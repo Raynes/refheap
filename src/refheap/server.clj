@@ -1,5 +1,16 @@
 (ns refheap.server
-  (:require [noir.server :as server]))
+  (:require [noir.server :as server]
+            [somnium.congomongo :as mongo]
+            [clj-config.core :as cfg]))
+
+(def config
+  "Some external configuration."
+  (cfg/safely cfg/read-config "config.clj"))
+
+(mongo/set-connection!
+ (mongo/make-connection (config :db-name)
+                        :host (config :db-host)
+                        :port (config :db-port)))
 
 (server/load-views "src/refheap/views/")
 
