@@ -10,6 +10,7 @@ The project is completely new and unusable right now. It is also totally experim
 
 ```bash
 lein deps
+./fetch-pyg.sh
 lein run
 ```
 
