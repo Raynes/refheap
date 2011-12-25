@@ -1,10 +1,10 @@
 # The Refuse Heap!
 
-This is a little Clojure pastebin project that shells out to pygmentize for syntax highlighting. As such, it supports all of the languages that Pygments supports. The goal for the project is to create a pastebin that will run on Heroku and is mostly on-par with the features that gist provides. Doing other cool innovative stuff would be nice too.
+This is a little Clojure pastebin project that shells out to pygmentize for syntax highlighting. As such, it supports generally whatever Pygments supports. The goal of the project is to create a pastebin that (hopefully) runs on Heroku and exceeds the feature and awesomeness offering of Github's gist.
 
-The running on Heroku bit means that storing things on the file system is a no-no. That means no git-powered revisions. I've never really used gist's git stuff and I don't really see the point in pulling and forking pastes, so I don't really care about that. The one thing that *is* useful, IMO, is revisions, so that'd be nice to have as well. It just wont be powered by git.
+One thing this project is not going to do is use git for pastes. I've never really understood why that was such a great thing and it simply would not work on Heroku. I do, however, think that revisions is an excellent Gist feature, so that's something I'll be looking into.
 
-The project is completely new and unusable right now.
+The project is completely new and unusable right now. It is also totally experimental. If something cool and useful comes out of it, it is a total plus.
 
 ## Usage
 
