@@ -1,0 +1,29 @@
+body { 
+    background-color: #0047B2; 
+    margin: 0;
+}
+
+div#header {
+    background-color: #1D1D56;
+    padding-left: 10px;
+    border: 2px solid black;
+    overflow: hidden;
+}
+
+#header span {
+    color: white;
+    font-size: 35px;
+    float: left;
+    margin-right: 40px;
+}
+
+div#headerlinks {
+    float: left;
+    margin-top: 17px;
+}
+
+#headerlinks a {
+    font-size: 20px;
+    padding: 0 5px 0 5px;
+    color: white;
+}
