@@ -26,6 +26,7 @@ div#headerlinks {
     font-size: 20px;
     padding: 0 5px 0 5px;
     color: white;
+    text-decoration: none;
 }
 
 div#content {
@@ -68,6 +69,11 @@ div#submit {
 }
 
 div#footer {
-    width: 100%;
-    
+    width: 70%;
+    margin: auto;
+}
+
+#footer a:link, a:visited, a:active {
+    color: black;
+    font-weight: bold;
 }

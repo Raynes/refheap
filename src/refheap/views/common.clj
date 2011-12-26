@@ -1,6 +1,6 @@
 (ns refheap.views.common
   (:use [noir.core :only [defpartial]]
-        [hiccup.page-helpers :only [include-css]]))
+        [hiccup.page-helpers :only [include-css link-to]]))
 
 (defpartial layout [& content]
   [:head
@@ -19,4 +19,8 @@
     [:div#container
      content]
     [:div#footer
-     [:p "Powered by Noir, MongoDB, and the cries of children the world over."]]]])
+     [:p
+      "Powered by " (link-to "http://clojure.org" "Clojure") ", "
+      (link-to "http://webnoir.org" "Noir") ", "
+      (link-to "http://mongodb" "MongoDB")
+      " and the cries of children the world over."]]]])
