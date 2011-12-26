@@ -16,4 +16,7 @@
      [:a {:href "/login"} "Login"]
      [:a {:href "/register"} "Register"]]]
    [:div#content
-    content]])
+    [:div#container
+     content]
+    [:div#footer
+     [:p "Powered by Noir, MongoDB, and the cries of children the world over."]]]])

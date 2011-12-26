@@ -11,12 +11,17 @@
    [:div#pastearea
     (fh/form-to
      [:post "/pastes/create"]
-     (fh/drop-down "language" (keys paste/lexers) "Clojure")
+     (fh/drop-down "language"
+                   (sort #(.compareToIgnoreCase % %2)
+                         (keys paste/lexers))
+                   "Clojure")
      (fh/text-area "paste")
-     (when (session/get :user)
-       (fh/label "Private? ")
-       (fh/check-box "private"))
-     (fh/submit-button "Paste!"))]))
+     [:div#submit
+      (when (session/get :user)
+        (fh/label "Private? ")
+        (fh/check-box "private"))
+      (fh/submit-button "Paste!")]
+     [:br])]))
 
 (defpage "/paste" []
   (create-paste-page))

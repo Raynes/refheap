@@ -29,28 +29,45 @@ div#headerlinks {
 }
 
 div#content {
-    margin: 15px 0px 0px 15px;
-    padding: 10px 10px 10px 10px;
+  margin: 15px 0px 0px 15px;  
+}
+
+div#container {
+    padding: 5px 5px 5px 5px;
     background-color: #80A3D8;
     border: 2px solid black;
     width: 70%;
-    float: left;
 }
 
 #pastearea textarea {
     width: 100%;
-    margin-bottom: 6px;
     min-height: 400px;
 }
 
-#pastearea input[type="submit"] {
+#pastearea form {
+    margin-bottom: 0;
+}
+
+#pastearea br {
+    clear: both;
+}
+
+div#submit {
+    float: right;
+}
+
+#submit input[type="submit"] {
     -webkit-appearance: default-button;
     cursor: pointer;
     font-size: 25px;
     padding: 4px;
-    float: right;
 }
 
 #pastearea select {
     float: right;
+}
+
+div#footer {
+    width: 100%;
+    
 }
