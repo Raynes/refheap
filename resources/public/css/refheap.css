@@ -27,3 +27,30 @@ div#headerlinks {
     padding: 0 5px 0 5px;
     color: white;
 }
+
+div#content {
+    margin: 15px 0px 0px 15px;
+    padding: 10px 10px 10px 10px;
+    background-color: #80A3D8;
+    border: 2px solid black;
+    width: 70%;
+    float: left;
+}
+
+#pastearea textarea {
+    width: 100%;
+    margin-bottom: 6px;
+    min-height: 400px;
+}
+
+#pastearea input[type="submit"] {
+    -webkit-appearance: default-button;
+    cursor: pointer;
+    font-size: 25px;
+    padding: 4px;
+    float: right;
+}
+
+#pastearea select {
+    float: right;
+}

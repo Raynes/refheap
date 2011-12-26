@@ -5,12 +5,14 @@
 (defpartial layout [& content]
   [:head
    [:title "The Refusal Heap"]
-   (include-css "/css/refheap.css")]
+   (include-css "/css/refheap.css")
+   (include-css "/css/pygments.css")]
   [:body
    [:div#header
     [:span "The Refusal Heap"]
     [:div#headerlinks
-     [:a {:href "/pastes"} "Pastes"]
+     [:a {:href "/pastes"} "All Pastes"]
+     [:a {:href "/create"} "Create Paste"]
      [:a {:href "/login"} "Login"]
      [:a {:href "/register"} "Register"]]]
    [:div#content
