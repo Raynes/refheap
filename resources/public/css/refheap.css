@@ -10,12 +10,15 @@ div#header {
     overflow: hidden;
 }
 
-#header span {
+a#site {
     color: white;
     font-size: 35px;
     float: left;
     margin-right: 40px;
+    text-decoration: none;
 }
+
+a#site:active { text-decoration: none; }
 
 div#headerlinks {
     float: left;
@@ -73,7 +76,7 @@ div#footer {
     margin: auto;
 }
 
-#footer a:link, a:visited, a:active {
+#footer a {
     color: black;
     font-weight: bold;
 }
