@@ -90,6 +90,11 @@ div#footer {
     font-weight: bold;
 }
 
+.written a {
+    color: black;
+    font-weight: bold;
+}
+
 .syntax {
     border: 3px solid black;
 }
