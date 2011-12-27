@@ -7,7 +7,7 @@
             [hiccup.form-helpers :as fh]
             [hiccup.page-helpers :as ph]))
 
-(defpartial create-paste-page []
+(defn create-paste-page []
   (layout
    [:div#pastearea
     (fh/form-to
@@ -24,7 +24,7 @@
       (fh/submit-button "Paste!")]
      [:br.clear])]))
 
-(defpartial show-paste-page [id]
+(defn show-paste-page [id]
   (let [{:keys [lines private user contents language]} (paste/get-paste (Long. id))]
     (layout
      (list
