@@ -8,6 +8,7 @@ div#header {
     padding-left: 10px;
     border: 2px solid black;
     overflow: hidden;
+    min-width: 700px;
 }
 
 a#site {
@@ -33,7 +34,8 @@ div#headerlinks {
 }
 
 div#content {
-  margin: 15px 0px 0px 15px;  
+    min-width: 833px;
+    margin: 15px 0px 0px 15px;  
 }
 
 div#container {
@@ -81,8 +83,11 @@ div#submit {
 }
 
 div#footer {
-    width: 70%;
-    margin: auto;
+    width: 71%;
+}
+
+#footer p {
+    text-align: center;
 }
 
 #footer a {
