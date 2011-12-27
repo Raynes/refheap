@@ -1,0 +1,35 @@
+.syntax .hll { background-color: #ffffcc }
+.syntax  { background: #ffffff; }
+.syntax .c { font-style: italic } /* Comment */
+.syntax .err { border: 1px solid #FF0000 } /* Error */
+.syntax .k { font-weight: bold } /* Keyword */
+.syntax .cm { font-style: italic } /* Comment.Multiline */
+.syntax .c1 { font-style: italic } /* Comment.Single */
+.syntax .cs { font-style: italic } /* Comment.Special */
+.syntax .ge { font-style: italic } /* Generic.Emph */
+.syntax .gh { font-weight: bold } /* Generic.Heading */
+.syntax .gp { font-weight: bold } /* Generic.Prompt */
+.syntax .gs { font-weight: bold } /* Generic.Strong */
+.syntax .gu { font-weight: bold } /* Generic.Subheading */
+.syntax .kc { font-weight: bold } /* Keyword.Constant */
+.syntax .kd { font-weight: bold } /* Keyword.Declaration */
+.syntax .kn { font-weight: bold } /* Keyword.Namespace */
+.syntax .kr { font-weight: bold } /* Keyword.Reserved */
+.syntax .s { font-style: italic } /* Literal.String */
+.syntax .nc { font-weight: bold } /* Name.Class */
+.syntax .ni { font-weight: bold } /* Name.Entity */
+.syntax .ne { font-weight: bold } /* Name.Exception */
+.syntax .nn { font-weight: bold } /* Name.Namespace */
+.syntax .nt { font-weight: bold } /* Name.Tag */
+.syntax .ow { font-weight: bold } /* Operator.Word */
+.syntax .sb { font-style: italic } /* Literal.String.Backtick */
+.syntax .sc { font-style: italic } /* Literal.String.Char */
+.syntax .sd { font-style: italic } /* Literal.String.Doc */
+.syntax .s2 { font-style: italic } /* Literal.String.Double */
+.syntax .se { font-weight: bold; font-style: italic } /* Literal.String.Escape */
+.syntax .sh { font-style: italic } /* Literal.String.Heredoc */
+.syntax .si { font-weight: bold; font-style: italic } /* Literal.String.Interpol */
+.syntax .sx { font-style: italic } /* Literal.String.Other */
+.syntax .sr { font-style: italic } /* Literal.String.Regex */
+.syntax .s1 { font-style: italic } /* Literal.String.Single */
+.syntax .ss { font-style: italic } /* Literal.String.Symbol */
