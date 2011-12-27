@@ -6,7 +6,7 @@
   [:head
    [:title "The Refusal Heap"]
    (include-css "/css/refheap.css")
-   (include-css "/css/pygments.css")]
+   (include-css "/css/native.css")]
   [:body
    [:div#header
     [:a#site {:href "/paste"} "The Refusal Heap"]

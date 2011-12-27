@@ -151,14 +151,14 @@
 
 (defn paste
   "Create a new paste."
-  [{:keys [description language contents]}]
+  [language contents private]
   (let [user (session/get :username "anonymous")
         id (swap! paste-count inc)]    
     (mongo/insert! :pastes {:paste-id id
                             :user user
-                            :description description
                             :language language
                             :raw-contents contents
+                            :private (boolean private)
                             :contents (pygmentize language contents)})))
 
 (defn get-paste

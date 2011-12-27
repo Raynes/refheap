@@ -65,6 +65,15 @@ div#submit {
     cursor: pointer;
     font-size: 25px;
     padding: 4px;
+    margin-left: 25px;
+}
+
+div#submit {
+    font-size: 18px;
+}
+
+#submit input[type="checkbox"] {
+    margin-left: 7px;
 }
 
 #pastearea select {
@@ -79,4 +88,8 @@ div#footer {
 #footer a {
     color: black;
     font-weight: bold;
+}
+
+.syntax div {
+    border: 3px solid black;
 }
