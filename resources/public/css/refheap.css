@@ -33,6 +33,11 @@ div#headerlinks {
     text-decoration: none;
 }
 
+img#signin {
+    margin-left: 35px;
+    cursor: pointer;
+}
+
 div#content {
     min-width: 833px;
     margin: 15px 0px 0px 15px;  

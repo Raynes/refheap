@@ -1,20 +1,21 @@
 (ns refheap.views.common
   (:use [noir.core :only [defpartial]]
-        [hiccup.page-helpers :only [include-css link-to]]))
+        [hiccup.page-helpers :only [include-css include-js link-to]]))
 
 (defpartial layout [& content]
   [:head
    [:title "The Refusal Heap"]
    (include-css "/css/refheap.css")
-   (include-css "/css/native.css")]
+   (include-css "/css/native.css")
+   (include-js  "/js/jquery-1.7.1.min.js")
+   (include-js  "/js/refheap.js")]
   [:body
    [:div#header
     [:a#site {:href "/paste"} "The Refusal Heap"]
     [:div#headerlinks
      (link-to "/pastes" "All Pastes")
-     (link-to "/login" "Login")
-     (link-to "/register" "Register")
-     (link-to "/about" "About")]]
+     (link-to "/about" "About")
+     [:img#signin {:src "/img/browserid.png"}]]]
    [:div#content
     [:div#container
      content]
