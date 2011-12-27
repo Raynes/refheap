@@ -20,7 +20,7 @@
     [:div#container
      content]
     [:div#footer
-     [:p
+     [:p.centered
       "Powered by " (link-to "http://clojure.org" "Clojure") ", "
       (link-to "http://webnoir.org" "Noir") ", "
       (link-to "http://mongodb.org" "MongoDB") ", "

@@ -25,7 +25,7 @@
      [:br.clear])]))
 
 (defn show-paste-page [id]
-  (let [{:keys [lines private user contents language]} (paste/get-paste (Long. id))]
+  (when-let [{:keys [lines private user contents language]} (paste/get-paste (Long. id))]
     (layout
      (list
       [:div.floater

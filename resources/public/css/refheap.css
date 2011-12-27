@@ -91,7 +91,7 @@ div#footer {
     width: 71%;
 }
 
-#footer p {
+.centered {
     text-align: center;
 }
 
