@@ -113,3 +113,9 @@ div.floater {
     width: 100%;
     overflow: hidden;
 }
+
+.linenodiv a {
+    text-decoration: none;
+    color: gray;
+    margin-right: 10px;
+}

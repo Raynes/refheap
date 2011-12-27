@@ -146,6 +146,7 @@
   [language text]
   (:out
    (sh "./pygmentize" "-fhtml" (str "-l" (lookup-lexer language))
+       "-Olinenos=table,anchorlinenos=true,lineanchors=L,stripnl=False"
        :dir "resources/pygments"
        :in text)))
 
@@ -153,13 +154,14 @@
   "Create a new paste."
   [language contents private]
   (let [user (session/get :username "anonymous")
-        id (swap! paste-count inc)]    
+        id (swap! paste-count inc)
+        lines (count (filter #{\newline} contents))]
     (mongo/insert! :pastes {:paste-id id
                             :user user
                             :language language
                             :raw-contents contents
                             :private (boolean private)
-                            :lines (count (filter #{\newline} contents))
+                            :lines (if (= \newline (last contents)) lines (inc lines))
                             :contents (pygmentize language contents)})))
 
 (defn get-paste
