@@ -11,9 +11,10 @@
    [:div#header
     [:a#site {:href "/paste"} "The Refusal Heap"]
     [:div#headerlinks
-     [:a {:href "/pastes"} "All Pastes"]
-     [:a {:href "/login"} "Login"]
-     [:a {:href "/register"} "Register"]]]
+     (link-to "/pastes" "All Pastes")
+     (link-to "/login" "Login")
+     (link-to "/register" "Register")
+     (link-to "/about" "About")]]
    [:div#content
     [:div#container
      content]
@@ -21,5 +22,6 @@
      [:p
       "Powered by " (link-to "http://clojure.org" "Clojure") ", "
       (link-to "http://webnoir.org" "Noir") ", "
-      (link-to "http://mongodb.org" "MongoDB")
+      (link-to "http://mongodb.org" "MongoDB") ", "
+      (link-to "http://pygments.org/" "Pygments")
       " and the cries of children the world over."]]]])
