@@ -52,7 +52,7 @@ div#container {
     margin-bottom: 0;
 }
 
-#pastearea br {
+br.clear {
     clear: both;
 }
 
@@ -90,6 +90,26 @@ div#footer {
     font-weight: bold;
 }
 
-.syntax div {
+.syntax {
     border: 3px solid black;
+}
+
+div#pasteinfo {
+    margin-bottom: 4px;
+}
+
+.info {
+    font-weight: bold;
+    padding: 0 10px 0 10px;
+    border-right: solid 1px black;
+}
+
+span#last {
+    border-right: none;
+}
+
+div.floater {
+    float: left;
+    width: 100%;
+    overflow: hidden;
 }

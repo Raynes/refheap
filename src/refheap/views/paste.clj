@@ -22,7 +22,21 @@
         (list (fh/label :private "Private")
               (fh/check-box :private)))
       (fh/submit-button "Paste!")]
-     [:br])]))
+     [:br.clear])]))
+
+(defpartial show-paste-page [id]
+  (let [{:keys [lines private user contents language]} (paste/get-paste (Long. id))]
+    (layout
+     (list
+      [:div.floater
+       [:div#pasteinfo
+        [:span.info language]
+        [:span.info "Lines: " lines]
+        [:span.info "Private: " private]
+        [:span#last.info "Pasted by: " user]]
+       [:div.syntax
+        contents]]
+      [:br.clear]))))
 
 (defpage "/paste" []
   (binding [session/*noir-session* (atom {:user 1})]
@@ -35,6 +49,4 @@
          (paste/paste language paste private)))))
 
 (defpage "/paste/:id" {:keys [id]}
-  (layout
-   [:div.syntax
-    (:contents (paste/get-paste (Long. id)))]))
+  (show-paste-page id))

@@ -159,6 +159,7 @@
                             :language language
                             :raw-contents contents
                             :private (boolean private)
+                            :lines (count (filter #{\newline} contents))
                             :contents (pygmentize language contents)})))
 
 (defn get-paste
