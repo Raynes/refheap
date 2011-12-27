@@ -104,6 +104,10 @@ div#footer {
     border: 3px solid black;
 }
 
+div#paste {
+    overflow: scroll;
+}
+
 div#pasteinfo {
     margin-bottom: 4px;
 }

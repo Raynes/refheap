@@ -34,7 +34,7 @@
         [:span.info "Lines: " lines]
         [:span.info "Private: " private]
         [:span#last.info "Pasted by: " user]]
-       [:div.syntax
+       [:div#paste.syntax
         contents]]
       [:br.clear]))))
 
