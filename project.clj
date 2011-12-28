@@ -4,6 +4,7 @@
                  [noir "1.3.0-alpha2"]
                  [congomongo "0.1.7"]
                  [clj-config "0.2.0"]
-                 [clj-http "0.2.6"]]
+                 [clj-http "0.2.6"]
+                 [clavatar "0.1.0"]]
   :main refheap.server)
 

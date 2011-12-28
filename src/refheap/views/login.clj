@@ -9,9 +9,9 @@
 (defn create-user-page [email]
   (session/flash-put! :email email)
   (layout
-   (when-let [error (session/flash-get :error)]
-     [:p.error error])
    [:div#login
+    (when-let [error (session/flash-get :error)]
+     [:p.error error])
     (form-to
      [:post "/user/create"]
      [:p "You're almost there! Just enter a username and you'll be on your way."]
@@ -33,8 +33,6 @@
 
 (defpage [:post "/user/verify"] {:keys [assertion]}
   (when-let [{:keys [email]} (login/verify-assertion assertion)]
-    (prn email)
     (if (login/user-exists email)
-      (do (prn (session/get :user))
-        (redirect "/paste"))
+      (redirect "/paste")
       (create-user-page email))))

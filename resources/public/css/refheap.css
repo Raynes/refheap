@@ -143,3 +143,8 @@ div#login {
     margin: auto;
     width: 450px;
 }
+
+.error {
+    color: red;
+    font-weight: bold;
+}

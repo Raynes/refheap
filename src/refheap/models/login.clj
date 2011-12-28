@@ -6,9 +6,10 @@
             [cheshire.core :as json]))
 
 (defn create-user [email name]
-  (let [qmap {:email email
+  (let [name (.toLowerCase name)
+        qmap {:email email
               :username name}]
-    (when-not (mongo/fetch-one :users :where {:email email})
+    (when-not (mongo/fetch-one :users :where {:username name})
       (mongo/insert!
        :users
        qmap)

@@ -1,7 +1,10 @@
 (ns refheap.models.paste
   (:use [clojure.java.shell :only [sh]])
   (:require [somnium.congomongo :as mongo]
-            [noir.session :as session]))
+            [noir.session :as session]
+            [clojure.java.io :as io]
+            [clojure.string :as string])
+  (:import java.io.StringReader))
 
 (def paste-count
   "The current count of pastes."
@@ -153,13 +156,20 @@
 (defn paste
   "Create a new paste."
   [language contents private]
-  (let [user (session/get :username "anonymous")
+  (let [user (:username (session/get :user) "anonymous")
         id (swap! paste-count inc)
         lines (count (filter #{\newline} contents))]
     (mongo/insert! :pastes {:paste-id id
                             :user user
                             :language language
                             :raw-contents contents
+                            :summary (->> contents
+                                          StringReader.
+                                          io/reader
+                                          line-seq
+                                          (take 5)
+                                          (string/join "\n")
+                                          (pygmentize language))
                             :private (boolean private)
                             :lines (if (= \newline (last contents)) lines (inc lines))
                             :contents (pygmentize language contents)})))
