@@ -4,10 +4,10 @@
         [noir.statuses :only [set-page!]]
         [noir.core :only [defpartial defpage]]))
 
-(def not-found
+(defn not-found []
   (layout [:p.centered "Just no."]))
 
-(set-page! 404 not-found)
+(set-page! 404 (not-found))
 
 (defpage "/" []
   (redirect "/paste"))

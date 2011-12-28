@@ -2,6 +2,14 @@
 
 $(document).ready(function(){
     $("#signin").click(function(event) {
-        alert("SIGN THE FUCK IN.")
+      navigator.id.getVerifiedEmail(function(assertion) {
+      if (assertion) {
+        $.post('/user/verify',
+               { assertion: assertion }, 
+               function(data) { $("body").html(data)})
+      } else {
+        alert("Login failure!")
+      }
+      })
     })
 });

@@ -39,8 +39,7 @@
       [:br.clear]))))
 
 (defpage "/paste" []
-  (binding [session/*noir-session* (atom {:user 1})]
-    (create-paste-page)))
+  (create-paste-page))
 
 (defpage [:post "/paste/create"] {:keys [paste language private]}
   (redirect

@@ -1,11 +1,7 @@
 (ns refheap.server
+  (:use [refheap.config :only [config]])
   (:require [noir.server :as server]
-            [somnium.congomongo :as mongo]
-            [clj-config.core :as cfg]))
-
-(def config
-  "Some external configuration."
-  (cfg/safely cfg/read-config "config.clj"))
+            [somnium.congomongo :as mongo]))
 
 (mongo/set-connection!
  (mongo/make-connection (config :db-name)

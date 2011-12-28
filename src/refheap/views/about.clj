@@ -3,7 +3,7 @@
         [refheap.views.common :only [layout]]
         [hiccup.page-helpers :only [link-to]]))
 
-(def about-page
+(defn about-page []
   (layout
    [:div.written
     [:p
@@ -27,4 +27,4 @@
      "If you'd like to take a look at the code and/or contribute, fork it "
      (link-to "https://github.com/Raynes/refheap" "on Github!")]]))
 
-(defpage "/about" [] about-page)
+(defpage "/about" [] (about-page))

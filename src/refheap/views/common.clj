@@ -1,6 +1,7 @@
 (ns refheap.views.common
   (:use [noir.core :only [defpartial]]
-        [hiccup.page-helpers :only [include-css include-js link-to]]))
+        [hiccup.page-helpers :only [include-css include-js link-to]])
+  (:require [noir.session :as session]))
 
 (defpartial layout [& content]
   [:head
@@ -8,6 +9,7 @@
    (include-css "/css/refheap.css")
    (include-css "/css/native.css")
    (include-js  "/js/jquery-1.7.1.min.js")
+   (include-js  "https://browserid.org/include.js")
    (include-js  "/js/refheap.js")]
   [:body
    [:div#header
@@ -15,10 +17,12 @@
     [:div#headerlinks
      (link-to "/pastes" "All Pastes")
      (link-to "/about" "About")
-     [:img#signin {:src "/img/browserid.png"}]]]
+     (if-let [user (and (bound? #'session/*noir-session*)
+                        (session/get :user))]
+       nil
+       [:img#signin {:src "/img/browserid.png"}])]]
    [:div#content
-    [:div#container
-     content]
+    [:div#container content]
     [:div#footer
      [:p.centered
       "Powered by " (link-to "http://clojure.org" "Clojure") ", "
