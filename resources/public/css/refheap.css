@@ -138,3 +138,8 @@ div.floater {
     color: gray;
     margin-right: 10px;
 }
+
+div#login {
+    margin: auto;
+    width: 450px;
+}

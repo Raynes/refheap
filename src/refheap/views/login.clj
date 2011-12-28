@@ -11,11 +11,12 @@
   (layout
    (when-let [error (session/flash-get :error)]
      [:p.error error])
-   (form-to
-    [:post "/user/create"]
-    [:p "You're almost there! Just enter a username and you'll be on your way."]
-    (text-field :name)
-    (submit-button "submit"))))
+   [:div#login
+    (form-to
+     [:post "/user/create"]
+     [:p "You're almost there! Just enter a username and you'll be on your way."]
+     (text-field :name)
+     (submit-button "submit"))]))
 
 (defpage [:post "/user/create"] {:keys [name]}
   (let [email (session/flash-get :email)]
