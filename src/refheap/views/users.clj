@@ -4,17 +4,31 @@
         [clavatar.core :only [gravatar]]
         [refheap.dates :only [date-string]])
   (:require [refheap.models.users :as users]
-            [hiccup.page-helpers :as ph]))
+            [hiccup.page-helpers :as ph]
+            [noir.session :as session]))
 
 (defn user-page [user page]
-  (let [paste-count (users/count-user-pastes user)]
+  (let [paste-count (users/count-user-pastes user)
+        you? (= user (:username (session/get :user)))]
     (layout
      [:div#user
       (-> user users/get-user :email (gravatar :size 70) ph/image)
-      [:p "User has " paste-count " paste(s)."]
-      (for [{:keys [paste-id summary date]} (users/user-pastes user page)]
+      [:p
+       (if you?
+         "You have "
+         (str user " has "))
+       (users/count-user-pastes user {:private false})
+       " public "
+       (if you?
+         (str "and " (users/count-user-pastes user {:private true}) " private paste(s).")
+         "paste(s).")]
+      (for [{:keys [paste-id summary date private]} (users/user-pastes
+                                                     user page
+                                                     (when-not you? {:private false}))]
         (list
          [:span.header
+          (when private
+            (ph/image "/img/lock.png"))
           (ph/link-to (str "/paste/" paste-id) paste-id)
           (date-string date)]
          [:div.syntax summary]
