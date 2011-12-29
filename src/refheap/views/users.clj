@@ -28,10 +28,10 @@
                                                        (when-not you? {:private false}))]
           (list
            [:span.header
-            (when private
-              (ph/image "/img/lock.png"))
             (ph/link-to (str "/paste/" paste-id) paste-id)
-            (date-string date)]
+            (date-string date)
+            (when private
+              (ph/image "/img/lock.png"))]
            [:div.syntax summary]
            [:br]))
         [:div.centered
