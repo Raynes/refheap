@@ -5,7 +5,7 @@
   (:require [noir.session :as session]))
 
 (defn avatar [email size]
-  (image (gravatar :size size)))
+  (image (gravatar email :size size)))
 
 (defpartial layout [& content]
   [:head
@@ -18,13 +18,16 @@
   [:body
    [:div#header
     [:a#site {:href "/paste"} "The Refusal Heap"]
-    [:div#headerlinks
+    [:div.headerlinks
      (link-to "/pastes" "All Pastes")
      (link-to "/about" "About")]
-    (if-let [user (and (bound? #'session/*noir-session*)
-                       (session/get :user))]
-      nil
-      [:img#signin {:src "/img/browserid.png"}])]
+    [:div#useri.headerlinks
+     (if-let [user (and (bound? #'session/*noir-session*)
+                        (:username (session/get :user)))]
+       [:div
+        (link-to (str "/users/" user) user)
+        (link-to "/users/logout" "logout")]
+       [:img#signin {:src "/img/browserid.png"}])]]
    [:div#content
     [:div#container content]
     [:div#footer

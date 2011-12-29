@@ -21,20 +21,34 @@ a#site {
 
 a#site:active { text-decoration: none; }
 
-div#headerlinks {
+div.headerlinks {
     float: left;
     margin-top: 17px;
 }
 
-#headerlinks a {
+.headerlinks a {
     font-size: 20px;
-    padding: 0 5px 0 5px;
+    padding-right: 10px;
     color: white;
     text-decoration: none;
 }
 
-img#signin {
-    margin: 17px 0 0 20px;
+div#useri {
+    border-left: 1px solid lightBlue;
+    padding-left: 10px;
+}
+
+#user div {
+    color: white;
+    font-size: 13px;
+    margin-top: 6px;
+}
+
+a#logout {
+    margin-left: 7px;
+}
+
+#user img {
     cursor: pointer;
 }
 

@@ -1,7 +1,8 @@
 (ns refheap.views.users
   (:use [noir.core :only [defpage]]
         [refheap.views.common :only [layout avatar]]
-        [refheap.dates :only [date-string]])
+        [refheap.dates :only [date-string]]
+        [noir.response :only [redirect]])
   (:require [refheap.models.users :as users]
             [hiccup.page-helpers :as ph]
             [noir.session :as session]))
@@ -44,3 +45,7 @@
 
 (defpage "/users/:user" {:keys [user page]}
   (user-page user (Long. (or page "1"))))
+
+(defpage "/users/logout" []
+  (session/remove! :user)
+  (redirect "/paste"))
