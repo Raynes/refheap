@@ -10,6 +10,7 @@
   (mongo/fetch
    :pastes
    :where {:user user}
+   :sort {:date -1}
    :limit 10
    :skip (* 10 (dec page))))
 
@@ -19,4 +20,4 @@
    :where {:user user}))
 
 (defn count-pages [n]
-  (Math/ceil (/ n 10)))
+  (long (Math/ceil (/ n 10))))

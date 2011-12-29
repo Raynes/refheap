@@ -148,3 +148,20 @@ div#login {
     color: red;
     font-weight: bold;
 }
+
+.header a {
+    margin-right: 10px;
+}
+
+a#newer {
+    margin-right: 10px;
+}
+
+.pagebutton {
+    background-color: #E8F2FF;
+    padding: 1px 4px 1px 4px;
+    text-decoration: none;
+    color: black;
+    font-size: 30px;
+    border-radius: 15px;
+}

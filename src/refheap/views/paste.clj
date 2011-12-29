@@ -1,7 +1,8 @@
 (ns refheap.views.paste
   (:use [noir.core :only [defpage defpartial]]
         [refheap.views.common :only [layout]]
-        [noir.response :only [redirect]])
+        [noir.response :only [redirect]]
+        [refheap.dates :only [date-string]])
   (:require [refheap.models.paste :as paste]
             [noir.session :as session]
             [hiccup.form-helpers :as fh]
@@ -25,7 +26,7 @@
      [:br.clear])]))
 
 (defn show-paste-page [id]
-  (when-let [{:keys [lines private user contents language]} (paste/get-paste (Long. id))]
+  (when-let [{:keys [lines private user contents language date]} (paste/get-paste (Long. id))]
     (layout
      (list
       [:div.floater
@@ -33,7 +34,12 @@
         [:span.info language]
         [:span.info "Lines: " lines]
         [:span.info "Private: " private]
-        [:span#last.info "Pasted by: " user]]
+        [:span#last.info "Pasted by "
+         (if (= user "anonymous")
+           user
+           (ph/link-to (str "/users/" user) user))
+         " on "
+         (date-string date)]]
        [:div#paste.syntax
         contents]]
       [:br.clear]))))

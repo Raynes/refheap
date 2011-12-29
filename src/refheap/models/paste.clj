@@ -3,7 +3,9 @@
   (:require [somnium.congomongo :as mongo]
             [noir.session :as session]
             [clojure.java.io :as io]
-            [clojure.string :as string])
+            [clojure.string :as string]
+            [clj-time.core :as time]
+            [clj-time.format :as format])
   (:import java.io.StringReader))
 
 (def paste-count
@@ -171,6 +173,7 @@
                                           (string/join "\n")
                                           (pygmentize language))
                             :private (boolean private)
+                            :date (format/unparse (format/formatters :date-time) (time/now))
                             :lines (if (= \newline (last contents)) lines (inc lines))
                             :contents (pygmentize language contents)})))
 
