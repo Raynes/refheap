@@ -5,6 +5,7 @@
                  [congomongo "0.1.7"]
                  [clj-config "0.2.0"]
                  [clj-http "0.2.6"]
-                 [clavatar "0.1.0"]]
+                 [clavatar "0.2.0"]
+                 [clj-time "0.3.3"]]
   :main refheap.server)
 
