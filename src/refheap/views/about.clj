@@ -14,8 +14,8 @@
      (link-to "http://mongodb.org" "MongoDB")
      ", and the excellent "
      (link-to "http://pygments.org/" "Pygments")
-     ", syntax highlighting tool. Because of that, I was able to develop a pastebin that"
-     " supports a remarkable number of languages with no effort at all. In addition, it"
+     " syntax highlighting tool. Because of that, I was able to develop a pastebin that"
+     " supports a remarkable number of languages with very little effort. In addition, it"
      " also supports highlighting non-code things such irb sessions and IRC logs."]
     [:p
      "This site is totally open source and entirely non-profit. It is mostly a personal"
