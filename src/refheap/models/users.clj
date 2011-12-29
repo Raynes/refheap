@@ -18,6 +18,3 @@
   (mongo/fetch-count
    :pastes
    :where (merge {:user user} others)))
-
-(defn count-pages [n]
-  (long (Math/ceil (/ n 10))))

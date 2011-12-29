@@ -9,6 +9,7 @@
                         :port (config :db-port)))
 
 (mongo/add-index! :pastes [:user :date])
+(mongo/add-index! :pastes [:private])
 
 (server/load-views "src/refheap/views/")
 

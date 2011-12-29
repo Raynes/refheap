@@ -41,7 +41,6 @@ div#useri {
 #user div {
     color: white;
     font-size: 13px;
-    margin-top: 6px;
 }
 
 a#logout {
@@ -161,10 +160,6 @@ div#login {
 .error {
     color: red;
     font-weight: bold;
-}
-
-.header a {
-    margin-right: 10px;
 }
 
 a#newer {

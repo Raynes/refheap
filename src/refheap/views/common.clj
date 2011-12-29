@@ -2,7 +2,8 @@
   (:use [noir.core :only [defpartial]]
         [hiccup.page-helpers :only [include-css include-js link-to image]]
         [clavatar.core :only [gravatar]])
-  (:require [noir.session :as session]))
+  (:require [noir.session :as session]
+            [refheap.models.paste :as paste]))
 
 (defn avatar [email size]
   (image (gravatar email :size size)))
@@ -38,3 +39,10 @@
       (link-to "http://mongodb.org" "MongoDB") ", "
       (link-to "http://pygments.org/" "Pygments")
       " and the cries of children the world over."]]]])
+
+(defn page-buttons [n page]
+  [:div.centered
+   (when-not (= 1 page)
+     [:a#newer.pagebutton {:href (str "/pastes?page=" (dec page))} "newer"])
+   (when-not (= page (paste/count-pages n))
+     [:a.pagebutton {:href (str "/pastes?page=" (inc page))} "older"])])

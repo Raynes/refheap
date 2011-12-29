@@ -1,6 +1,6 @@
 (ns refheap.views.paste
   (:use [noir.core :only [defpage defpartial]]
-        [refheap.views.common :only [layout]]
+        [refheap.views.common :only [layout avatar page-buttons]]
         [noir.response :only [redirect]]
         [refheap.dates :only [date-string]])
   (:require [refheap.models.paste :as paste]
@@ -44,6 +44,26 @@
         contents]]
       [:br.clear]))))
 
+(defn pastes [ps]
+  (for [{:keys [paste-id summary date user]} ps]
+    (list
+     [:span.header
+      (ph/link-to (str "/paste/" paste-id) paste-id)
+      " pasted by "
+      (if user
+        (ph/link-to (str "/users/" user) user)
+        "anonymous")
+      " on "
+      (date-string date)]
+     [:div.syntax summary]
+     [:br])))
+
+(defn all-pastes-page [page]
+  (layout
+   [:div
+    (pastes (paste/get-pastes page))
+    (page-buttons (paste/count-pastes page) page)]))
+
 (defpage "/paste" []
   (create-paste-page))
 
@@ -55,3 +75,6 @@
 
 (defpage "/paste/:id" {:keys [id]}
   (show-paste-page id))
+
+(defpage "/pastes" {:keys [page]}
+  (all-pastes-page (Long. (or page "1"))))

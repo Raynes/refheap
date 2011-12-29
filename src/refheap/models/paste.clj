@@ -181,3 +181,23 @@
   "Get a paste."
   [id]
   (mongo/fetch-one :pastes :where {:paste-id id}))
+
+(defn get-pastes
+  "Get public pastes."
+  [page]
+  (mongo/fetch
+   :pastes
+   :where {:private false}
+   :sort {:date -1}
+   :limit 20
+   :skip (* 10 (dec page))))
+
+(defn count-pastes
+  "Count pastes."
+  [private?]
+  (mongo/fetch-count
+   :pastes
+   :where {:private private?}))
+
+(defn count-pages [n]
+  (long (Math/ceil (/ n 10))))
