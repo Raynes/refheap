@@ -20,11 +20,11 @@
     [:a#site {:href "/paste"} "The Refusal Heap"]
     [:div#headerlinks
      (link-to "/pastes" "All Pastes")
-     (link-to "/about" "About")
-     (if-let [user (and (bound? #'session/*noir-session*)
-                        (session/get :user))]
-       nil
-       [:img#signin {:src "/img/browserid.png"}])]]
+     (link-to "/about" "About")]
+    (if-let [user (and (bound? #'session/*noir-session*)
+                       (session/get :user))]
+      nil
+      [:img#signin {:src "/img/browserid.png"}])]
    [:div#content
     [:div#container content]
     [:div#footer
