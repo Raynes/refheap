@@ -1,7 +1,11 @@
 (ns refheap.views.common
   (:use [noir.core :only [defpartial]]
-        [hiccup.page-helpers :only [include-css include-js link-to]])
+        [hiccup.page-helpers :only [include-css include-js link-to image]]
+        [clavatar.core :only [gravatar]])
   (:require [noir.session :as session]))
+
+(defn avatar [email size]
+  (image (gravatar :size size)))
 
 (defpartial layout [& content]
   [:head
