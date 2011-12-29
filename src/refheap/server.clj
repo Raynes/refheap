@@ -8,6 +8,8 @@
                         :host (config :db-host)
                         :port (config :db-port)))
 
+(mongo/add-index! :pastes [:user :date])
+
 (server/load-views "src/refheap/views/")
 
 (defn -main [& m]
