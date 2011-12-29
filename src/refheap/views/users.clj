@@ -21,13 +21,12 @@
   [:div.centered
    (when-not (= 1 page)
      [:a#newer.pagebutton {:href (str "/users/" user "?page=" (dec page))} "newer"])
-   (when-not (= page (users/count-pages paste-count))
+   (when-not (= page (users/count-pages (users/count-user-pastes user)))
      [:a.pagebutton {:href (str "/users/" user "?page=" (inc page))} "older"])])
 
 (defn user-page [user page]
   (when-let [user-data (users/get-user user)]
-    (let [paste-count (users/count-user-pastes user)
-          you? (= user (:username (session/get :user)))]
+    (let [you? (= user (:username (session/get :user)))]
       (layout
        [:div#user
         (-> user-data :email (avatar 70))

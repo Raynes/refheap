@@ -29,7 +29,8 @@
     [:div#container content]
     [:div#footer
      [:p.centered
-      "Powered by " (link-to "http://clojure.org" "Clojure") ", "
+      (link-to "https://github.com/Raynes/refheap" "Refheap")
+      " is powered by " (link-to "http://clojure.org" "Clojure") ", "
       (link-to "http://webnoir.org" "Noir") ", "
       (link-to "http://mongodb.org" "MongoDB") ", "
       (link-to "http://pygments.org/" "Pygments")
