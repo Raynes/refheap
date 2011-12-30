@@ -158,24 +158,25 @@
 (defn paste
   "Create a new paste."
   [language contents private]
-  (let [user (:username (session/get :user) "anonymous")
-        id (swap! paste-count inc)
-        lines (count (filter #{\newline} contents))]
-    (mongo/insert! :pastes {:paste-id id
-                            :user user
-                            :language language
-                            :raw-contents contents
-                            :summary (->> contents
-                                          StringReader.
-                                          io/reader
-                                          line-seq
-                                          (take 5)
-                                          (string/join "\n")
-                                          (pygmentize language))
-                            :private (boolean private)
-                            :date (format/unparse (format/formatters :date-time) (time/now))
-                            :lines (if (= \newline (last contents)) lines (inc lines))
-                            :contents (pygmentize language contents)})))
+  (when (< (count contents) 64000)
+    (let [user (:username (session/get :user) "anonymous")
+          id (swap! paste-count inc)
+          lines (count (filter #{\newline} contents))]
+      (mongo/insert! :pastes {:paste-id id
+                              :user user
+                              :language language
+                              :raw-contents contents
+                              :summary (->> contents
+                                            StringReader.
+                                            io/reader
+                                            line-seq
+                                            (take 5)
+                                            (string/join "\n")
+                                            (pygmentize language))
+                              :private (boolean private)
+                              :date (format/unparse (format/formatters :date-time) (time/now))
+                              :lines (if (= \newline (last contents)) lines (inc lines))
+                              :contents (pygmentize language contents)}))))
 
 (defn get-paste
   "Get a paste."
