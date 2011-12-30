@@ -57,7 +57,7 @@ div#content {
 }
 
 div#container {
-    padding: 5px 5px 5px 5px;
+    padding: 5px;
     background-color: #80A3D8;
     border: 2px solid black;
     width: 70%;
@@ -66,6 +66,9 @@ div#container {
 #pastearea textarea {
     width: 100%;
     min-height: 400px;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -ms-box-sizing: border-box; /* Look at me, all tryin' to support IE8 and such. */
 }
 
 #pastearea form {
