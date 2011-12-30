@@ -19,5 +19,5 @@
         port (Integer. (or (get (System/getenv) "PORT") (str (config :port))))]
     (server/start port {:mode mode
                         :ns 'refheap
-                        :session-store (mongo-session :sessions)})))
+                        :session-store (mongo-session :refheap-sessions)})))
 
