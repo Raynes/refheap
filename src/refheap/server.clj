@@ -16,7 +16,7 @@
 
 (defn -main [& m]
   (let [mode (keyword (or (first m) :dev))
-        port (Integer. (get (System/getenv) "PORT" "8080"))]
+        port (Integer. (or (get (System/getenv) "PORT") (str (config :port))))]
     (server/start port {:mode mode
                         :ns 'refheap
                         :session-store (mongo-session :sessions)})))
