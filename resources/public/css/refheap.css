@@ -105,6 +105,7 @@ div#submit {
 
 div#footer {
     width: 71%;
+    color: #A0BCE6;
 }
 
 .centered {
@@ -112,8 +113,7 @@ div#footer {
 }
 
 #footer a {
-    color: black;
-    font-weight: bold;
+    color: #A0BCE6;
 }
 
 .written a {
