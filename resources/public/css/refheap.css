@@ -177,3 +177,12 @@ a#newer {
     font-size: 30px;
     border-radius: 15px;
 }
+
+div#edit {
+    float: right;
+}
+
+#edit a {
+    padding-right: 5px;
+    color: black;
+}

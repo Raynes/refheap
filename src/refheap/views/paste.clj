@@ -39,7 +39,9 @@
            user
            (ph/link-to (str "/users/" user) user))
          " on "
-         (date-string date)]]
+         (date-string date)
+         [:div#edit
+          [:a {:href (str "/paste/" id "/edit")} "edit"]]]]
        [:div#paste.syntax
         contents]]
       [:div.clear]))))
