@@ -44,5 +44,5 @@
   [:div.centered
    (when-not (= 1 page)
      [:a#newer.pagebutton {:href (str "/pastes?page=" (dec page))} "newer"])
-   (when-not (= page (paste/count-pages n))
+   (when-not (or (zero? n) (= page (paste/count-pages n)))
      [:a.pagebutton {:href (str "/pastes?page=" (inc page))} "older"])])
