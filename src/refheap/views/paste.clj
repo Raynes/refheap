@@ -50,9 +50,9 @@
      [:span.header
       (ph/link-to (str "/paste/" paste-id) paste-id)
       " pasted by "
-      (if user
-        (ph/link-to (str "/users/" user) user)
-        "anonymous")
+      (if (= user "anonymous")
+        user
+        (ph/link-to (str "/users/" user) user))
       " on "
       (date-string date)]
      [:div.syntax summary]
