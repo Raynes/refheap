@@ -1,5 +1,6 @@
 (ns refheap.server
-  (:use [refheap.config :only [config]])
+  (:use [refheap.config :only [config]]
+        [mongo-session.core :only [mongo-session]])
   (:require [noir.server :as server]
             [somnium.congomongo :as mongo]))
 
@@ -17,5 +18,6 @@
   (let [mode (keyword (or (first m) :dev))
         port (Integer. (get (System/getenv) "PORT" "8080"))]
     (server/start port {:mode mode
-                        :ns 'refheap})))
+                        :ns 'refheap
+                        :session-store (mongo-session :sessions)})))
 

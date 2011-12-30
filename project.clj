@@ -6,6 +6,7 @@
                  [clj-config "0.2.0"]
                  [clj-http "0.2.6"]
                  [clavatar "0.2.0"]
-                 [clj-time "0.3.3"]]
+                 [clj-time "0.3.3"]
+                 [amalloy/mongo-session "0.0.1"]]
   :main refheap.server)
 
