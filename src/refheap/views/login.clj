@@ -31,6 +31,10 @@
     (do (session/flash-put! :email email)
         (redirect "/user/create"))))
 
+(defpage "/users/logout" []
+  (session/remove! :user)
+  (redirect "/paste"))
+
 (defpage [:post "/user/verify"] {:keys [assertion]}
   (when-let [{:keys [email]} (login/verify-assertion assertion)]
     (if (login/user-exists email)

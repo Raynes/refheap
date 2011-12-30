@@ -40,7 +40,3 @@
 
 (defpage "/users/:user" {:keys [user page]}
   (user-page user (Long. (or page "1"))))
-
-(defpage "/users/logout" []
-  (session/remove! :user)
-  (redirect "/paste"))
