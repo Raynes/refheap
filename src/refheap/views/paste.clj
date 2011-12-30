@@ -23,7 +23,7 @@
         (list (fh/label :private "Private")
               (fh/check-box :private)))
       (fh/submit-button "Paste!")]
-     [:br.clear])]))
+     [:div.clear])]))
 
 (defn show-paste-page [id]
   (when-let [{:keys [lines private user contents language date]} (paste/get-paste (Long. id))]
@@ -42,7 +42,7 @@
          (date-string date)]]
        [:div#paste.syntax
         contents]]
-      [:br.clear]))))
+      [:div.clear]))))
 
 (defn pastes [ps]
   (for [{:keys [paste-id summary date user]} ps]
