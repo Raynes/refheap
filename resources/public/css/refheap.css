@@ -123,9 +123,6 @@ div#footer {
 
 .syntax {
     border: 3px solid black;
-}
-
-div#paste {
     overflow-x: auto;
 }
 
