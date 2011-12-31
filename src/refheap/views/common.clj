@@ -10,7 +10,7 @@
 (defn layout [& content]
   (html5
    [:head
-    [:title "The Refusal Heap"]
+    [:title "The Refuse Heap"]
     (include-css "http://fonts.googleapis.com/css?family=Open+Sans")
     (include-css "/css/refheap.css")
     (include-css "/css/native.css")
@@ -19,7 +19,7 @@
     (include-js  "/js/refheap.js")]
    [:body
     [:div#header
-     [:a#site {:href "/paste"} "The Refusal Heap"]
+     [:a#site {:href "/paste"} "The Refuse Heap"]
      [:div.headerlinks
       (link-to "/pastes" "All Pastes")
       (link-to "/about" "About")]
