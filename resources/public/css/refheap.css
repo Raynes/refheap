@@ -180,9 +180,17 @@ a#newer {
 
 div#edit {
     float: right;
+    padding: 
 }
 
 #edit a {
-    padding-right: 5px;
+    padding-right: 7px;
+}
+
+.nice { 
     color: black;
+}
+
+.evil {
+    color: #CF0000;
 }

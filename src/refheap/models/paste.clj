@@ -219,6 +219,11 @@
       (mongo/update! :pastes old paste)
       paste)))
 
+(defn delete-paste
+  "Delete an existing paste."
+  [id]
+  (mongo/destroy! :pastes {:paste-id (Long. id)}))
+
 (defn get-pastes
   "Get public pastes."
   [page]

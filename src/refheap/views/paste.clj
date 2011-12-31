@@ -43,7 +43,8 @@
          " on "
          (date-string date)
          [:div#edit
-          [:a {:href (str "/paste/" id "/edit")} "edit"]]]]
+          [:a.nice {:href (str "/paste/" id "/edit")} "edit"]
+          [:a.evil {:href (str "/paste/" id "/delete")} "delete"]]]]
        [:div#paste.syntax
         contents]]
       [:div.clear]))))
@@ -77,6 +78,10 @@
 
 (defpage "/paste/:id/edit" {:keys [id]}
   (create-paste-page (paste/get-paste id)))
+
+(defpage "/paste/:id/delete" {:keys [id]}
+  (paste/delete-paste id)
+  (redirect "/paste"))
 
 (defpage [:post "/paste/:id/edit"] {:keys [id paste language private]}
   (if-let [paste (paste/update-paste
