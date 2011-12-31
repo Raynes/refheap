@@ -161,7 +161,7 @@
   [language text]
   (:out
    (sh "./pygmentize" "-fhtml" (str "-l" (lookup-lexer language))
-       "-Olinenos=table,anchorlinenos=true,lineanchors=L,stripnl=False"
+       "-Olinenos=table,anchorlinenos=true,lineanchors=L,stripnl=False,encoding=utf-8"
        :dir "resources/pygments"
        :in text)))
 
