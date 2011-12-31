@@ -42,9 +42,10 @@
            (ph/link-to (str "/users/" user) user))
          " on "
          (date-string date)
-         [:div#edit
-          [:a.nice {:href (str "/paste/" id "/edit")} "edit"]
-          [:a.evil {:href (str "/paste/" id "/delete")} "delete"]]]]
+         (when (= user (:username (session/get :user)))
+           [:div#edit
+            [:a.nice {:href (str "/paste/" id "/edit")} "edit"]
+            [:a.evil {:href (str "/paste/" id "/delete")} "delete"]])]]
        [:div#paste.syntax
         contents]]
       [:div.clear]))))
@@ -77,11 +78,15 @@
   (create-paste-page))
 
 (defpage "/paste/:id/edit" {:keys [id]}
-  (create-paste-page (paste/get-paste id)))
+  (let [paste (paste/get-paste id)]
+    (when (= (:user paste) (:username (session/get :user)))
+      (create-paste-page paste))))
 
 (defpage "/paste/:id/delete" {:keys [id]}
-  (paste/delete-paste id)
-  (redirect "/paste"))
+  (when (= (:user (paste/get-paste id))
+           (:username (session/get :user)))
+    (paste/delete-paste id)
+    (redirect "/paste")))
 
 (defpage [:post "/paste/:id/edit"] {:keys [id paste language private]}
   (if-let [paste (paste/update-paste
