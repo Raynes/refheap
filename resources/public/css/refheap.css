@@ -1,6 +1,7 @@
 body { 
     background-color: #0047B2; 
     margin: 0;
+    font-family: 'Open Sans', sans-serif;
 }
 
 div#header {
@@ -13,7 +14,7 @@ div#header {
 
 a#site {
     color: white;
-    font-size: 35px;
+    font-size: 33px;
     float: left;
     margin-right: 40px;
     text-decoration: none;
@@ -109,6 +110,7 @@ div#submit {
 div#footer {
     width: 71%;
     color: #A0BCE6;
+    font-size: 13px;
 }
 
 .centered {
@@ -131,6 +133,7 @@ div#footer {
 
 div#pasteinfo {
     margin-bottom: 4px;
+    font-size: 11px;
 }
 
 .info {
@@ -193,4 +196,8 @@ div#edit {
 
 .evil {
     color: #CF0000;
+}
+
+.header {
+    font-size: 14px;
 }

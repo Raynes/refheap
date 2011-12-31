@@ -11,6 +11,7 @@
   (html5
    [:head
     [:title "The Refusal Heap"]
+    (include-css "http://fonts.googleapis.com/css?family=Open+Sans")
     (include-css "/css/refheap.css")
     (include-css "/css/native.css")
     (include-js  "/js/jquery-1.7.1.min.js")

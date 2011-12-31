@@ -11,7 +11,7 @@
 (defn pastes [ps]
   (for [{:keys [paste-id summary date private]} ps]
     (list
-     [:span
+     [:span.header
       (ph/link-to (str "/paste/" paste-id) paste-id)
       " pasted on "
       (date-string date)
