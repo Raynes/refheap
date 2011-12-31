@@ -12,4 +12,11 @@ $(document).ready(function(){
       }
       })
     })
+  
+  $(".evil").click(function(event) {
+    var r = confirm("Are you sure you want to delete this paste? There is no getting it back.")
+    if (r == false) {
+      event.preventDefault()
+    }
+  })
 });
