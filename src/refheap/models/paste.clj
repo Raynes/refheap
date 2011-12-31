@@ -146,6 +146,7 @@
    "HTML" "html"
    "Javascript" "js"
    "PHP" "php"
+   "Plain Text" "text"
    "SASS" "sass"
    "Scaml" "scaml"
    "XML" "xml"})
