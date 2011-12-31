@@ -158,10 +158,11 @@
 
 (defn pygmentize
   "Syntax highlight some code."
-  [language text]
+  [language text & [anchor?]]
   (:out
    (sh "./pygmentize" "-fhtml" (str "-l" (lookup-lexer language))
-       "-Olinenos=table,anchorlinenos=true,lineanchors=L,stripnl=False,encoding=utf-8"
+       (str "-Olinenos=table,stripnl=False,encoding=utf-8"
+            (when anchor? ",anchorlinenos=true,lineanchors=L"))
        :dir "resources/pygments"
        :in text)))
 
@@ -184,7 +185,7 @@
             (if (= \newline (last contents))
               lines
               (inc lines)))
-   :contents (pygmentize language contents)})
+   :contents (pygmentize language contents true)})
 
 (defn validate [contents]
   (cond

@@ -40,7 +40,6 @@ div#useri {
 }
 
 #user div {
-    color: white;
     font-size: 13px;
 }
 
@@ -152,10 +151,14 @@ div.floater {
     overflow: hidden;
 }
 
+.linenos div {
+    color: gray;
+    margin-right: 10px;
+}
+
 .linenodiv a {
     text-decoration: none;
     color: gray;
-    margin-right: 10px;
 }
 
 div#login {
