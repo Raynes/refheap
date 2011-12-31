@@ -11,7 +11,7 @@
 
 (mongo/add-index! :pastes [:user :date])
 (mongo/add-index! :pastes [:private])
-(mongo/add-index! :pastes [:paste-id])
+(mongo/add-index! :pastes [:id])
 
 (server/load-views "src/refheap/views/")
 

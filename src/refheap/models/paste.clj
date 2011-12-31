@@ -12,12 +12,14 @@
 (def paste-id
   "The current highest paste-id."
   (atom
-   (:paste-id
-    (first
-     (mongo/fetch
-      :pastes
-      :sort {:paste-id -1}
-      :limit 1)))))
+   (-> (mongo/fetch
+        :pastes
+        :sort {:id -1}
+        :limit 1)
+       first
+       :id
+       (or "0")
+       Long.)))
 
 (def lexers
   "A map of language names to pygments lexer names."
@@ -162,8 +164,9 @@
        :dir "resources/pygments"
        :in text)))
 
-(defn paste-map [id language contents date private]
-  {:paste-id id
+(defn paste-map [paste-id id language contents date private]
+  {:paste-id (str paste-id)
+   :id (str id)
    :user (:username (session/get :user) "anonymous")
    :language language
    :raw-contents contents
@@ -196,28 +199,41 @@
   "Create a new paste."
   [language contents private]
   (when-short contents
-    (mongo/insert!
-     :pastes
-     (paste-map
-      (swap! paste-id inc)
-      language
-      contents
-      (format/unparse (format/formatters :date-time) (time/now))
-      private))))
+    (let [id (swap! paste-id inc)
+          result (mongo/insert!
+                  :pastes
+                  (paste-map
+                   (when-not private id)
+                   id
+                   language
+                   contents
+                   (format/unparse (format/formatters :date-time) (time/now))
+                   private))]
+      (if private
+        (let [new (assoc result :paste-id (str (:_id result)))]
+          (mongo/update! :pastes result new)
+          new)
+        result))))
 
 (defn get-paste
   "Get a paste."
   [id]
   (mongo/fetch-one
    :pastes
-   :where {:paste-id (if (string? id) (Long. id) id)}))
+   :where {:paste-id id}))
 
 (defn update-paste
   "Update an existing paste."
   [old language contents private]
   (when-short contents
-    (let [paste (paste-map
-                 (:paste-id old)
+    (let [old-private (:private old)
+          new-private (boolean private)
+          paste (paste-map
+                 (cond
+                  (= old-private new-private) (:paste-id old)
+                  (false? new-private) (:id old)
+                  (true? new-private) (str (:_id old)))
+                 (:id old)
                  language
                  contents
                  (:date old)
@@ -228,7 +244,7 @@
 (defn delete-paste
   "Delete an existing paste."
   [id]
-  (mongo/destroy! :pastes {:paste-id (Long. id)}))
+  (mongo/destroy! :pastes {:paste-id id}))
 
 (defn get-pastes
   "Get public pastes."
