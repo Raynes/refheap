@@ -16,8 +16,11 @@
    11 "November"
    12 "December"})
 
+(defn parse-string [date]
+  (format/parse (format/formatters :date-time) date))
+
 (defn date-string [date]
-  (let [parsed (format/parse (format/formatters :date-time) date)]
+  (let [parsed (parse-string date)]
     (str (months (time/month parsed)) " "
          (time/day parsed) ", "
          (time/year parsed))))

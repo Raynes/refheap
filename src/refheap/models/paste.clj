@@ -1,5 +1,6 @@
 (ns refheap.models.paste
-  (:use [clojure.java.shell :only [sh]])
+  (:use [clojure.java.shell :only [sh]]
+        [refheap.dates :only [parse-string]])
   (:require [somnium.congomongo :as mongo]
             [noir.session :as session]
             [clojure.java.io :as io]
@@ -155,33 +156,68 @@
        :dir "resources/pygments"
        :in text)))
 
+(defn paste-map [id language contents date private]
+  {:paste-id id
+   :user (:username (session/get :user) "anonymous")
+   :language language
+   :raw-contents contents
+   :summary (->> contents
+                 StringReader.
+                 io/reader
+                 line-seq
+                 (take 5)
+                 (string/join "\n")
+                 (pygmentize language))
+   :private (boolean private)
+   :date date
+   :lines (let [lines (count (filter #{\newline} contents))]
+            (if (= \newline (last contents))
+              lines
+              (inc lines)))
+   :contents (pygmentize language contents)})
+
+(defmacro when-short
+  "Convenience macro. Just 'when' with a predicate that checks
+   the length of contents and makes sure it is < 64k."
+  [contents & body]
+  `(when (< (count ~contents) 64000)
+     ~@body))
+
+(defn parse-date [date]
+  (format/parse))
+
 (defn paste
   "Create a new paste."
   [language contents private]
-  (when (< (count contents) 64000)
-    (let [user (:username (session/get :user) "anonymous")
-          id (swap! paste-count inc)
-          lines (count (filter #{\newline} contents))]
-      (mongo/insert! :pastes {:paste-id id
-                              :user user
-                              :language language
-                              :raw-contents contents
-                              :summary (->> contents
-                                            StringReader.
-                                            io/reader
-                                            line-seq
-                                            (take 5)
-                                            (string/join "\n")
-                                            (pygmentize language))
-                              :private (boolean private)
-                              :date (format/unparse (format/formatters :date-time) (time/now))
-                              :lines (if (= \newline (last contents)) lines (inc lines))
-                              :contents (pygmentize language contents)}))))
+  (when-short contents
+    (mongo/insert!
+     :pastes
+     (paste-map
+      (swap! paste-count inc)
+      language
+      contents
+      (format/unparse (format/formatters :date-time) (time/now))
+      private))))
 
 (defn get-paste
   "Get a paste."
   [id]
-  (mongo/fetch-one :pastes :where {:paste-id id}))
+  (mongo/fetch-one
+   :pastes
+   :where {:paste-id (if (string? id) (Long. id) id)}))
+
+(defn update-paste
+  "Update an existing paste."
+  [old language contents private]
+  (when-short contents
+    (let [paste (paste-map
+                 (:paste-id old)
+                 language
+                 contents
+                 (:date old)
+                 private)]
+      (mongo/update! :pastes old paste)
+      paste)))
 
 (defn get-pastes
   "Get public pastes."

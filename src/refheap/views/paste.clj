@@ -8,25 +8,27 @@
             [hiccup.form-helpers :as fh]
             [hiccup.page-helpers :as ph]))
 
-(defn create-paste-page []
+(defn create-paste-page [& [old]]
   (layout
    [:div#pastearea
     (fh/form-to
-     [:post "/paste/create"]
+     [:post (if old
+              (str "/paste/" (:paste-id old) "/edit")
+              "/paste/create")]
      (fh/drop-down "language"
                    (sort #(.compareToIgnoreCase % %2)
                          (keys paste/lexers))
-                   "Clojure")
-     (fh/text-area :paste)
+                   (:language old "Clojure"))
+     (fh/text-area :paste (:raw-contents old))
      [:div#submit
       (when (session/get :user)
         (list (fh/label :private "Private")
-              (fh/check-box :private)))
-      (fh/submit-button "Paste!")]
+              (fh/check-box :private (:private old))))
+      (fh/submit-button (if old "Edit!" "Paste!"))]
      [:div.clear])]))
 
 (defn show-paste-page [id]
-  (when-let [{:keys [lines private user contents language date]} (paste/get-paste (Long. id))]
+  (when-let [{:keys [lines private user contents language date]} (paste/get-paste id)]
     (layout
      (list
       [:div.floater
@@ -72,6 +74,18 @@
 
 (defpage "/paste" []
   (create-paste-page))
+
+(defpage "/paste/:id/edit" {:keys [id]}
+  (create-paste-page (paste/get-paste id)))
+
+(defpage [:post "/paste/:id/edit"] {:keys [id paste language private]}
+  (if-let [paste (paste/update-paste
+                  (paste/get-paste id)
+                  language
+                  paste
+                  private)]
+    (redirect (str "/paste/" (:paste-id paste)))
+    (too-big)))
 
 (defpage [:post "/paste/create"] {:keys [paste language private]}
   (if-let [paste (paste/paste language paste private)]
