@@ -70,9 +70,9 @@
     (pastes (paste/get-pastes page))
     (page-buttons (paste/count-pastes page) page)]))
 
-(defn too-big []
+(defn fail []
   (layout
-   [:p.centered "That paste was too big. Has to be less than 64KB"]))
+   [:p.centered (session/flash-get :error)]))
 
 (defpage "/paste" []
   (create-paste-page))
@@ -95,12 +95,12 @@
                   paste
                   private)]
     (redirect (str "/paste/" (:paste-id paste)))
-    (too-big)))
+    (fail)))
 
 (defpage [:post "/paste/create"] {:keys [paste language private]}
   (if-let [paste (paste/paste language paste private)]
     (redirect (str "/paste/" (:paste-id paste)))
-    (too-big)))
+    (fail)))
 
 (defpage "/paste/:id" {:keys [id]}
   (show-paste-page id))

@@ -1,14 +1,11 @@
 (ns refheap.models.login
   (:use [refheap.config :only [config]]
+        [refheap.messages :only [error]]
         [noir.request :only [ring-request]])
   (:require [somnium.congomongo :as mongo]
             [clj-http.client :as http]
             [noir.session :as session]
             [cheshire.core :as json]))
-
-(defn error [msg]
-  (session/flash-put! :error msg)
-  nil)
 
 (defn create-user [email name]
   (let [name (.toLowerCase name)

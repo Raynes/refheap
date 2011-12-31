@@ -1,6 +1,7 @@
 (ns refheap.models.paste
   (:use [clojure.java.shell :only [sh]]
-        [refheap.dates :only [parse-string]])
+        [refheap.dates :only [parse-string]]
+        [refheap.messages :only [error]])
   (:require [somnium.congomongo :as mongo]
             [noir.session :as session]
             [clojure.java.io :as io]
@@ -185,12 +186,11 @@
               (inc lines)))
    :contents (pygmentize language contents)})
 
-(defmacro when-short
-  "Convenience macro. Just 'when' with a predicate that checks
-   the length of contents and makes sure it is < 64k."
-  [contents & body]
-  `(when (< (count ~contents) 64000)
-     ~@body))
+(defn validate [contents]
+  (cond
+   (>= (count contents) 64000) (error "That paste was too big. Has to be less than 64KB")
+   (not (re-seq #"\S" contents)) (error "Your paste cannot be empty.")
+   :else contents))
 
 (defn parse-date [date]
   (format/parse))
@@ -198,7 +198,7 @@
 (defn paste
   "Create a new paste."
   [language contents private]
-  (when-short contents
+  (when-let [contents (validate contents)]
     (let [id (swap! paste-id inc)
           result (mongo/insert!
                   :pastes
@@ -212,7 +212,7 @@
       (if private
         (let [new (assoc result :paste-id (str (:_id result)))]
           (mongo/update! :pastes result new)
-          new)
+          new) 
         result))))
 
 (defn get-paste
@@ -225,7 +225,7 @@
 (defn update-paste
   "Update an existing paste."
   [old language contents private]
-  (when-short contents
+  (when-let [contents (validate contents)]
     (let [old-private (:private old)
           new-private (boolean private)
           paste (paste-map
