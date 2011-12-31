@@ -28,7 +28,7 @@
         [:div
          (link-to (str "/users/" user) user)
          (link-to "/users/logout" "logout")]
-        [:img#signin {:src "/img/browserid.png"}])]]
+        [:img#signin.imgbutton {:src "/img/browserid.png"}])]]
     [:div#content
      [:div#container content]
      [:div#footer
