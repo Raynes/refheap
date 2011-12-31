@@ -45,7 +45,7 @@
          (when (= user (:username (session/get :user)))
            [:div#edit
             [:a.nice {:href (str "/paste/" id "/edit")} "edit"]
-            [:a.evil {:href (str "/paste/" id "/delete")} "delete"]])]]
+            [:a#delete.evil {:href (str "/paste/" id "/delete")} "delete"]])]]
        [:div#paste.syntax
         contents]]
       [:div.clear]))))

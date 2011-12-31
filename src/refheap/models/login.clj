@@ -6,15 +6,25 @@
             [noir.session :as session]
             [cheshire.core :as json]))
 
+(defn error [msg]
+  (session/flash-put! :error msg)
+  nil)
+
 (defn create-user [email name]
   (let [name (.toLowerCase name)
         qmap {:email email
               :username name}]
-    (when-not (mongo/fetch-one :users :where {:username name})
-      (mongo/insert!
-       :users
-       qmap)
-      (session/put! :user qmap))))
+    (cond
+     (> (count name) 15)
+     (error "Username must be between 3 and 15 characters.")
+     (not= name (first (re-seq #"\w+" name)))
+     (error "Username cannot contain non-alphanumeric characters.")
+     (mongo/fetch-one :users :where {:username name})
+     (error "Username already exists.")
+     :else (do (mongo/insert!
+                :users
+                qmap)
+               (session/put! :user qmap)))))
 
 (defn user-exists [email]
   (when-let [user (:username

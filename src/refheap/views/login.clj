@@ -11,7 +11,7 @@
   (layout
    [:div#login
     (when-let [error (session/flash-get :error)]
-     [:p.error error])
+      [:p.evil error])
     (form-to
      [:post "/user/create"]
      [:p "You're almost there! Just enter a username and you'll be on your way."]
@@ -22,8 +22,7 @@
   (let [email (session/flash-get :email)]
     (if (login/create-user email name)
       (redirect "/paste")
-      (do (session/flash-put! :error "Username already exists.")
-          (create-user-page email)))))
+      (create-user-page email))))
 
 (defpage [:post "/user/login"] {:keys [email]}
   (if-let [username (login/user-exists email)]
