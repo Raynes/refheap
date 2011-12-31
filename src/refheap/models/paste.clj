@@ -9,9 +9,15 @@
             [clj-time.format :as format])
   (:import java.io.StringReader))
 
-(def paste-count
-  "The current count of pastes."
-  (atom (mongo/fetch-count :pastes)))
+(def paste-id
+  "The current highest paste-id."
+  (atom
+   (:paste-id
+    (first
+     (mongo/fetch
+      :pastes
+      :sort {:paste-id -1}
+      :limit 1)))))
 
 (def lexers
   "A map of language names to pygments lexer names."
@@ -193,7 +199,7 @@
     (mongo/insert!
      :pastes
      (paste-map
-      (swap! paste-count inc)
+      (swap! paste-id inc)
       language
       contents
       (format/unparse (format/formatters :date-time) (time/now))
