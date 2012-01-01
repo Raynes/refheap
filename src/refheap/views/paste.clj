@@ -8,7 +8,7 @@
             [hiccup.form-helpers :as fh]
             [hiccup.page-helpers :as ph]))
 
-(defn create-paste-page [& [old]]
+(defn create-paste-page [lang & [old]]
   (layout
    [:div#pastearea
     (fh/form-to
@@ -18,7 +18,7 @@
      (fh/drop-down "language"
                    (sort #(.compareToIgnoreCase % %2)
                          (keys paste/lexers))
-                   (:language old "Clojure"))
+                   (or lang (:language old "Clojure")))
      (fh/text-area :paste (:raw-contents old))
      [:div#submit
       (when (session/get :user)
@@ -74,13 +74,13 @@
   (layout
    [:p.centered (session/flash-get :error)]))
 
-(defpage "/paste" []
-  (create-paste-page))
+(defpage "/paste" {:keys [lang]}
+  (create-paste-page lang))
 
 (defpage "/paste/:id/edit" {:keys [id]}
   (let [paste (paste/get-paste id)]
     (when (= (:user paste) (:username (session/get :user)))
-      (create-paste-page paste))))
+      (create-paste-page nil paste))))
 
 (defpage "/paste/:id/delete" {:keys [id]}
   (when (= (:user (paste/get-paste id))
