@@ -1,11 +1,11 @@
 body { 
-    background-color: #0047B2; 
+    background-color: #001F5C; 
     margin: 0;
     font-family: 'Open Sans', sans-serif;
 }
 
 div#header {
-    background-color: #1D1D56;
+    background-color: #171745;
     padding-left: 10px;
     border: 2px solid black;
     overflow: hidden;
@@ -58,7 +58,7 @@ div#content {
 
 div#container {
     padding: 5px;
-    background-color: #80A3D8;
+    background-color: #7181A4;
     border: 2px solid black;
     width: 70%;
 }
