@@ -22,14 +22,14 @@
      [:a#site {:href "/paste"} "The Refuse Heap"]
      [:div.headerlinks
       (link-to "/pastes" "All Pastes")
-      (link-to "/about" "About")]
-     [:div#useri.headerlinks
-      (if-let [user (and (bound? #'session/*noir-session*)
-                         (:username (session/get :user)))]
-        [:div
-         (link-to (str "/users/" user) user)
-         (link-to "/users/logout" "logout")]
-        [:img#signin.imgbutton {:src "/img/browserid.png"}])]]
+      (link-to "/about" "About")
+      [:div#useri
+       (if-let [user (and (bound? #'session/*noir-session*)
+                          (:username (session/get :user)))]
+         [:div
+          [:b (link-to (str "/users/" user) user)]
+          (link-to "/users/logout" "logout")]
+         [:img#signin.imgbutton {:src "/img/browserid.png"}])]]]
     [:div#content
      [:div#container content]
      [:div#footer

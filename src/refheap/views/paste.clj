@@ -19,12 +19,14 @@
                    (sort #(.compareToIgnoreCase % %2)
                          (keys paste/lexers))
                    (or lang (:language old "Clojure")))
-     (fh/text-area :paste (:raw-contents old))
      [:div#submit
       (when (session/get :user)
-        (list (fh/label :private "Private")
-              (fh/check-box :private (:private old))))
+        (list (fh/check-box :private (:private old))
+              (fh/label :private "Private")))
       (fh/submit-button (if old "Edit!" "Paste!"))]
+     [:div#main-container
+      (fh/text-area :paste (:raw-contents old))
+      [:div#main-right "&nbsp;Instructions and/or kittens."]]
      [:div.clear])]))
 
 (defn show-paste-page [id]

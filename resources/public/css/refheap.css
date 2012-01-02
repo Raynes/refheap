@@ -1,19 +1,17 @@
-body { 
-    background-color: #001F5C; 
+body {
+    background-color: #2E2E2E; 
     margin: 0;
     font-family: 'Open Sans', sans-serif;
 }
 
 div#header {
-    background-color: #171745;
-    padding-left: 10px;
-    border: 2px solid black;
+    padding: 10px 0px 10px 15px;
     overflow: hidden;
     min-width: 700px;
 }
 
 a#site {
-    color: white;
+    color: #FFE93B;
     font-size: 33px;
     float: left;
     margin-right: 40px;
@@ -23,20 +21,26 @@ a#site {
 a#site:active { text-decoration: none; }
 
 div.headerlinks {
-    float: left;
-    margin-top: 17px;
+    margin-top: 10px;
+    padding-right: 10px;
+    float: right;
+}
+
+.headerlinks #signin {
+    margin-top: 3px;
 }
 
 .headerlinks a {
     font-size: 20px;
     padding-right: 10px;
-    color: white;
+    color: #FFE93B;
     text-decoration: none;
 }
 
 div#useri {
-    border-left: 1px solid lightBlue;
     padding-left: 10px;
+    border-left: 1px solid #DDD;
+    float: right;
 }
 
 #user div {
@@ -52,26 +56,44 @@ a#logout {
 }
 
 div#content {
-    min-width: 833px;
-    margin: 15px 0px 0px 15px;  
+    width: 100%;
 }
 
 div#container {
-    padding: 5px;
-    background-color: #7181A4;
-    border: 2px solid black;
-    width: 70%;
+    padding: 6px 10px 10px 13px;
+    background-color: #434E48;
+    width: initial;
+}
+
+div#main-container {
+    clear: both;
+    float: left;
+    width: 100%;
+}
+
+div#main-right {
+    width: 27%;
+    color: #DDD;
+    padding-right: 10px;
+    background-color: transparent;
+    min-height: 511px;
+    border: 2px solid #2E2E2E;
+    float: right;
+    margin: 2px;
 }
 
 #pastearea textarea {
-    width: 100%;
-    min-height: 400px;
-    box-sizing: border-box;
+    width: 70%;
+    float: left;
+    background-color: #DDD;
+    min-height: 510px;
     /* Dear world: stop using fucking prefixes. */
     -moz-box-sizing: border-box; /* Render properly on  Firefox */
-    -ms-box-sizing: border-box; /* Look at me, all tryin' to support IE8 and such. */
-    -webkit-box-sizing: border-box; /* Render properly on popular Android browsers. 
+    -ms-box-sizing: border-box; /* Look at me, all tryin' to support IE8 and such. */ /* Render properly on popular Android browsers. 
                                        And... Safari, I guess? */
+;
+    border: none;
+    margin:;
 }
 
 #pastearea form {
@@ -84,44 +106,77 @@ div#container {
 
 div#submit {
     float: right;
+    margin-right: 363px;
 }
 
 #submit input[type="submit"] {
     -webkit-appearance: default-button;
     cursor: pointer;
-    font-size: 25px;
-    padding: 4px;
-    margin-left: 25px;
+    font-size: 15px;
+    padding: 5px 10px;
+    margin-right: 10px;
+    margin-bottom: 5px;
+    border: 2px solid #2E2E2E;
+    background-color: #cfcfcf;
+    background: -webkit-gradient(linear, top, bottom, from(#D5D5D5), to(#E4E4E4));
+    color: #2E2E2E;
+    border-radius: 5px;
 }
 
 div#submit {
     font-size: 18px;
 }
 
-#submit input[type="checkbox"] {
+#submit input[type="checkbox"]{
     margin-left: 7px;
+    float: left;
+    margin-top: 13px;
+}
+
+div#submit label {
+    float: left;
+    margin-right: 580px;
+    margin-top: 7px;
+    color: #DDD;
+    margin-left: 5px;
+    font-size: 15px;
 }
 
 #pastearea select {
-    float: right;
+    float: left;
+    font-size: 14px;
+    background: #CCC;
+    margin-top: 2px;
+    width: 150px;
+    border: 2px solid #2E2E2E;
+    border-image: initial;
+    height: 32px;
+    color: #2E2E2E;
 }
 
 div#footer {
-    width: 71%;
-    color: #A0BCE6;
+    width: initial;
+    color: #FFE93B;
     font-size: 13px;
 }
 
 .centered {
+    width: 100%;
     text-align: center;
+    font-size: 10px;
 }
 
 #footer a {
-    color: #A0BCE6;
+    color: #A2B943;
+}
+
+div.written {
+    color: #DDD;
 }
 
 .written a {
-    color: black;
+    color: #A2B943;
+    text-decoration: none;
     font-weight: bold;
 }
 
