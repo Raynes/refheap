@@ -75,7 +75,7 @@
   (layout
    [:div
     (pastes (paste/get-pastes page))
-    (page-buttons (paste/count-pastes page) page)]))
+    (page-buttons "/pastes" (paste/count-pastes) 20 page)]))
 
 (defn fail []
   (layout

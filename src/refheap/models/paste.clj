@@ -256,14 +256,14 @@
    :where {:private false}
    :sort {:date -1}
    :limit 20
-   :skip (* 10 (dec page))))
+   :skip (* 20 (dec page))))
 
 (defn count-pastes
   "Count pastes."
-  [private?]
+  [& [private?]]
   (mongo/fetch-count
    :pastes
-   :where {:private private?}))
+   :where (when-not (nil? private?) {:private private?})))
 
-(defn count-pages [n]
-  (long (Math/ceil (/ n 10))))
+(defn count-pages [n per]
+  (long (Math/ceil (/ n per))))

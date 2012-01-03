@@ -43,9 +43,9 @@
         " and "
         (link-to "http://photos.geni.com/p13/45/9a/44/22/5344483904b52482/img_7798_large.jpg" "Iguana") "."]]]]]))
 
-(defn page-buttons [n page]
+(defn page-buttons [base n per page]
   [:div.centered
    (when-not (= 1 page)
-     [:a#newer.pagebutton {:href (str "/pastes?page=" (dec page))} "newer"])
-   (when-not (or (zero? n) (= page (paste/count-pages n)))
-     [:a.pagebutton {:href (str "/pastes?page=" (inc page))} "older"])])
+     [:a#newer.pagebutton {:href (str base "?page=" (dec page))} "newer"])
+   (when-not (or (zero? n) (= page (paste/count-pages n per)))
+     [:a.pagebutton {:href (str base "?page=" (inc page))} "older"])])
