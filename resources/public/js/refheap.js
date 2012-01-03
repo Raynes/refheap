@@ -7,8 +7,6 @@ $(document).ready(function(){
         $.post('/user/verify',
                { assertion: assertion }, 
                function(data) { $("body").html(data)})
-      } else {
-        alert("Login failure!")
       }
       })
     })
