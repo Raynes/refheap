@@ -7,8 +7,8 @@
   (layout
    [:div.written
     [:p
-     "The Refuse Heap (a synonym for 'dump') is a pastebin written in Clojure, leveraging"
-     " awesome technologies such as the "
+     "The Reference Heap is a pastebin written in Clojure, leveraging awesome technologies"
+     " such as the "
      (link-to "http://webnoir.org" "Noir")
      " web framework, "
      (link-to "http://mongodb.org" "MongoDB")
