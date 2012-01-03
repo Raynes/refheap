@@ -1,9 +1,12 @@
 div#site-container {
     margin: 0 auto;
-    width: 1280px;
+    max-width: 1280px;
+    min-width: 800px;
+    width: 100%;
     overflow: scroll;
     background-color: #2E2E2E;
 }
+
 body {
     background-color: #2E2E2E; 
     margin: 0;
@@ -39,7 +42,7 @@ div.headerlinks {
 .headerlinks a {
     font-size: 20px;
     padding-right: 10px;
-    color: #FFE93B;
+    color: #A2B943;
     text-decoration: none;
 }
 
@@ -78,26 +81,45 @@ div#main-container {
 }
 
 div#main-right {
-    width: 345px;
+    max-width: 345px;
+    width: 27%;
     color: #DDD;
     padding-right: 10px;
     background-color: transparent;
-    height: 511px;
+    height: 507px;
     border: 2px solid #2E2E2E;
     float: right;
-    margin: 2px;
+    margin-right: 2px;
+    margin-top: 41px;
 }
 
-#pastearea textarea {
-    width: 879px;
+div#paste-container {
+    max-width: 879px;
+    width: 70%;
+    background: transparent;
+    height: 555px;
+    overflow: hidden;
     float: left;
+    border: none;
+}
+
+div#paste-header {
+    width: 100%;
+    float: left;
+    overflow: visible;
+}
+
+div#paste-container textarea {
+    float: left;
+    clear: left;
+    width: 100%;
     background-color: #DDD;
     height: 510px;
-    /* Dear world: stop using fucking prefixes. */ /* Render properly on  Firefox */ /* Look at me, all tryin' to support IE8 and such. */ /* Render properly on popular Android browsers. 
-                                       And... Safari, I guess? */
-;
-    border: none;
-    margin-top: 2px;
+    /* Dear world: stop using fucking prefixes. */
+    -moz-box-sizing: border-box; /* Render properly on  Firefox */
+    -ms-box-sizing: border-box; /* Look at me, all tryin' to support IE8 and such. */ 
+    -webkit-box-sizing: border-box; /* Render properly on popular Android browsers. */
+    border: border-box;
 }
 
 #pastearea form {
@@ -108,45 +130,35 @@ div#main-right {
     clear: both;
 }
 
-div#submit {
-    float: right;
-    margin-right: 363px;
-}
-
-#submit input[type="submit"] {
+div#paste-header input[type="submit"] {
     -webkit-appearance: default-button;
     cursor: pointer;
+    float: right;
     font-size: 15px;
     padding: 5px 10px;
-    margin-right: 10px;
-    margin-bottom: 5px;
+    margin-bottom: 7px;
+    margin-right: 0px;
     border: 2px solid #2E2E2E;
     background-color: #cfcfcf;
-    background: -webkit-gradient(linear, top, bottom, from(#D5D5D5), to(#E4E4E4));
     color: #2E2E2E;
     border-radius: 5px;
 }
 
-div#submit {
-    font-size: 18px;
-}
-
-#submit input[type="checkbox"]{
-    margin-left: 7px;
+div#paste-header input[type="checkbox"]{
+    margin-left: 15px;
     float: left;
     margin-top: 13px;
 }
 
-div#submit label {
+div#paste-header label {
     float: left;
-    margin-right: 580px;
     margin-top: 7px;
     color: #DDD;
     margin-left: 5px;
     font-size: 15px;
 }
 
-#pastearea select {
+div#paste-header select {
     float: left;
     font-size: 14px;
     background: #CCC;

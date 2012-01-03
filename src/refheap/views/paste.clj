@@ -10,24 +10,24 @@
 
 (defn create-paste-page [lang & [old]]
   (layout
-   [:div#pastearea
-    (fh/form-to
-     [:post (if old
-              (str "/paste/" (:paste-id old) "/edit")
-              "/paste/create")]
-     (fh/drop-down "language"
-                   (sort #(.compareToIgnoreCase % %2)
-                         (keys paste/lexers))
-                   (or lang (:language old "Clojure")))
-     [:div#submit
-      (when (session/get :user)
-        (list (fh/check-box :private (:private old))
-              (fh/label :private "Private")))
-      (fh/submit-button (if old "Edit!" "Paste!"))]
-     [:div#main-container
-      (fh/text-area :paste (:raw-contents old))
-      [:div#main-right "&nbsp;Instructions and/or kittens."]]
-     [:div.clear])]))
+   [:div#main-container
+    [:div#paste-container
+     (fh/form-to
+      [:post (if old
+               (str "/paste/" (:paste-id old) "/edit")
+               "/paste/create")]
+      [:div#paste-header
+       (fh/drop-down "language"
+                     (sort #(.compareToIgnoreCase % %2)
+                           (keys paste/lexers))
+                     (or lang (:language old "Clojure")))
+       (when (session/get :user)
+         (list (fh/check-box :private (:private old))
+               (fh/label :private "Private")))
+       (fh/submit-button (if old "Edit!" "Paste!"))]
+      (fh/text-area :paste (:raw-contents old)))]
+    [:div#main-right "&nbsp;Instructions and/or kittens."]]
+   [:div.clear]))
 
 (defn show-paste-page [id]
   (when-let [{:keys [lines private user contents language date]} (paste/get-paste id)]
