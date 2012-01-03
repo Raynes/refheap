@@ -11,6 +11,7 @@
   (html5
    [:head
     [:title "RefHeap"]
+    [:link {:rel "shortcut icon" :href "/img/favicon.ico"}]
     (include-css "http://fonts.googleapis.com/css?family=Open+Sans")
     (include-css "/css/refheap.css")
     (include-css "/css/native.css")
