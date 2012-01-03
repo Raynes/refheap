@@ -10,7 +10,7 @@
 (defn layout [& content]
   (html5
    [:head
-    [:title "The Refuse Heap"]
+    [:title "The Reference Heap"]
     (include-css "http://fonts.googleapis.com/css?family=Open+Sans")
     (include-css "/css/refheap.css")
     (include-css "/css/native.css")

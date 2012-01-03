@@ -129,6 +129,7 @@ div#paste-container textarea {
     float: left;
     clear: left;
     width: 100%;
+    margin: 0px;
     background-color: #DDD;
     height: 510px;
     /* Dear world: stop using fucking prefixes. */
@@ -168,6 +169,7 @@ div#paste-header input[type="checkbox"]{
 
 div#paste-header label {
     float: left;
+    padding-top: 1px;
     margin-top: 7px;
     margin-left: 5px;
     font-size: 15px;
@@ -182,6 +184,7 @@ div#paste-header select {
     border: 2px solid #2E2E2E;
     border-image: initial;
     height: 32px;
+    padding: 4px;
     color: #2E2E2E;
 }
 
