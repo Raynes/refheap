@@ -20,7 +20,7 @@
    [:body
     [:div#site-container
      [:div#header
-      [:a#site {:href "/paste"} "RefHeap"]
+      [:a#site {:href "/paste"} "The Reference Heap"]
       [:div.headerlinks
        (link-to "/pastes" "All Pastes")
        (link-to "/about" "About")
