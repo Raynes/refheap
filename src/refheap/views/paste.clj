@@ -26,7 +26,12 @@
                (fh/label :private "Private")))
        (fh/submit-button (if old "Edit!" "Paste!"))]
       (fh/text-area :paste (:raw-contents old)))]
-    [:div#main-right "&nbsp;Instructions and/or kittens."]]
+    [:div#main-right
+     (ph/unordered-list ["Throw some text in that big white box over on the left" "Select what language you want to use for syntax highlighting" "Hit 'Paste!'" "Share, edit, refine; enjoy."])
+     [:p "Protip: if you get tired of selecting your language every time you drop in, you can specify it in the URL and bookmark the link. Example: \""
+      (ph/link-to "http://refheap.com/paste?lang=Ruby" "http://refheap.com/paste?lang=Ruby") "\""]
+     [:p "Send feedback, feature requests, and bug reports "
+      (ph/link-to "http://github.com/raynes/refheap/issues" "here") "."]]]
    [:div.clear]))
 
 (defn show-paste-page [id]

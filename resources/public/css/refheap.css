@@ -13,6 +13,11 @@ body {
     font-family: 'Open Sans', sans-serif;
 }
 
+a {
+    color: #A2B943;
+    text-decoration: none;
+}
+
 div#header {
     padding: 10px 0px 10px 15px;
     overflow: hidden;
@@ -42,7 +47,6 @@ div.headerlinks {
 .headerlinks a {
     font-size: 20px;
     padding-right: 10px;
-    color: #A2B943;
     text-decoration: none;
 }
 
@@ -91,6 +95,17 @@ div#main-right {
     float: right;
     margin-right: 2px;
     margin-top: 41px;
+}
+
+div#main-right ul li {
+    margin-bottom: 15px;
+    padding: 0 10px;
+    font-size: 15px;
+}
+
+div#main-right p {
+    font-size: 15px;
+    padding: 10px 20px 0 30px;
 }
 
 div#paste-container {
@@ -183,16 +198,15 @@ div#footer {
 }
 
 #footer a {
-    color: #A2B943;
+    text-decoration: underline;
 }
 
 div.written {
+    padding: 20px 45px;
     color: #DDD;
 }
 
 .written a {
-    color: #A2B943;
-    text-decoration: none;
     font-weight: bold;
 }
 
