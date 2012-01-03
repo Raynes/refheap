@@ -3,7 +3,7 @@ div#site-container {
     max-width: 1280px;
     min-width: 800px;
     width: 100%;
-    overflow: scroll;
+    overflow: auto;
     background-color: #2E2E2E;
 }
 
@@ -11,6 +11,7 @@ body {
     background-color: #2E2E2E; 
     margin: 0;
     font-family: 'Open Sans', sans-serif;
+    color: #DDD;
 }
 
 a {
@@ -87,7 +88,6 @@ div#main-container {
 div#main-right {
     max-width: 345px;
     width: 27%;
-    color: #DDD;
     padding-right: 10px;
     background-color: transparent;
     height: 507px;
@@ -95,7 +95,7 @@ div#main-right {
     float: right;
     margin-right: 2px;
     margin-top: 41px;
-    overflow: scroll;
+    overflow: auto;
 }
 
 div#main-right ul li {
@@ -171,7 +171,6 @@ div#paste-header label {
     float: left;
     padding-top: 1px;
     margin-top: 7px;
-    color: #DDD;
     margin-left: 5px;
     font-size: 15px;
 }
@@ -207,7 +206,6 @@ div#footer {
 
 div.written {
     padding: 20px 45px;
-    color: #DDD;
 }
 
 .written a {
@@ -252,12 +250,14 @@ div.floater {
 
 div#login {
     margin: auto;
-    width: 450px;
+    width: 525px;
+    text-align: center;
 }
 
 .error {
-    color: red;
+    color: #CF0000;
     font-weight: bold;
+    text-align: center;
 }
 
 a#newer {
@@ -280,10 +280,6 @@ div#edit {
 
 #edit a {
     padding-right: 7px;
-}
-
-.nice { 
-    color: black;
 }
 
 .evil {

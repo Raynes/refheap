@@ -36,7 +36,7 @@
            (str "and " (users/count-user-pastes user {:private true}) " private paste(s).")
            "paste(s).")]
         (pastes (users/user-pastes user page (when-not you? {:private false})))
-        (page-buttons (users/count-user-pastes user) page)]))))
+        (page-buttons (str "/users/" user) (users/count-user-pastes user) 10 page)]))))
 
 (defpage "/users/:user" {:keys [user page]}
   (user-page user (Long. (or page "1"))))

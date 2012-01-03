@@ -11,7 +11,7 @@
   (layout
    [:div#login
     (when-let [error (session/flash-get :error)]
-      [:p.evil error])
+      [:p.error error])
     (form-to
      [:post "/user/create"]
      [:p "You're almost there! Just enter a username and you'll be on your way."]

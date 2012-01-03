@@ -10,9 +10,10 @@
 (defn create-user [email name]
   (let [name (.toLowerCase name)
         qmap {:email email
-              :username name}]
+              :username name}
+        name-count (count name)]
     (cond
-     (> (count name) 15)
+     (or (> 3 name-count) (< 15 name-count)) 
      (error "Username must be between 3 and 15 characters.")
      (not= name (first (re-seq #"\w+" name)))
      (error "Username cannot contain non-alphanumeric characters.")

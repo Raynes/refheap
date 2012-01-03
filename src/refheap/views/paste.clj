@@ -51,7 +51,7 @@
          (date-string date)
          (when (= user (:username (session/get :user)))
            [:div#edit
-            [:a.nice {:href (str "/paste/" id "/edit")} "edit"]
+            [:a {:href (str "/paste/" id "/edit")} "edit"]
             [:a#delete.evil {:href (str "/paste/" id "/delete")} "delete"]])]]
        [:div#paste.syntax
         contents]]
@@ -75,11 +75,11 @@
   (layout
    [:div
     (pastes (paste/get-pastes page))
-    (page-buttons (paste/count-pastes page) page)]))
+    (page-buttons "/pastes" (paste/count-pastes) 20 page)]))
 
 (defn fail []
   (layout
-   [:p.centered (session/flash-get :error)]))
+   [:p.error (session/flash-get :error)]))
 
 (defpage "/paste" {:keys [lang]}
   (create-paste-page lang))
