@@ -267,3 +267,6 @@
 
 (defn count-pages [n per]
   (long (Math/ceil (/ n per))))
+
+(defn proper-page [n]
+  (if (<= n 0) 1 n))

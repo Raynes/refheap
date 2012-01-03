@@ -72,10 +72,13 @@
      [:br])))
 
 (defn all-pastes-page [page]
-  (layout
-   [:div
-    (pastes (paste/get-pastes page))
-    (page-buttons "/pastes" (paste/count-pastes) 20 page)]))
+  (let [paste-count (paste/count-pastes)]
+    (if (> page (paste/count-pages paste-count 20))
+      (redirect "/paste")
+      (layout
+       [:div
+        (pastes (paste/get-pastes page))
+        (page-buttons "/pastes" paste-count 20 page)]))))
 
 (defn fail []
   (layout
@@ -113,4 +116,4 @@
   (show-paste-page id))
 
 (defpage "/pastes" {:keys [page]}
-  (all-pastes-page (Long. (or page "1"))))
+  (all-pastes-page (paste/proper-page (Long. (or page "1")))))
