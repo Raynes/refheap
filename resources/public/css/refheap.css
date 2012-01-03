@@ -3,7 +3,7 @@ div#site-container {
     max-width: 1280px;
     min-width: 800px;
     width: 100%;
-    overflow: scroll;
+    overflow: auto;
     background-color: #2E2E2E;
 }
 
@@ -95,7 +95,7 @@ div#main-right {
     float: right;
     margin-right: 2px;
     margin-top: 41px;
-    overflow: scroll;
+    overflow: auto;
 }
 
 div#main-right ul li {
