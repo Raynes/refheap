@@ -1,3 +1,9 @@
+div#site-container {
+    margin: 0 auto;
+    width: 1280px;
+    overflow: scroll;
+    background-color: #2E2E2E;
+}
 body {
     background-color: #2E2E2E; 
     margin: 0;
@@ -72,28 +78,26 @@ div#main-container {
 }
 
 div#main-right {
-    width: 27%;
+    width: 345px;
     color: #DDD;
     padding-right: 10px;
     background-color: transparent;
-    min-height: 511px;
+    height: 511px;
     border: 2px solid #2E2E2E;
     float: right;
     margin: 2px;
 }
 
 #pastearea textarea {
-    width: 70%;
+    width: 879px;
     float: left;
     background-color: #DDD;
-    min-height: 510px;
-    /* Dear world: stop using fucking prefixes. */
-    -moz-box-sizing: border-box; /* Render properly on  Firefox */
-    -ms-box-sizing: border-box; /* Look at me, all tryin' to support IE8 and such. */ /* Render properly on popular Android browsers. 
+    height: 510px;
+    /* Dear world: stop using fucking prefixes. */ /* Render properly on  Firefox */ /* Look at me, all tryin' to support IE8 and such. */ /* Render properly on popular Android browsers. 
                                        And... Safari, I guess? */
 ;
     border: none;
-    margin:;
+    margin-top: 2px;
 }
 
 #pastearea form {
