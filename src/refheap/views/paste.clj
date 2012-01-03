@@ -79,7 +79,7 @@
 
 (defn fail []
   (layout
-   [:p.centered (session/flash-get :error)]))
+   [:p.error (session/flash-get :error)]))
 
 (defpage "/paste" {:keys [lang]}
   (create-paste-page lang))

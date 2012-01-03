@@ -249,12 +249,15 @@ div.floater {
 
 div#login {
     margin: auto;
-    width: 450px;
+    width: 525px;
+    color: #DDD;
+    text-align: center;
 }
 
 .error {
-    color: red;
+    color: #CF0000;
     font-weight: bold;
+    text-align: center;
 }
 
 a#newer {
