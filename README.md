@@ -1,4 +1,4 @@
-# RefHeap, The Reference Heap!
+# RefHeap
 
 This project is a lightweight Clojure pastebin that uses [Pygments](http://pygments.org) for syntax highlighting.
 
