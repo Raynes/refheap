@@ -18,28 +18,30 @@
     (include-js  "https://browserid.org/include.js")
     (include-js  "/js/refheap.js")]
    [:body
-    [:div#header
-     [:a#site {:href "/paste"} "The Refuse Heap"]
-     [:div.headerlinks
-      (link-to "/pastes" "All Pastes")
-      (link-to "/about" "About")
-      [:div#useri
-       (if-let [user (and (bound? #'session/*noir-session*)
-                          (:username (session/get :user)))]
-         [:div
-          [:b (link-to (str "/users/" user) user)]
-          (link-to "/users/logout" "logout")]
-         [:img#signin.imgbutton {:src "/img/browserid.png"}])]]]
-    [:div#content
-     [:div#container content]
-     [:div#footer
-      [:p.centered
-       (link-to "https://github.com/Raynes/refheap" "Refheap")
-       " is powered by " (link-to "http://clojure.org" "Clojure") ", "
-       (link-to "http://webnoir.org" "Noir") ", "
-       (link-to "http://mongodb.org" "MongoDB") ", "
-       (link-to "http://pygments.org/" "Pygments")
-       " and the cries of children the world over."]]]]))
+    [:div#site-container
+     [:div#header
+      [:a#site {:href "/paste"} "The Refuse Heap"]
+      [:div.headerlinks
+       (link-to "/pastes" "All Pastes")
+       (link-to "/about" "About")
+       [:div#useri
+        (if-let [user (and (bound? #'session/*noir-session*)
+                           (:username (session/get :user)))]
+          [:div
+           [:b (link-to (str "/users/" user) user)]
+           (link-to "/users/logout" "logout")]
+          [:img#signin.imgbutton {:src "/img/browserid.png"}])]]]
+     [:div#content
+      [:div#container content]
+      [:div#footer
+       [:p.centered
+        (link-to "https://github.com/Raynes/refheap" "Refheap")
+        " is powered by " (link-to "http://clojure.org" "Clojure") ", "
+        (link-to "http://webnoir.org" "Noir") ", "
+        (link-to "http://mongodb.org" "MongoDB") ", "
+        (link-to "http://pygments.org/" "Pygments")
+        " and "
+        (link-to "http://photos.geni.com/p13/45/9a/44/22/5344483904b52482/img_7798_large.jpg" "Iguana") "."]]]]]))
 
 (defn page-buttons [n page]
   [:div.centered
