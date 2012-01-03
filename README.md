@@ -1,6 +1,6 @@
-## The Reference Heap
+# RefHeap, The Reference Heap!
 
-RefHeap is a lightweight Clojure pastebin that uses [Pygments](http://pygments.org) for syntax highlighting.  As such, it supports generally whatever Pygments supports.
+This project is a lightweight Clojure pastebin that uses [Pygments](http://pygments.org) for syntax highlighting.
 
 ## Usage
 
