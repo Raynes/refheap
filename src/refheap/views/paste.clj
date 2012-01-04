@@ -62,20 +62,18 @@
 
 (defn pastes [ps]
   (for [{:keys [paste-id summary date user]} ps]
-    (let [user (if user
-                 (:username (users/get-user-by-id user))
-                 "anonymous")]
-      (list
-       [:span.header
-        (ph/link-to (str "/paste/" paste-id) paste-id)
-        " pasted by "
-        (if (= user "anonymous")
-          user
+    (list
+     [:span.header
+      (ph/link-to (str "/paste/" paste-id) paste-id)
+      " pasted by "
+      (if user
+        (let [user (:username (users/get-user-by-id user))]
           (ph/link-to (str "/users/" user) user))
-        " on "
-        (date-string date)]
-       [:div.syntax summary]
-       [:br]))))
+        "anonymous")
+      " on "
+      (date-string date)]
+     [:div.syntax summary]
+     [:br])))
 
 (defn all-pastes-page [page]
   (let [paste-count (paste/count-pastes)]
