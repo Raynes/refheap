@@ -1,7 +1,7 @@
 (ns refheap.views.about
-  (:use [noir.core :only [defpage defpartial]]
+  (:use [noir.core            :only [defpage]]
         [refheap.views.common :only [layout]]
-        [hiccup.page-helpers :only [link-to]]))
+        [hiccup.page-helpers  :only [link-to]]))
 
 (defn about-page []
   (layout
