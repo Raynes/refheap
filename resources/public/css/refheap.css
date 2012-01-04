@@ -77,6 +77,7 @@ div#container {
     padding: 6px 10px 10px 13px;
     background-color: #434E48;
     width: initial;
+    border-radius: 10px;
 }
 
 div#main-container {
