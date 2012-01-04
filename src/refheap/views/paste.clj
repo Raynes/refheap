@@ -99,7 +99,7 @@
 
 (defpage "/paste/:id/delete" {:keys [id]}
   (when (= (:user (paste/get-paste id))
-           (:username (session/get :user)))
+           (:id (session/get :user)))
     (paste/delete-paste id)
     (redirect "/paste")))
 
