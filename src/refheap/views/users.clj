@@ -44,4 +44,4 @@
           (page-buttons (str "/users/" user) paste-count 10 page)])))))
 
 (defpage "/users/:user" {:keys [user page]}
-  (user-page user (proper-page (Long. (or page "1")))))
+  (user-page (.toLowerCase user) (proper-page (Long. (or page "1")))))
