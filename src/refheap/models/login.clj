@@ -19,10 +19,10 @@
      (error "Username cannot contain non-alphanumeric characters.")
      (mongo/fetch-one :users :where {:username name})
      (error "Username already exists.")
-     :else (do (mongo/insert!
-                :users
-                qmap)
-               (session/put! :user qmap)))))
+     :else (let [user (mongo/insert!
+                       :users
+                       qmap)]
+             (session/put! :user (assoc qmap :id (str (:_id user))))))))
 
 (defn user-exists [email]
   (when-let [{:keys [username _id]} (mongo/fetch-one
