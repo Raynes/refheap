@@ -2,7 +2,7 @@
   (:use [noir.core :only [defpage defpartial]]
         [refheap.views.common :only [layout avatar page-buttons]]
         [noir.response :only [redirect]]
-        [refheap.dates :only [datetime-string]])
+        [refheap.dates :only [date-string]])
   (:require [refheap.models.paste :as paste]
             [refheap.models.users :as users]
             [noir.session :as session]
@@ -51,7 +51,7 @@
              (ph/link-to (str "/users/" user) user))
            "anonymous")
          " on "
-         (datetime-string date)
+         (date-string date)
          (when (and user (= user (:id (session/get :user))))
            [:div#edit
             [:a {:href (str "/paste/" id "/edit")} "edit"]
@@ -69,7 +69,7 @@
           (ph/link-to (str "/users/" user) user))
       "anonymous")
       " on "
-      (datetime-string date)
+      (date-string date)
       [:div.right
        "[" (ph/link-to (str "/paste/" paste-id) "Link") "]"]]
      [:div.syntax summary
