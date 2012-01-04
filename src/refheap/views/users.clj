@@ -25,7 +25,8 @@
     (let [you? (= user (:username (session/get :user)))
           others (when-not you? {:private false})
           paste-count (users/count-user-pastes user others)]
-      (if (> page (count-pages paste-count 10))
+      (if (and (> page (count-pages paste-count 10))
+               (not (and (zero? paste-count) (= 1 page))))
         (redirect "/paste")
         (layout
          [:div#user
