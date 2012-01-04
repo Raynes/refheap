@@ -57,6 +57,10 @@ div#useri {
     float: right;
 }
 
+div#user {
+    padding-top: 15px;
+}
+
 #user div {
     font-size: 13px;
 }
@@ -212,10 +216,17 @@ div.written {
     font-weight: bold;
 }
 
-.syntax {
+div.syntax {
     border: 2px solid #2e2e2e;
     overflow-x: auto;
     border-radius: 4px;
+}
+
+div.syntax div.more {
+    position: relative;
+    top: -10px;
+    padding-left: 3px;
+    font-size: 12px;
 }
 
 div#pasteinfo {
@@ -224,7 +235,6 @@ div#pasteinfo {
 }
 
 .info {
-    font-weight: bold;
     padding: 0 10px 0 10px;
     border-right: solid 1px black;
 }
@@ -291,6 +301,15 @@ div#edit {
     color: #CF0000;
 }
 
-.header {
-    font-size: 14px;
+div#preview-container {
+    padding-top: 15px;
+}
+
+div.preview-header {
+    font-size: 12px;
+    margin: 0 1px;
+}
+
+div.preview-header div.right {
+    float: right;
 }

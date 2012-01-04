@@ -1,23 +1,24 @@
 (ns refheap.views.users
-  (:use [noir.core :only [defpage]]
+  (:use [noir.core            :only [defpage]]
         [refheap.views.common :only [layout avatar page-buttons]]
-        [refheap.dates :only [date-string]]
-        [noir.response :only [redirect]]
+        [refheap.dates        :only [datetime-string]]
+        [noir.response        :only [redirect]]
         [refheap.models.paste :only [count-pages proper-page]])
   (:require [refheap.models.users :as users]
-            [hiccup.page-helpers :as ph]
-            [noir.session :as session]))
+            [hiccup.page-helpers  :as ph]
+            [noir.session         :as session]))
 
 (defn pastes [ps]
-  (for [{:keys [paste-id summary date private]} ps]
+  (for [{:keys [paste-id lines summary date private]} ps]
     (list
-     [:span.header
-      (ph/link-to (str "/paste/" paste-id) paste-id)
-      " pasted on "
-      (date-string date)
+     [:div.preview-header
+      (datetime-string date)
       (when private
-        (ph/image "/img/lock.png"))]
-     [:div.syntax summary]
+          (list " (" [:span.private "Private"] ")"))
+      [:div.right
+       "[" (ph/link-to (str "/paste/" paste-id) "Link") "]"]]
+     [:div.syntax summary
+      (if (> lines 5) [:div.more (ph/link-to (str "/paste/" paste-id) "more...")])]
      [:br])))
 
 (defn user-page [user page]

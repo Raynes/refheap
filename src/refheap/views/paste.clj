@@ -2,7 +2,7 @@
   (:use [noir.core :only [defpage defpartial]]
         [refheap.views.common :only [layout avatar page-buttons]]
         [noir.response :only [redirect]]
-        [refheap.dates :only [date-string]])
+        [refheap.dates :only [datetime-string]])
   (:require [refheap.models.paste :as paste]
             [refheap.models.users :as users]
             [noir.session :as session]
@@ -51,7 +51,7 @@
              (ph/link-to (str "/users/" user) user))
            "anonymous")
          " on "
-         (date-string date)
+         (datetime-string date)
          (when (and user (= user (:id (session/get :user))))
            [:div#edit
             [:a {:href (str "/paste/" id "/edit")} "edit"]
@@ -60,20 +60,26 @@
         contents]]
       [:div.clear]))))
 
-(defn pastes [ps]
-  (for [{:keys [paste-id summary date user]} ps]
+(defn render-paste-preview [paste]
+  (let [{:keys [paste-id lines summary date user]} paste]
     (list
-     [:span.header
-      (ph/link-to (str "/paste/" paste-id) paste-id)
-      " pasted by "
+     [:div.preview-header
       (if user
         (let [user (:username (users/get-user-by-id user))]
           (ph/link-to (str "/users/" user) user))
-        "anonymous")
+      "anonymous")
       " on "
-      (date-string date)]
-     [:div.syntax summary]
+      (datetime-string date)
+      [:div.right
+       "[" (ph/link-to (str "/paste/" paste-id) "Link") "]"]]
+     [:div.syntax summary
+      (if (> lines 5) [:div.more (ph/link-to (str "/paste/" paste-id) "more...")])]
      [:br])))
+  
+(defn pastes [ps]
+  [:div#preview-container
+   (for [paste ps]
+     (render-paste-preview paste))])
 
 (defn all-pastes-page [page]
   (let [paste-count (paste/count-pastes)]
