@@ -170,7 +170,7 @@
 (defn paste-map [paste-id id language contents date private]
   {:paste-id (str paste-id)
    :id (str id)
-   :user (:username (session/get :user) "anonymous")
+   :user (:id (session/get :user))
    :language language
    :raw-contents contents
    :summary (->> contents

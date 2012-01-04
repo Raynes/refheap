@@ -4,6 +4,7 @@
         [noir.response :only [redirect]]
         [refheap.dates :only [date-string]])
   (:require [refheap.models.paste :as paste]
+            [refheap.models.users :as users]
             [noir.session :as session]
             [hiccup.form-helpers :as fh]
             [hiccup.page-helpers :as ph]))
@@ -44,12 +45,13 @@
         [:span.info "Lines: " lines]
         [:span.info "Private: " private]
         [:span#last.info "Pasted by "
-         (if (= user "anonymous")
-           user
-           (ph/link-to (str "/users/" user) user))
+         (if user
+           (let [user (:username (users/get-user-by-id user))]
+             (ph/link-to (str "/users/" user) user))
+           "anonymous")
          " on "
          (date-string date)
-         (when (= user (:username (session/get :user)))
+         (when (= user (:id (session/get :user)))
            [:div#edit
             [:a {:href (str "/paste/" id "/edit")} "edit"]
             [:a#delete.evil {:href (str "/paste/" id "/delete")} "delete"]])]]
@@ -59,17 +61,20 @@
 
 (defn pastes [ps]
   (for [{:keys [paste-id summary date user]} ps]
-    (list
-     [:span.header
-      (ph/link-to (str "/paste/" paste-id) paste-id)
-      " pasted by "
-      (if (= user "anonymous")
-        user
-        (ph/link-to (str "/users/" user) user))
-      " on "
-      (date-string date)]
-     [:div.syntax summary]
-     [:br])))
+    (let [user (if user
+                 (:username (users/get-user-by-id user))
+                 "anonymous")]
+      (list
+       [:span.header
+        (ph/link-to (str "/paste/" paste-id) paste-id)
+        " pasted by "
+        (if (= user "anonymous")
+          user
+          (ph/link-to (str "/users/" user) user))
+        " on "
+        (date-string date)]
+       [:div.syntax summary]
+       [:br]))))
 
 (defn all-pastes-page [page]
   (let [paste-count (paste/count-pastes)]

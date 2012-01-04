@@ -25,13 +25,13 @@
                (session/put! :user qmap)))))
 
 (defn user-exists [email]
-  (when-let [user (:username
-                   (mongo/fetch-one
-                    :users
-                    :where {:email email}))]
+  (when-let [{:keys [username _id]} (mongo/fetch-one
+                                     :users
+                                     :where {:email email})]
     (session/put! :user {:email email
-                         :username user})
-    user))
+                         :username username
+                         :id (str _id)})
+    username))
 
 (defn verify-host [hosts]
   (hosts (first (.split (get-in (ring-request) [:headers "host"]) ":"))))
