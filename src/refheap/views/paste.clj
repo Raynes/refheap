@@ -84,9 +84,9 @@
         (pastes (paste/get-pastes page))
         (page-buttons "/pastes" paste-count 20 page)]))))
 
-(defn fail []
+(defn fail [error]
   (layout
-   [:p.error (session/flash-get :error)]))
+   [:p.error error]))
 
 (defpage "/paste" {:keys [lang]}
   (create-paste-page lang))
@@ -103,18 +103,20 @@
       (redirect "/paste"))))
 
 (defpage [:post "/paste/:id/edit"] {:keys [id paste language private]}
-  (if-let [paste (paste/update-paste
-                  (paste/get-paste id)
-                  language
-                  paste
-                  private)]
-    (redirect (str "/paste/" (:paste-id paste)))
-    (fail)))
+  (let [paste (paste/update-paste
+               (paste/get-paste id)
+               language
+               paste
+               private)]
+    (if (map? paste)
+      (redirect (str "/paste/" (:paste-id paste)))
+      (fail paste))))
 
 (defpage [:post "/paste/create"] {:keys [paste language private]}
-  (if-let [paste (paste/paste language paste private)]
-    (redirect (str "/paste/" (:paste-id paste)))
-    (fail)))
+  (let [paste (paste/paste language paste private)]
+    (if (map? paste)
+      (redirect (str "/paste/" (:paste-id paste)))
+      (fail paste))))
 
 (defpage "/paste/:id" {:keys [id]}
   (show-paste-page id))

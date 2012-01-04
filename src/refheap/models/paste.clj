@@ -189,9 +189,9 @@
 
 (defn validate [contents]
   (cond
-   (>= (count contents) 64000) (error "That paste was too big. Has to be less than 64KB")
-   (not (re-seq #"\S" contents)) (error "Your paste cannot be empty.")
-   :else contents))
+   (>= (count contents) 64000) {:error "That paste was too big. Has to be less than 64KB"}
+   (not (re-seq #"\S" contents)) {:error "Your paste cannot be empty."}
+   :else {:contents contents}))
 
 (defn parse-date [date]
   (format/parse))
@@ -199,22 +199,24 @@
 (defn paste
   "Create a new paste."
   [language contents private]
-  (when-let [contents (validate contents)]
-    (let [id (swap! paste-id inc)
-          result (mongo/insert!
-                  :pastes
-                  (paste-map
-                   (when-not private id)
-                   id
-                   language
-                   contents
-                   (format/unparse (format/formatters :date-time) (time/now))
-                   private))]
-      (if private
-        (let [new (assoc result :paste-id (str (:_id result)))]
-          (mongo/update! :pastes result new)
-          new) 
-        result))))
+  (let [validated (validate contents)]
+    (if-let [error (:error validated)]
+      error
+      (let [id (swap! paste-id inc)
+            result (mongo/insert!
+                    :pastes
+                    (paste-map
+                     (when-not private id)
+                     id
+                     language
+                     (:contents validated)
+                     (format/unparse (format/formatters :date-time) (time/now))
+                     private))]
+        (if private
+          (let [new (assoc result :paste-id (str (:_id result)))]
+            (mongo/update! :pastes result new)
+            new) 
+          result)))))
 
 (defn get-paste
   "Get a paste."
@@ -226,21 +228,23 @@
 (defn update-paste
   "Update an existing paste."
   [old language contents private]
-  (when-let [contents (validate contents)]
-    (let [old-private (:private old)
-          new-private (boolean private)
-          paste (paste-map
-                 (cond
-                  (= old-private new-private) (:paste-id old)
-                  (false? new-private) (:id old)
-                  (true? new-private) (str (:_id old)))
-                 (:id old)
-                 language
-                 contents
-                 (:date old)
-                 private)]
-      (mongo/update! :pastes old paste)
-      paste)))
+  (let [validated (validate contents)]
+    (if-let [error (:error validated)]
+      error
+      (let [old-private (:private old)
+            new-private (boolean private)
+            paste (paste-map
+                   (cond
+                    (= old-private new-private) (:paste-id old)
+                    (false? new-private) (:id old)
+                    (true? new-private) (str (:_id old)))
+                   (:id old)
+                   language
+                   (:contents validated)
+                   (:date old)
+                   private)]
+        (mongo/update! :pastes old paste)
+        paste))))
 
 (defn delete-paste
   "Delete an existing paste."
