@@ -213,8 +213,9 @@ div.written {
 }
 
 .syntax {
-    border: 3px solid black;
+    border: 2px solid #2e2e2e;
     overflow-x: auto;
+    border-radius: 4px;
 }
 
 div#pasteinfo {
