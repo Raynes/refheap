@@ -55,8 +55,8 @@
         (ph/link-to "http://mongodb.org" "MongoDB") ", "
         (ph/link-to "http://pygments.org/" "Pygments")
         ", and "
-        (ph/link-to "http://photos.geni.com/p13/45/9a/44/22/5344483904b52482/img_7798_large.jpg" "Iguana") ". Please read: the terms of "
-        (ph/link-to "/legal/tos" "service") ", and "
+        (ph/link-to "http://photos.geni.com/p13/45/9a/44/22/5344483904b52482/img_7798_large.jpg" "Iguana") ". Please read: the "
+        (ph/link-to "/legal/tos" "terms of service") ", and "
         (ph/link-to "/legal/privacy" "privacy") " policy."]]]]]))
 
 (defn page-buttons [base n per page]
