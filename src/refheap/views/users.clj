@@ -1,7 +1,7 @@
 (ns refheap.views.users
   (:use [noir.core            :only [defpage]]
         [refheap.views.common :only [layout avatar page-buttons]]
-        [refheap.dates        :only [datetime-string]]
+        [refheap.dates        :only [date-string]]
         [noir.response        :only [redirect]]
         [refheap.models.paste :only [count-pages proper-page]])
   (:require [refheap.models.users :as users]
@@ -12,7 +12,7 @@
   (for [{:keys [paste-id lines summary date private]} ps]
     (list
      [:div.preview-header
-      (datetime-string date)
+      (date-string date)
       (when private
           (list " (" [:span.private "Private"] ")"))
       [:div.right
