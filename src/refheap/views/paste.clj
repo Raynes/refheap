@@ -51,7 +51,7 @@
            "anonymous")
          " on "
          (date-string date)
-         (when (= user (:id (session/get :user)))
+         (when (and user (= user (:id (session/get :user))))
            [:div#edit
             [:a {:href (str "/paste/" id "/edit")} "edit"]
             [:a#delete.evil {:href (str "/paste/" id "/delete")} "delete"]])]]
@@ -98,10 +98,10 @@
       (create-paste-page nil paste))))
 
 (defpage "/paste/:id/delete" {:keys [id]}
-  (when (= (:user (paste/get-paste id))
-           (:id (session/get :user)))
-    (paste/delete-paste id)
-    (redirect "/paste")))
+  (when-let [user (:user (paste/get-paste id))]
+    (when (= user (:id (session/get :user)))
+      (paste/delete-paste id)
+      (redirect "/paste"))))
 
 (defpage [:post "/paste/:id/edit"] {:keys [id paste language private]}
   (if-let [paste (paste/update-paste
