@@ -43,7 +43,8 @@
        [:div#pasteinfo
         [:span.info language]
         [:span.info "Lines: " lines]
-        [:span.info "Private: " private]
+        (when private
+          [:span {:class "info private"} "Private"])
         [:span#last.info "Pasted by "
          (if user
            (let [user (:username (users/get-user-by-id user))]

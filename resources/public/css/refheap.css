@@ -228,6 +228,10 @@ div#pasteinfo {
     border-right: solid 1px black;
 }
 
+.private {
+    color: #22aa22;
+}
+
 span#last {
     border-right: none;
 }
