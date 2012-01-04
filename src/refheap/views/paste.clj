@@ -94,7 +94,7 @@
 
 (defpage "/paste/:id/edit" {:keys [id]}
   (let [paste (paste/get-paste id)]
-    (when (= (:user paste) (:username (session/get :user)))
+    (when (= (:user paste) (:id (session/get :user)))
       (create-paste-page nil paste))))
 
 (defpage "/paste/:id/delete" {:keys [id]}
