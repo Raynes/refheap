@@ -166,10 +166,10 @@
        :dir "resources/pygments"
        :in text)))
 
-(defn paste-map [paste-id id language contents date private]
+(defn paste-map [paste-id id user language contents date private]
   {:paste-id (str paste-id)
    :id id
-   :user (:id (session/get :user))
+   :user (:id user)
    :language language
    :raw-contents contents
    :summary (->> contents
@@ -198,7 +198,7 @@
 
 (defn paste
   "Create a new paste."
-  [language contents private]
+  [language contents private user]
   (let [validated (validate contents)]
     (if-let [error (:error validated)]
       error
@@ -208,6 +208,7 @@
                     (paste-map
                      (when-not private id)
                      id
+                     user
                      language
                      (:contents validated)
                      (format/unparse (format/formatters :date-time) (time/now))
@@ -227,7 +228,7 @@
 
 (defn update-paste
   "Update an existing paste."
-  [old language contents private]
+  [old language contents private user]
   (let [validated (validate contents)]
     (if-let [error (:error validated)]
       error
@@ -239,6 +240,7 @@
                     (false? new-private) (:id old)
                     (true? new-private) (str (:_id old)))
                    (:id old)
+                   user
                    language
                    (:contents validated)
                    (:date old)

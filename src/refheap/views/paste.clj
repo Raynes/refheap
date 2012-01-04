@@ -113,13 +113,14 @@
                (paste/get-paste id)
                language
                paste
-               private)]
+               private
+               (session/get :user))]
     (if (map? paste)
       (redirect (str "/paste/" (:paste-id paste)))
       (fail paste))))
 
 (defpage [:post "/paste/create"] {:keys [paste language private]}
-  (let [paste (paste/paste language paste private)]
+  (let [paste (paste/paste language paste private (session/get :user))]
     (if (map? paste)
       (redirect (str "/paste/" (:paste-id paste)))
       (fail paste))))
