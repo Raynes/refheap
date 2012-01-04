@@ -19,8 +19,7 @@
         :limit 1)
        first
        :id
-       (or "0")
-       Long.)))
+       (or 0))))
 
 (def lexers
   "A map of language names to pygments lexer names."
@@ -169,7 +168,7 @@
 
 (defn paste-map [paste-id id language contents date private]
   {:paste-id (str paste-id)
-   :id (str id)
+   :id id
    :user (:id (session/get :user))
    :language language
    :raw-contents contents
