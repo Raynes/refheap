@@ -230,6 +230,10 @@ div.syntax div.more {
     font-size: 12px;
 }
 
+div.more a {
+    font-weight: bold;
+}
+
 div#pasteinfo {
     margin-bottom: 4px;
     font-size: 11px;
