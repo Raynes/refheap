@@ -1,6 +1,7 @@
 (ns refheap.models.api
   (:require [somnium.congomongo :as mongo]
-            [refheap.models.users :as users])
+            [refheap.models.users :as users]
+            [noir.response :as response])
   (:import java.util.UUID))
 
 (defn gen-token
@@ -52,3 +53,17 @@
     "true" true
     "false" false
     false))
+
+(defn add-status [status resp]
+  (assoc resp :status status))
+
+(defn error [msg] {:error msg})
+
+(defn response [type & [data]]
+  (case type
+    :bad (add-status 400 (response/json (error data)))
+    :unprocessable (add-status 422 (response/json (error data)))
+    :created (add-status 201 (response/json data))
+    :no-content {:status 204}
+    :not-found (add-status 404 (response/json data))
+    :ok (response/json data)))
