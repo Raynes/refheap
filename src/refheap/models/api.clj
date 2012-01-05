@@ -23,7 +23,7 @@
   "Get a user's API token. Generate one if it doesn't exist."
   [userid]
   (or (:token (users/get-user-by-id userid))
-      (:token (new-token userid))))
+      (new-token userid)))
 
 (defn validate-user
   "Validate that a token exists and that the user has that token."
