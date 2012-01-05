@@ -29,10 +29,13 @@
   "Validate that a token exists and that the user has that token."
   [username token]
   (when (and username token)
-    (or (mongo/fetch-one
-         :users
-         :where {:token token, :username username})
-        "User or token not valid.")))
+    (if-let [user (mongo/fetch-one
+                   :users
+                   :where {:token token, :username (.toLowerCase username)})]
+      (-> user
+          (assoc :id (str (:_id user)))
+          (dissoc :_id))
+      "User or token not valid.")))
 
 (defn process-paste
   "Select and rename keys to make pastes suitable for api consumption."
