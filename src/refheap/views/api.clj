@@ -76,12 +76,7 @@
        :else (api/response :no-content (paste/delete-paste id))))
     (api/response :not-found "Paste doesn't exist.")))
 
-(defpage "/api/paste/:id" {:keys [id username token]}
+(defpage "/api/paste/:id" {:keys [id]}
   (if-let [paste (paste/get-paste id)]
-    (let [user (api/validate-user username token)]
-      (cond
-       (string? user) (api/response :unprocessable user)
-       (and (:private paste) (not= (:id user) (:user paste)))
-       (api/response :unprocessable "You can't see private pastes that you don't own.")
-       :else (api/response :ok (api/process-paste paste))))
+    (api/response :ok (api/process-paste paste))
     (api/response :not-found "Paste does not exist.")))
