@@ -78,7 +78,7 @@ div#content {
 }
 
 div#container {
-    padding: 6px 10px 10px 13px;
+    padding: 6px 12px 10px 13px;
     background-color: #434E48;
     width: initial;
     border-radius: 5px;
@@ -98,8 +98,8 @@ div#main-right {
     height: 507px;
     border: 2px solid #2E2E2E;
     float: right;
-    margin-right: 2px;
     margin-top: 41px;
+    margin-right: 1px;
     overflow: auto;
 }
 
