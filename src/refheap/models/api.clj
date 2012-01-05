@@ -11,11 +11,13 @@
 (defn new-token
   "Gives a user a new API token and disables the old one (by removing it)."
   [userid]
-  (let [old (users/get-user-by-id userid)]
+  (let [old (users/get-user-by-id userid)
+        new (gen-token)]
     (mongo/update!
      :users
      old
-     (assoc old :token (gen-token)))))
+     (assoc old :token new))
+    new))
 
 (defn get-token
   "Get a user's API token. Generate one if it doesn't exist."

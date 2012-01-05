@@ -6,7 +6,7 @@ $(document).ready(function(){
       if (assertion) {
         $.post('/user/verify',
                { assertion: assertion }, 
-               function(data) { $("body").html(data)})
+               function(data) { $("body").html(data) })
       }
       })
     })
@@ -16,5 +16,10 @@ $(document).ready(function(){
     if (r == false) {
       event.preventDefault()
     }
+  })
+
+  $("#gentoken").click(function(event) {
+    $.get('/token/generate',
+          function(data) { $("#tokentext").html(data) })
   })
 });

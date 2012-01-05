@@ -38,6 +38,7 @@
       [:div.headerlinks
        (ph/link-to "/pastes" "All Pastes")
        (ph/link-to "/about" "About")
+       (ph/link-to "/api" "API")
        [:div#useri
         (if-let [user (and (bound? #'session/*noir-session*)
                            (:username (session/get :user)))]

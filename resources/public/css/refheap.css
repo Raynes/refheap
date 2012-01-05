@@ -318,3 +318,20 @@ div.preview-header {
 div.preview-header div.right {
     float: right;
 }
+
+div#token {
+    text-align: center;
+}
+
+code#tokentext {
+    margin-right: 10px;
+    background-color: #DDD;
+    color: black;
+    padding: 4px;
+    border-radius: 5px;
+}
+
+button#gentoken {
+    height: 24px;
+    border-radius: 5px;
+}
