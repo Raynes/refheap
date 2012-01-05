@@ -22,3 +22,29 @@
   [userid]
   (or (:token (users/get-user-by-id userid))
       (:token (new-token userid))))
+
+(defn validate-user
+  "Validate that a token exists and that the user has that token."
+  [username token]
+  (when (and username token)
+    (or (mongo/fetch-one
+         :users
+         :where {:token token, :username username})
+        "User or token not valid.")))
+
+(defn process-paste
+  "Select and rename keys to make pastes suitable for api consumption."
+  [paste]
+  (prn paste)
+  (-> paste
+      (assoc :contents (:raw-contents paste))
+      (assoc :user (when-let [user (:user paste)]
+                     (:username (users/get-user-by-id user))))
+      (assoc :url (str "http://refheap.com/paste/" (:paste-id paste)))
+      (dissoc :id :_id :raw-contents :summary)))
+
+(defn string->bool [s]
+  (case s
+    "true" true
+    "false" false
+    false))

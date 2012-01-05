@@ -170,7 +170,9 @@
   {:paste-id (str paste-id)
    :id id
    :user (:id user)
-   :language language
+   :language (if (lexers language)
+               language
+               "Plain Text")
    :raw-contents contents
    :summary (->> contents
                  StringReader.
@@ -190,7 +192,7 @@
 (defn validate [contents]
   (cond
    (>= (count contents) 64000) {:error "That paste was too big. Has to be less than 64KB"}
-   (not (re-seq #"\S" contents)) {:error "Your paste cannot be empty."}
+   (not (re-seq #"\S" (str contents))) {:error "Your paste cannot be empty."}
    :else {:contents contents}))
 
 (defn parse-date [date]
