@@ -1,6 +1,7 @@
 (ns refheap.views.api
   (:use [noir.core :only [defpage]]
-        [refheap.views.common :only [layout]])
+        [refheap.views.common :only [layout]]
+        [hiccup.page-helpers :only [link-to]])
   (:require [noir.response :as response]
             [noir.session :as session]
             [refheap.models.api :as api]
@@ -17,11 +18,15 @@
      "You want to keep this API token a secret. However, if you accidentally push it to Github "
      "or it is otherwise compromised, you can generate a new one at anytime. When you generate a new "
      "token, the old one no longer works."]
+    [:p
+     "Check out the API documentation on "
+     (link-to "https://github.com/Raynes/refheap/wiki/Documentation:-API" "Github")
+     "!"]
     (if-let [id (:id (session/get :user))]
       [:div#token
        [:code#tokentext (api/get-token id)]
        [:button#gentoken {:type "button"} "Generate New Token"]]
-      [:p "Login to see your API token!"])]))
+      [:p "Login to see your API token."])]))
 
 (defpage "/api" []
   (api-page))
