@@ -35,8 +35,8 @@
   (when-let [id (:id (session/get :user))]
     (api/new-token id)))
 
-(defpage [:post "/api/paste/create"] {:keys [private contents language username token]
-                                      :or {private "false"}}
+(defpage [:post "/api/paste"] {:keys [private contents language username token]
+                               :or {private "false"}}
   (response/json
    (let [user (api/validate-user username token)]
      (if (string? user)
@@ -46,7 +46,7 @@
            {:error paste}
            (api/process-paste paste)))))))
 
-(defpage [:post "/api/paste/:id/edit"] {:keys [id private contents language username token]}
+(defpage [:post "/api/paste/:id"] {:keys [id private contents language username token]}
   (response/json
    (if-let [paste (paste/get-paste id)]
      (let [user (api/validate-user username token)]
@@ -54,7 +54,7 @@
         (string? user) {:error "Username or token is incorrect."}
         (nil? (:user paste)) {:error "You can't edit anonymous pastes."}
         (nil? user) {:error "You must be authenticated to edit pastes."}
-        (not= (:id user) (:user paste)) {:error "You can only edit pastes created by you."}
+        (not= (:id user) (:user paste)) {:error "You can only edit pastes that you own."}
         :else (let [paste (paste/update-paste paste
                                               (or language (:language paste))
                                               (or contents (:raw-contents paste))
@@ -66,6 +66,20 @@
                   {:error paste}
                   (api/process-paste paste)))))
      {:error "Paste does not exist."})))
+
+(defpage [:delete "/api/paste/:id"] {:keys [id username token]}
+  (let [resp (if-let [paste (paste/get-paste id)]
+               (let [user (api/validate-user username token)]
+                 (cond
+                  (string? user) {:error user}
+                  (nil? (:user paste)) {:error "You can't delete anonymous pastes."}
+                  (nil? user) {:error "You must be authenticated to delete pastes."}
+                  (not= (:id user) (:user paste)) {:error "You can only delete pastes that you own."}
+                  :else (paste/delete-paste id)))
+               {:error "Paste doesn't exist."})]
+    (if (map? resp)
+      (response/json resp)
+      (response/empty))))
 
 (defpage "/api/paste/:id" {:keys [id username token]}
   (response/json
