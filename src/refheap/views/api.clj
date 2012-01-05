@@ -46,7 +46,7 @@
            {:error paste}
            (api/process-paste paste)))))))
 
-(defpage [:post "/api/paste/edit"] {:keys [id private contents language username token]}
+(defpage [:post "/api/paste/:id/edit"] {:keys [id private contents language username token]}
   (response/json
    (if-let [paste (paste/get-paste id)]
      (let [user (api/validate-user username token)]
