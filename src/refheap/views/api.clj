@@ -11,7 +11,7 @@
   (layout
    [:div.written
     [:p
-     "RefHeap has a simple API for accessing and creating tweets. You can use this API without an "
+     "RefHeap has a simple API for accessing and creating pastes. You can use this API without an "
      "account with RefHeap. However, if you want pastes that you create to be created under your "
      "account, you'll need to supply your username and an API token with the request. "
      "You want to keep this API token a secret. However, if you accidentally push it to Github "
