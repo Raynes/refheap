@@ -40,7 +40,6 @@
 (defn process-paste
   "Select and rename keys to make pastes suitable for api consumption."
   [paste]
-  (prn paste)
   (-> paste
       (assoc :contents (:raw-contents paste))
       (assoc :user (when-let [user (:user paste)]
