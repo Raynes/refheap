@@ -66,3 +66,14 @@
                   {:error paste}
                   (api/process-paste paste)))))
      {:error "Paste does not exist."})))
+
+(defpage "/api/paste/:id" {:keys [id username token]}
+  (response/json
+   (if-let [paste (paste/get-paste id)]
+     (let [user (api/validate-user username token)]
+       (cond
+        (string? user) {:error user}
+        (and (:private paste) (not= (:id user) (:user paste)))
+        {:error "You can't see private pastes that you don't own."}
+        :else (api/process-paste paste)))
+     {:error "Paste does not exist."})))
