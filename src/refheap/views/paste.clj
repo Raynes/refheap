@@ -31,6 +31,11 @@
      (ph/unordered-list ["Throw some text in that big white box over on the left" "Select what language you want to use for syntax highlighting" "Hit 'Paste!'" "Share, edit, refine; enjoy."])
      [:p "Protip: if you get tired of selecting your language every time you drop in, you can specify it in the URL and bookmark the link. Example: \""
       (ph/link-to "http://refheap.com/paste?lang=Ruby" "http://refheap.com/paste?lang=Ruby") "\""]
+     [:p "We have an API! Generate a token "
+      (ph/link-to "/api" "here")
+      " and find examples in our "
+      (ph/link-to "https://github.com/Raynes/refheap/wiki/Documentation:-API" "documentation")
+      ". Happy hacking!"]
      [:p "Send feedback, feature requests, and bug reports "
       (ph/link-to "http://github.com/raynes/refheap/issues" "here") "."]]]
    [:div.clear]))
