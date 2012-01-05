@@ -45,3 +45,24 @@
          (if (string? paste)
            {:error paste}
            (api/process-paste paste)))))))
+
+(defpage [:post "/api/paste/edit"] {:keys [id private contents language username token]}
+  (response/json
+   (if-let [paste (paste/get-paste id)]
+     (let [user (api/validate-user username token)]
+       (cond
+        (string? user) {:error "Username or token is incorrect."}
+        (nil? (:user paste)) {:error "You can't edit anonymous pastes."}
+        (nil? user) {:error "You must be authenticated to edit pastes."}
+        (not= (:id user) (:user paste)) {:error "You can only edit pastes created by you."}
+        :else (let [paste (paste/update-paste paste
+                                              (or language (:language paste))
+                                              (or contents (:raw-contents paste))
+                                              (if (nil? private)
+                                                (:private paste)
+                                                (api/string->bool private))
+                                              user)]
+                (if (string? paste)
+                  {:error paste}
+                  (api/process-paste paste)))))
+     {:error "Paste does not exist."})))
