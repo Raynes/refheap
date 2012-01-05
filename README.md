@@ -21,5 +21,3 @@ We are [Anthony Grimes](https://github.com/Raynes) and [Alex McNamara](https://g
 ## License
 
 Distributed under the Eclipse Public License, the same as Clojure; the terms of which can be found in the file epl-v10.html at the root of this disribution or at [http://opensource.org/licenses/eclipse-1.0.php](http://opensource.org/licenses/eclipse-1.0.php).
-
-This project uses graphic assets which are part of the [PRZE](http://rrze-icon-set.berlios.de) icon set, which is licensed under Creative Commons Attribution-ShareAlike 3.0 Unported.
