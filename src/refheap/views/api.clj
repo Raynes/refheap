@@ -30,8 +30,8 @@
   (when-let [id (:id (session/get :user))]
     (api/new-token id)))
 
-(defpage [:post "/api/v1/paste/create"] {:keys [private contents language username token]
-                                         :or {private "false"}}
+(defpage [:post "/api/paste/create"] {:keys [private contents language username token]
+                                      :or {private "false"}}
   (response/json
    (let [user (api/validate-user username token)]
      (if (string? user)
