@@ -1,5 +1,10 @@
 // Just some BrowserID stuff.
 
+function hlLine() {
+  $('a[style]').removeAttr("style")
+  $('a[href|="' + window.location.hash + '"]').attr("style", "color: #22aa22;")
+}
+
 $(document).ready(function(){
     $("#signin").click(function(event) {
       navigator.id.getVerifiedEmail(function(assertion) {
@@ -22,4 +27,10 @@ $(document).ready(function(){
     $.get('/token/generate',
           function(data) { $("#tokentext").html(data) })
   })
+
+  $(window).bind('hashchange', hlLine)
+
+  if (window.location.hash) {
+    hlLine()
+  }
 });
