@@ -1,7 +1,7 @@
 (ns refheap.views.paste
   (:use [noir.core :only [defpage defpartial]]
         [refheap.views.common :only [layout avatar page-buttons]]
-        [noir.response :only [redirect]]
+        [noir.response :only [redirect content-type]]
         [refheap.dates :only [date-string]])
   (:require [refheap.models.paste :as paste]
             [refheap.models.users :as users]
@@ -57,10 +57,12 @@
            "anonymous")
          " on "
          (date-string date)
-         (when (and user (= user (:id (session/get :user))))
-           [:div#edit
-            [:a {:href (str "/paste/" id "/edit")} "edit"]
-            [:a#delete.evil {:href (str "/paste/" id "/delete")} "delete"]])]]
+         [:div#edit
+          (ph/link-to (str "/paste/" id "/raw") "raw")
+          (when (and user (= user (:id (session/get :user))))
+            (list
+             [:a {:href (str "/paste/" id "/edit")} "edit"]
+             [:a#delete.evil {:href (str "/paste/" id "/delete")} "delete"]))]]]
        [:div#paste.syntax
         contents]]
       [:div.clear]))))
@@ -112,6 +114,10 @@
     (when (= user (:id (session/get :user)))
       (paste/delete-paste id)
       (redirect "/paste"))))
+
+(defpage "/paste/:id/raw" {:keys [id]}
+  (when-let [content (:raw-contents (paste/get-paste id))]
+    (content-type "text/plain" content)))
 
 (defpage [:post "/paste/:id/edit"] {:keys [id paste language private]}
   (let [paste (paste/update-paste
