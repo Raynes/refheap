@@ -108,12 +108,8 @@
   (let [{:keys [paste-id content]} paste]
     (layout
      (list 
-      [:p {:style "font-size: 13px;"}
-       "Please copy the following html element onto your webpage, and change the inline size/styling as needed:"]
-      [:p {:style "font-size: 13px; margin-bottom: 25px;"}
-       "&lt;iframe style=\"width: 648px; height: 400px; border: 0px;\" src=\"http://refheap.com/paste/" paste-id "/fullscreen\" /&gt;"]
-      [:iframe {:style "width: 648px; height: 400px; border: 0px;"
-                :src (str "http://refheap.com/paste/" paste-id "/fullscreen")}]))))
+      [:p "Please copy the following html element onto your webpage, and change the inline size/styling as needed:"]
+      [:p "&lt;iframe style=\"width: 648px; height: 400px; border: 0px;\" src=\"http://refheap.com/paste/" paste-id "/fullscreen\" /&gt;"]))))
 
 (defn pastes [ps]
   [:div#preview-container
