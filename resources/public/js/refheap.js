@@ -1,6 +1,6 @@
 function hlLine() {
   $('a[style]').removeAttr("style")
-  $('a[href|="' + window.location.hash + '"]').attr("style", "color: #22aa22;")
+  $('a[href|="' + window.location.hash + '"]').attr("style", "color: #FFE93B;")
 }
 
 $(document).ready(function(){
