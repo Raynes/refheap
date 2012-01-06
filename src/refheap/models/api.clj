@@ -1,6 +1,7 @@
 (ns refheap.models.api
   (:require [somnium.congomongo :as mongo]
             [refheap.models.users :as users]
+            [refheap.models.paste :as pastes]
             [noir.response :as response])
   (:import java.util.UUID))
 
@@ -38,6 +39,11 @@
           (dissoc :_id))
       "User or token not valid.")))
 
+(defn id->paste-id [paste]
+  (if-let [fork (:fork paste)]
+    (assoc paste :fork (or (:paste-id (pastes/get-paste-by-id fork)) "deleted"))
+    paste))
+
 (defn process-paste
   "Select and rename keys to make pastes suitable for api consumption."
   [paste]
@@ -46,7 +52,8 @@
       (assoc :user (when-let [user (:user paste)]
                      (:username (users/get-user-by-id user))))
       (assoc :url (str "http://refheap.com/paste/" (:paste-id paste)))
-      (dissoc :id :_id :raw-contents :summary)))
+      (dissoc :id :_id :raw-contents :summary)
+      id->paste-id))
 
 (defn string->bool [s]
   (case s

@@ -41,7 +41,7 @@
    [:div.clear]))
 
 (defn show-paste-page [id]
-  (when-let [{:keys [lines private user contents language date]} (paste/get-paste id)]
+  (when-let [{:keys [lines private user contents language date fork] :as all} (paste/get-paste id)]
     (layout
      (list
       [:div.floater
@@ -50,17 +50,26 @@
         [:span.info "Lines: " lines]
         (when private
           [:span {:class "info private"} "Private"])
-        [:span#last.info "Pasted by "
+        [:span#last.info
+         (if fork "Forked by " "Pasted by ")
          (if user
            (let [user (:username (users/get-user-by-id user))]
              (ph/link-to (str "/users/" user) user))
            "anonymous")
+         (when fork
+           (list
+            " from "
+            (if-let [paste (:paste-id (paste/get-paste-by-id fork))]
+              (ph/link-to (str "/paste/" paste) paste)
+              "[deleted]")))
          " on "
          (date-string date)
          [:div#edit
           (ph/link-to (str "/paste/" id "/embed") "embed")
           (ph/link-to (str "/paste/" id "/raw") "raw")
           (ph/link-to (str "/paste/" id "/fullscreen") "maximize")
+          (when-not (= user (:id (session/get :user)))
+            (ph/link-to (str "/paste/" id "/fork") "fork"))
           (when (and user (= user (:id (session/get :user))))
             (list
              [:a {:href (str "/paste/" id "/edit")} "edit"]
@@ -132,6 +141,17 @@
   (let [paste (paste/get-paste id)]
     (when (= (:user paste) (:id (session/get :user)))
       (create-paste-page nil paste))))
+
+(defpage "/paste/:id/fork" {:keys [id]}
+  (let [user (:id (session/get :user))
+        paste (paste/get-paste id)]
+    (when (and user paste (not= (:user paste) user))
+      (let [forked (paste/paste (:language paste)
+                                (:raw-contents paste)
+                                (:private paste)
+                                (session/get :user)
+                                (:id paste))]
+        (redirect (str "/paste/" (:paste-id forked)))))))
 
 (defpage "/paste/:id/delete" {:keys [id]}
   (when-let [user (:user (paste/get-paste id))]
