@@ -1,8 +1,10 @@
 (ns refheap.views.login
   (:use [hiccup.form-helpers :only [text-field submit-button form-to]]
-        [refheap.views.common :only [layout]]
+        [refheap.views.common :only [layout logged-in]]
         [noir.core :only [defpage]]
-        [noir.response :only [redirect]])
+        [noir.response :only [redirect json]]
+        [hiccup.core :only [html]]
+        [refheap.views.paste :only [private-checkbox]])
   (:require [refheap.models.login :as login]
             [noir.session :as session]))
 
@@ -36,6 +38,7 @@
 
 (defpage [:post "/user/verify"] {:keys [assertion]}
   (when-let [{:keys [email]} (login/verify-assertion assertion)]
-    (if (login/user-exists email)
-      (redirect "/paste")
-      (create-user-page email))))
+    (if-let [username (login/user-exists email)]
+     (json {:login-html (html (logged-in username))
+       :private-html (html (private-checkbox {:private false}))})
+      (create-user-page))))

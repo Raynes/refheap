@@ -9,6 +9,11 @@
             [hiccup.form-helpers :as fh]
             [hiccup.page-helpers :as ph]))
 
+
+(defn private-checkbox [old]
+  (list (fh/check-box :private (:private old))
+               (fh/label :private "Private")))
+
 (defn create-paste-page [lang & [old]]
   (layout
    [:div#main-container
@@ -23,8 +28,7 @@
                            (keys paste/lexers))
                      (or lang (:language old "Clojure")))
        (when (session/get :user)
-         (list (fh/check-box :private (:private old))
-               (fh/label :private "Private")))
+         (private-checkbox old))
        (fh/submit-button (if old "Edit!" "Paste!"))]
       (fh/text-area :paste (:raw-contents old)))]
     [:div#main-right

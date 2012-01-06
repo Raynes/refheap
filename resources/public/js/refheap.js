@@ -7,10 +7,19 @@ $(document).ready(function(){
     $("#signin").click(function(event) {
       navigator.id.getVerifiedEmail(function(assertion) {
       if (assertion) {
-        $.post('/user/verify',
-               { assertion: assertion }, 
-               function(data) { $("body").html(data) })
-      }
+        $.ajax({type: "POST",
+              url: "/user/verify",
+              data: { assertion: assertion},
+              dataType: "json",
+              success: function(data) {
+                if (data) {
+                   console.log("Hi there" + data);
+                   $("#useri").html(data["login-html"]);
+                   $("#language").after(data["private-html"])
+                }
+              },
+             });
+          }
       })
     })
   

@@ -20,7 +20,7 @@
   })();"))
 
 (defn header []
-  [:head
+ [:head
    [:title "RefHeap"]
    [:link {:rel "shortcut icon" :href "/img/favicon.ico"}]
    (ph/include-css "http://fonts.googleapis.com/css?family=Open+Sans")
@@ -29,6 +29,28 @@
    (ph/include-js  "/js/jquery-1.7.1.min.js")
    (ph/include-js  "https://browserid.org/include.js")
    (ph/include-js  "/js/refheap.js")
+   (analytics)])
+
+(defn logged-in [username]
+  (if-let [user (or username
+                  (and (bound? #'session/*noir-session*)
+                   (:username (session/get :user))))]
+          [:div
+           [:b (ph/link-to (str "/users/" user) user)]
+            (ph/link-to "/users/logout" "logout")]
+    [:img#signin.imgbutton {:src "/img/browserid.png"}]))
+
+(defn layout [& content]
+  (ph/html5
+   [:head
+    [:title "RefHeap"]
+    [:link {:rel "shortcut icon" :href "/img/favicon.ico"}]
+    (ph/include-css "http://fonts.googleapis.com/css?family=Open+Sans")
+    (ph/include-css "/css/refheap.css")
+    (ph/include-css "/css/native.css")
+    (ph/include-js  "/js/jquery-1.7.1.min.js")
+    (ph/include-js  "https://browserid.org/include.js")
+    (ph/include-js  "/js/refheap.js")
    (analytics)])
 
 (defn layout [& content]
@@ -41,13 +63,7 @@
       [:div.headerlinks
        (ph/link-to "/pastes" "Latest")
        (ph/link-to "http://blog.refheap.com" "Blog")
-       [:div#useri
-        (if-let [user (and (bound? #'session/*noir-session*)
-                           (:username (session/get :user)))]
-          [:div
-           [:b (ph/link-to (str "/users/" user) user)]
-           (ph/link-to "/users/logout" "logout")]
-          [:img#signin.imgbutton {:src "/img/browserid.png"}])]]]
+       [:div#useri (logged-in nil)]]]
      [:div#content
       [:div#container content]
       [:div#footer
