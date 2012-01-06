@@ -87,7 +87,7 @@
      (render-paste-preview paste))])
 
 (defn all-pastes-page [page]
-  (let [paste-count (paste/count-pastes)]
+  (let [paste-count (paste/count-pastes false)]
     (if (> page (paste/count-pages paste-count 20))
       (redirect "/paste")
       (layout
