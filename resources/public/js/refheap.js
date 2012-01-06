@@ -1,5 +1,3 @@
-// Just some BrowserID stuff.
-
 function hlLine() {
   $('a[style]').removeAttr("style")
   $('a[href|="' + window.location.hash + '"]').attr("style", "color: #22aa22;")
