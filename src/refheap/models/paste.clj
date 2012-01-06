@@ -166,7 +166,7 @@
        :dir "resources/pygments"
        :in text)))
 
-(defn paste-map [paste-id id user language contents date private]
+(defn paste-map [paste-id id user language contents date private fork]
   {:paste-id (str paste-id)
    :id id
    :user (:id user)
@@ -187,7 +187,8 @@
             (if (= \newline (last contents))
               lines
               (inc lines)))
-   :contents (pygmentize language contents true)})
+   :contents (pygmentize language contents true)
+   :fork fork})
 
 (defn validate [contents]
   (cond
@@ -200,7 +201,7 @@
 
 (defn paste
   "Create a new paste."
-  [language contents private user]
+  [language contents private user & [fork]]
   (let [validated (validate contents)]
     (if-let [error (:error validated)]
       error
@@ -214,7 +215,8 @@
                      language
                      (:contents validated)
                      (format/unparse (format/formatters :date-time) (time/now))
-                     private))]
+                     private
+                     fork))]
         (if private
           (let [new (assoc result :paste-id (str (:_id result)))]
             (mongo/update! :pastes result new)
@@ -227,6 +229,13 @@
   (mongo/fetch-one
    :pastes
    :where {:paste-id id}))
+
+(defn get-paste-by-id
+  "Get a paste by its :id key (which is the same regardless of being public or private."
+  [id]
+  (mongo/fetch-one
+   :pastes
+   :where {:id id}))
 
 (defn update-paste
   "Update an existing paste."
@@ -246,7 +255,8 @@
                    language
                    (:contents validated)
                    (:date old)
-                   private)]
+                   private
+                   (:fork old))]
         (mongo/update! :pastes old paste)
         paste))))
 
