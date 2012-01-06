@@ -58,6 +58,7 @@
          " on "
          (date-string date)
          [:div#edit
+          (ph/link-to (str "/paste/" id "/embed") "embed")
           (ph/link-to (str "/paste/" id "/raw") "raw")
           (ph/link-to (str "/paste/" id "/fullscreen") "maximize")
           (when (and user (= user (:id (session/get :user))))
@@ -93,7 +94,18 @@
      [:div.syntax summary
       (if (> lines 5) [:div.more (ph/link-to (str "/paste/" paste-id) "more...")])]
      [:br])))
-  
+
+(defn render-embed-page [paste]
+  (let [{:keys [paste-id content]} paste]
+    (layout
+     (list 
+      [:p {:style "font-size: 13px;"}
+       "Please copy the following html element onto your webpage, and change the inline size/styling as needed:"]
+      [:p {:style "font-size: 13px; margin-bottom: 25px;"}
+       "&lt;iframe style=\"width: 648px; height: 400px; border: 0px;\" src=\"http://refheap.com/paste/" paste-id "/fullscreen\" /&gt;"]
+      [:iframe {:style "width: 648px; height: 400px; border: 0px;"
+                :src (str "http://refheap.com/paste/" paste-id "/fullscreen")}]))))
+
 (defn pastes [ps]
   [:div#preview-container
    (for [paste ps]
@@ -130,6 +142,10 @@
 (defpage "/paste/:id/raw" {:keys [id]}
   (when-let [content (:raw-contents (paste/get-paste id))]
     (content-type "text/plain" content)))
+
+(defpage "/paste/:id/embed" {:keys [id]}
+  (let [paste (paste/get-paste id)]
+    (render-embed-page paste)))
 
 (defpage [:post "/paste/:id/edit"] {:keys [id paste language private]}
   (let [paste (paste/update-paste
