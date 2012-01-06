@@ -39,7 +39,7 @@
      [:div#header
       [:a#site {:href "/paste"} "The Reference Heap"]
       [:div.headerlinks
-       (ph/link-to "/pastes" "All Pastes")
+       (ph/link-to "/pastes" "Latest")
        (ph/link-to "http://blog.refheap.com" "Blog")
        [:div#useri
         (if-let [user (and (bound? #'session/*noir-session*)
