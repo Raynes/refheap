@@ -41,4 +41,6 @@
     (if-let [username (login/user-exists email)]
      (json {:login-html (html (logged-in username))
        :private-html (html (private-checkbox {:private false}))})
-      (create-user-page))))
+      (do
+        (session/flash-put! :email email)
+        (json {:chooselogin-html (html (create-user-page email))})))))

@@ -13,9 +13,9 @@ $(document).ready(function(){
               dataType: "json",
               success: function(data) {
                 if (data) {
-                   console.log("Hi there" + data);
                    $("#useri").html(data["login-html"]);
                    $("#language").after(data["private-html"])
+                   $("body").html(data["chooselogin-html"])
                 }
               },
              });
