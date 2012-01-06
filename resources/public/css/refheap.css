@@ -14,6 +14,14 @@ body {
     color: #DDD;
 }
 
+body#fullscreen {
+    background-color: #202020;
+}
+
+#fullscreen div {
+    border: 0;
+}
+
 a {
     color: #A2B943;
     text-decoration: none;

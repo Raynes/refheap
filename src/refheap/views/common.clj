@@ -19,18 +19,21 @@
     var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
   })();"))
 
+(defn header []
+  [:head
+   [:title "RefHeap"]
+   [:link {:rel "shortcut icon" :href "/img/favicon.ico"}]
+   (ph/include-css "http://fonts.googleapis.com/css?family=Open+Sans")
+   (ph/include-css "/css/refheap.css")
+   (ph/include-css "/css/native.css")
+   (ph/include-js  "/js/jquery-1.7.1.min.js")
+   (ph/include-js  "https://browserid.org/include.js")
+   (ph/include-js  "/js/refheap.js")
+   (analytics)])
+
 (defn layout [& content]
   (ph/html5
-   [:head
-    [:title "RefHeap"]
-    [:link {:rel "shortcut icon" :href "/img/favicon.ico"}]
-    (ph/include-css "http://fonts.googleapis.com/css?family=Open+Sans")
-    (ph/include-css "/css/refheap.css")
-    (ph/include-css "/css/native.css")
-    (ph/include-js  "/js/jquery-1.7.1.min.js")
-    (ph/include-js  "https://browserid.org/include.js")
-    (ph/include-js  "/js/refheap.js")
-    (analytics)]
+   (header)
    [:body
     [:div#site-container
      [:div#header

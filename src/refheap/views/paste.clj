@@ -1,6 +1,6 @@
 (ns refheap.views.paste
   (:use [noir.core :only [defpage defpartial]]
-        [refheap.views.common :only [layout avatar page-buttons]]
+        [refheap.views.common :only [layout avatar page-buttons header]]
         [noir.response :only [redirect content-type]]
         [refheap.dates :only [date-string]])
   (:require [refheap.models.paste :as paste]
@@ -59,6 +59,7 @@
          (date-string date)
          [:div#edit
           (ph/link-to (str "/paste/" id "/raw") "raw")
+          (ph/link-to (str "/paste/" id "/fullscreen") "maximize")
           (when (and user (= user (:id (session/get :user))))
             (list
              [:a {:href (str "/paste/" id "/edit")} "edit"]
@@ -66,6 +67,16 @@
        [:div#paste.syntax
         contents]]
       [:div.clear]))))
+
+(defn fullscreen-paste [id]
+  (when-let [contents (:contents (paste/get-paste id))]
+    (ph/html5
+     (header)
+     [:body#fullscreen
+      [:div.syntax contents]])))
+
+(defpage "/paste/:id/fullscreen" {:keys [id]}
+  (fullscreen-paste id))
 
 (defn render-paste-preview [paste]
   (let [{:keys [paste-id lines summary date user]} paste]
