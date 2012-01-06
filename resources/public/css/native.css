@@ -1,4 +1,4 @@
-td.linos {float: left;}
+.linenos {float: left;}
 .syntax .hll { background-color: #404040 }
 .syntax  { background: #202020; color: #d0d0d0 }
 .syntax .c { color: #999999; font-style: italic } /* Comment */
