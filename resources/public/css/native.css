@@ -1,7 +1,7 @@
 .linenos {float: left;}
 .syntax .hll { background-color: #404040 }
 .syntax  { background: #202020; color: #d0d0d0 }
-.syntax .c { color: #999999; font-style: italic } /* Comment */
+.syntax .c { color: #999999; font-weight: bold; } /* Comment */
 .syntax .err { color: #a61717; background-color: #e3d2d2 } /* Error */
 .syntax .g { color: #d0d0d0 } /* Generic */
 .syntax .k { color: #6ab825; font-weight: bold } /* Keyword */
@@ -10,14 +10,14 @@
 .syntax .o { color: #d0d0d0 } /* Operator */
 .syntax .x { color: #d0d0d0 } /* Other */
 .syntax .p { color: #d0d0d0 } /* Punctuation */
-.syntax .cm { color: #999999; font-style: italic } /* Comment.Multiline */
-.syntax .cp { color: #cd2828; font-weight: bold } /* Comment.Preproc */
-.syntax .c1 { color: #999999; font-style: italic } /* Comment.Single */
+.syntax .cm { color: #999999; font-weight: bold; } /* Comment.Multiline */
+.syntax .cp { color: #cd2828; font-weight: bold; } /* Comment.Preproc */
+.syntax .c1 { color: #999999; font-weight: bold; } /* Comment.Single */
 .syntax .cs { color: #e50808; font-weight: bold; background-color: #520000 } /* Comment.Special */
 .syntax .gd { color: #d22323 } /* Generic.Deleted */
-.syntax .ge { color: #d0d0d0; font-style: italic } /* Generic.Emph */
+.syntax .ge { color: #d0d0d0; font-weight: bold; } /* Generic.Emph */
 .syntax .gr { color: #d22323 } /* Generic.Error */
-.syntax .gh { color: #ffffff; font-weight: bold } /* Generic.Heading */
+.syntax .gh { color: #ffffff; font-weight: bold; } /* Generic.Heading */
 .syntax .gi { color: #589819 } /* Generic.Inserted */
 .syntax .go { color: #cccccc } /* Generic.Output */
 .syntax .gp { color: #aaaaaa } /* Generic.Prompt */
