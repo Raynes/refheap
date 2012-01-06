@@ -293,12 +293,12 @@ a#newer {
 }
 
 .pagebutton {
-    background-color: #E8F2FF;
-    padding: 1px 4px 1px 4px;
-    text-decoration: none;
-    color: black;
-    font-size: 20px;
-    border-radius: 15px;
+    font-size: 15px;
+    padding: 5px 10px;
+    border: 2px solid #2E2E2E;
+    background-color: #CFCFCF;
+    color: #2E2E2E;
+    border-radius: 5px;
 }
 
 div#edit {

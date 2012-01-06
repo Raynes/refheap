@@ -106,7 +106,8 @@
       (layout
        [:div
         (pastes (paste/get-pastes page))
-        (page-buttons "/pastes" paste-count 20 page)]))))
+        (page-buttons "/pastes" paste-count 20 page)
+        [:div.clear]]))))
 
 (defn fail [error]
   (layout
