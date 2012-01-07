@@ -88,6 +88,9 @@
 (defpage "/paste/:id/fullscreen" {:keys [id]}
   (fullscreen-paste id))
 
+(defpage "/paste/:id/framed" {:keys [id]}
+  (fullscreen-paste id))
+
 (defn render-paste-preview [paste]
   (let [{:keys [paste-id lines summary date user]} paste]
     (list
@@ -109,7 +112,7 @@
     (layout
      (list 
       [:p "Please copy the following html element onto your webpage, and change the inline size/styling as needed:"]
-      [:p "&lt;iframe style=\"width: 648px; height: 400px; border: 0px;\" src=\"http://refheap.com/paste/" paste-id "/fullscreen\" /&gt;"]))))
+      [:p "&lt;iframe style=\"width: 648px; height: 400px; border: 0px;\" src=\"http://refheap.com/paste/" paste-id "/framed\" /&gt;"]))))
 
 (defn pastes [ps]
   [:div#preview-container
