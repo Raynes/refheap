@@ -76,6 +76,21 @@
        :else (api/response :no-content (paste/delete-paste id))))
     (api/response :not-found "Paste doesn't exist.")))
 
+(defpage [:post "/api/paste/:id/fork"] {:keys [id username token]}
+  (if-let [paste (paste/get-paste id)]
+    (let [user (api/validate-user username token)]
+      (cond
+       (string? user) (api/response :unprocessable user)
+       (= (:id user) (:user paste)) (api/response :unprocessable "You can't fork your own pastes.")
+       :else (api/response :created
+                           (api/process-paste
+                            (paste/paste (:language paste)
+                                         (:raw-contents paste)
+                                         (:private paste)
+                                         user
+                                         (:id paste))))))
+    (api/response :not-found "Paste doesn't exist.")))
+
 (defpage "/api/paste/:id" {:keys [id]}
   (if-let [paste (paste/get-paste id)]
     (api/response :ok (api/process-paste paste))

@@ -23,7 +23,7 @@
  [:head
    [:title "RefHeap"]
    [:link {:rel "shortcut icon" :href "/img/favicon.ico"}]
-   (ph/include-css "http://fonts.googleapis.com/css?family=Open+Sans")
+   (ph/include-css "https://fonts.googleapis.com/css?family=Open+Sans")
    (ph/include-css "/css/refheap.css")
    (ph/include-css "/css/native.css")
    (ph/include-js  "/js/jquery-1.7.1.min.js")

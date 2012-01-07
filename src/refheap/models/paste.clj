@@ -55,7 +55,7 @@
    "Cython" "pyx"
    "Pyrex" "pyx"
    "D" "d"
-   "Delphi" "dephi"
+   "Delphi" "delphi"
    "Dylan" "dylan"
    "eC" "ec"
    "Felix" "flx"
