@@ -110,9 +110,10 @@
 (defn render-embed-page [paste]
   (let [{:keys [paste-id content]} paste]
     (layout
-     (list 
-      [:p "Please copy the following html element onto your webpage, and change the inline size/styling as needed:"]
-      [:p "&lt;iframe style=\"width: 648px; height: 400px; border: 0px;\" src=\"http://refheap.com/paste/" paste-id "/framed\" /&gt;"]))))
+     (list
+      [:div.written
+       [:p "Please copy the following html element onto your webpage, and change the inline size/styling as needed:"]
+       [:p "&lt;iframe style=\"width: 648px; height: 400px; border: 0px;\" src=\"http://refheap.com/paste/" paste-id "/framed\" /&gt;"]]))))
 
 (defn pastes [ps]
   [:div#preview-container
