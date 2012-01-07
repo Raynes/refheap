@@ -48,8 +48,8 @@
      [:div#header
       [:a#site {:href "/paste"} "The Reference Heap"]
       [:div.headerlinks
-       (ph/link-to "/pastes" "Latest")
-       (ph/link-to "http://blog.refheap.com" "Blog")
+       (ph/link-to {:style "border-right: 1px solid #DDD;"} "/pastes" "Latest")
+       (ph/link-to {:style "margin-left: 10px;"} "http://blog.refheap.com" "Blog")
        [:div#useri (logged-in nil)]]]
      [:div#content
       [:div#container content]
