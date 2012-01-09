@@ -14,7 +14,6 @@ $(document).ready(function(){
               success: function(data) {
                 if (data) {
                    $("#useri").html(data["login-html"]);
-                   $("#language").after(data["private-html"])
                    $("body").html(data["chooselogin-html"])
                 }
               },

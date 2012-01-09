@@ -12,7 +12,7 @@
 
 (defn private-checkbox [old]
   (list (fh/check-box :private (:private old))
-               (fh/label :private "Private")))
+        (fh/label :private "Private")))
 
 (defn create-paste-page [lang & [old]]
   (layout
@@ -27,8 +27,7 @@
                      (sort #(.compareToIgnoreCase % %2)
                            (keys paste/lexers))
                      (or lang (:language old "Clojure")))
-       (when (session/get :user)
-         (private-checkbox old))
+       (private-checkbox old)
        (fh/submit-button (if old "Edit!" "Paste!"))]
       (fh/text-area :paste (:raw-contents old)))]
     [:div#main-right
