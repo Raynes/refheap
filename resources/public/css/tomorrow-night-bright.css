@@ -2,12 +2,14 @@ pre {
     font-family: monospace;
     line-height: 1.2em;
 }
+
 .linenos { float: left; }
+
 .syntax .hll { background-color: #424242 }
 .syntax  { background: #000000; color: #eaeaea }
 .syntax .c { color: #969896; font-style: italic } /* Comment */
 .syntax .err { color: #d54e53 } /* Error */
-.syntax .k { color: #eaeaea } /* Keyword */
+.syntax .k { color: #c397d8 } /* Keyword */
 .syntax .n { color: #eaeaea } /* Name */
 .syntax .o { color: #8abeb7 } /* Operator */
 .syntax .p { color: #eaeaea } /* Punctuation */
@@ -15,12 +17,12 @@ pre {
 .syntax .cp { color: #969896; font-style: italic } /* Comment.Preproc */
 .syntax .c1 { color: #969896; font-style: italic } /* Comment.Single */
 .syntax .cs { color: #969896; font-style: italic } /* Comment.Special */
-.syntax .kc { color: #eaeaea } /* Keyword.Constant */
-.syntax .kd { color: #eaeaea } /* Keyword.Declaration */
-.syntax .kn { color: #eaeaea } /* Keyword.Namespace */
-.syntax .kp { color: #eaeaea } /* Keyword.Pseudo */
-.syntax .kr { color: #eaeaea } /* Keyword.Reserved */
-.syntax .kt { color: #70c0b1 } /* Keyword.Type */
+.syntax .kc { color: #c397d8 } /* Keyword.Constant */
+.syntax .kd { color: #c397d8 } /* Keyword.Declaration */
+.syntax .kn { color: #c397d8 } /* Keyword.Namespace */
+.syntax .kp { color: #c397d8 } /* Keyword.Pseudo */
+.syntax .kr { color: #c397d8 } /* Keyword.Reserved */
+.syntax .kt { color: #e78c45 } /* Keyword.Type */
 .syntax .m { color: #eaeaea } /* Literal.Number */
 .syntax .s { color: #b9ca4a } /* Literal.String */
 .syntax .na { color: #eaeaea } /* Name.Attribute */
