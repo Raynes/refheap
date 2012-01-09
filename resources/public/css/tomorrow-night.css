@@ -5,16 +5,16 @@ pre {
 .linenos { float: left; }
 .syntax .hll { background-color: #373b41 }
 .syntax  { background: #1d1f21; color: #c5c8c6 }
-.syntax .c { color: #969896; } /* Comment */
+.syntax .c { color: #969896; font-style: italic } /* Comment */
 .syntax .err { color: #cc6666 } /* Error */
 .syntax .k { color: #c5c8c6 } /* Keyword */
 .syntax .n { color: #c5c8c6 } /* Name */
 .syntax .o { color: #8abeb7 } /* Operator */
 .syntax .p { color: #c5c8c6 } /* Punctuation */
-.syntax .cm { color: #969896; } /* Comment.Multiline */
-.syntax .cp { color: #969896; } /* Comment.Preproc */
-.syntax .c1 { color: #969896; } /* Comment.Single */
-.syntax .cs { color: #969896; } /* Comment.Special */
+.syntax .cm { color: #969896; font-style: italic } /* Comment.Multiline */
+.syntax .cp { color: #969896; font-style: italic } /* Comment.Preproc */
+.syntax .c1 { color: #969896; font-style: italic } /* Comment.Single */
+.syntax .cs { color: #969896; font-style: italic } /* Comment.Special */
 .syntax .kc { color: #c5c8c6 } /* Keyword.Constant */
 .syntax .kd { color: #c5c8c6 } /* Keyword.Declaration */
 .syntax .kn { color: #c5c8c6 } /* Keyword.Namespace */
