@@ -188,6 +188,19 @@ div#paste-header label {
     font-size: 15px;
 }
 
+div#paste-header select {
+    float: left;
+    font-size: 14px;
+    background: #CCC;
+    margin-top: 2px;
+    width: 150px;
+    border: 2px solid #2E2E2E;
+    border-image: initial;
+    height: 32px;
+    padding: 4px;
+    color: #2E2E2E;
+}
+
 div#language_chzn {
     color: #2E2E2E;
     float: left;
