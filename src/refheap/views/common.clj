@@ -26,8 +26,10 @@
    (ph/include-css "https://fonts.googleapis.com/css?family=Open+Sans")
    (ph/include-css "/css/refheap.css")
    (ph/include-css "/css/tomorrow-night-bright.css")
+   (ph/include-css "/css/chosen.css")
    (ph/include-js  "/js/jquery-1.7.1.min.js")
    (ph/include-js  "https://browserid.org/include.js")
+   (ph/include-js  "/js/chosen.jquery.min.js")
    (ph/include-js  "/js/refheap.js")
    (analytics)])
 

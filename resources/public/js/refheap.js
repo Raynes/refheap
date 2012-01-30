@@ -39,4 +39,6 @@ $(document).ready(function(){
   if (window.location.hash) {
     hlLine()
   }
+
+  $('select#language').chosen();
 });
