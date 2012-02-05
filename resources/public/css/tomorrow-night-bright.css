@@ -1,3 +1,7 @@
+pre { 
+    font-family: monospace;
+    line-height: 1.2em;
+}
 .syntax .hll { background-color: #424242 }
 .syntax  { background: #000000; color: #eaeaea }
 .syntax .c { color: #969896 } /* Comment */
