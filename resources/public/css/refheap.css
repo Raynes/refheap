@@ -60,9 +60,11 @@ div.headerlinks {
 }
 
 div#useri {
-    padding-left: 10px;
-    border-left: 1px solid #DDD;
     float: right;
+}
+
+a#userbutton {
+  font-weight: bold;
 }
 
 div#user {
@@ -291,6 +293,10 @@ div#login {
     text-align: center;
 }
 
+#starting {
+  float: left;
+}
+
 .error {
     color: #CF0000;
     font-weight: bold;
@@ -301,6 +307,11 @@ a#newer {
     margin-right: 10px;
 }
 
+a.borderedbutton {
+  border-right: 1px solid #DDD;
+  padding-right: 10px;
+  margin-right: 8px;
+}
 .pagebutton {
     font-size: 15px;
     padding: 5px 10px;
@@ -352,3 +363,15 @@ button#gentoken {
     height: 24px;
     border-radius: 5px;
 }
+
+.clearfix:after {
+  visibility: hidden;
+  display: block;
+  font-size: 0;
+  content: " ";
+  clear: both;
+  height: 0;
+}
+
+* html .clearfix             { zoom: 1; } /* IE6 */
+*:first-child+html .clearfix { zoom: 1; } /* IE7 */

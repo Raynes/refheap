@@ -3,9 +3,9 @@
         [refheap.views.common :only [layout logged-in]]
         [noir.core :only [defpage]]
         [noir.response :only [redirect json]]
-        [hiccup.core :only [html]]
-        [refheap.views.paste :only [private-checkbox]])
+        [hiccup.core :only [html]])
   (:require [refheap.models.login :as login]
+            [stencil.core :as stencil]
             [noir.session :as session]))
 
 (defn create-user-page [email]
@@ -39,8 +39,7 @@
 (defpage [:post "/user/verify"] {:keys [assertion]}
   (when-let [{:keys [email]} (login/verify-assertion assertion)]
     (if-let [username (login/user-exists email)]
-     (json {:login-html (html (logged-in username))
-       :private-html (html (private-checkbox {:private false}))})
+     (json {:login-html (logged-in username)})
       (do
         (session/flash-put! :email email)
         (json {:chooselogin-html (html (create-user-page email))})))))

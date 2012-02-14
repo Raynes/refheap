@@ -1,0 +1,42 @@
+<div id="main-container">
+  <div id="paste-container">
+    <form name="paste" action="{{url}}" method="post">
+      <div id="paste-header">
+        <select id="language" name="language">
+          {{#languages}}
+          <option value="{{language}}">{{language}}</option>
+          {{/languages}}
+          <option selected value="Clojure">Clojure</option>
+        </select>
+        <input name="private" type="checkbox" />
+        <label for="private">Private</label>
+        <input value="Paste!" type="submit" />
+      </div>
+      <textarea name="paste" id="paste">{{old}}</textarea>
+    </form>
+  </div>
+
+  <div id="main-right">
+    <ul>
+      <li>Throw some text in that big white box over on the left</li>
+      <li>Select what language you want to use for syntax highlighting</li>
+      <li>Hit 'Paste!'</li>
+      <li>Share, edit, refine; enjoy.</li>
+    </ul>
+    <p>
+    Protip: if you get tired of selecting your language every time you drop in,
+    you can specify it in the URL and bookmark the link. Example:
+    <a href="https://refheap.com/paste?lang=Ruby">http://refheap.com/paste?lang=Ruby</a>
+    </p>
+    <p>
+    We have an API! Generate a token <a href="/api">here</a> and find examples in our
+    <a href="https://github.com/Raynes/refheap/wiki/Documentation:-API">documentation</a>.
+    Happy hacking!
+    </p>
+    <p>
+    Send feedback, feature requests, and bug reports
+    <a href="http://github.com/raynes/refheap/issues">here</a>
+    </p>
+  </div>
+
+</div>
