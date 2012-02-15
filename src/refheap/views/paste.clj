@@ -23,10 +23,9 @@
 
 (defn fullscreen-paste [id]
   (when-let [contents (:contents (paste/get-paste id))]
-    (ph/html5
-     (header)
-     [:body#fullscreen
-      [:div.syntax contents]])))
+    (stencil/render-file
+      "refheap/views/templates/fullscreen"
+      {:contents contents})))
 
 (defn show-paste-page [id]
   (when-let [{:keys [lines private user contents language date fork]
