@@ -26,8 +26,8 @@
 (def header nil)
 
 (defn page-buttons [base n per page]
-  [:div.centered
-   (when-not (= 1 page)
-     [:a#newer.pagebutton {:href (str base "?page=" (dec page))} "newer"])
-   (when-not (or (zero? n) (= page (paste/count-pages n per)))
-     [:a.pagebutton {:href (str base "?page=" (inc page))} "older"])])
+  (stencil/render-file
+    "refheap/views/templates/pagination"
+    {:newer (when-not (= 1 page) {:base base, :page (dec page)})
+     :older (when-not (or (zero? n) (= page (paste/count-pages n per)))
+              {:base base, :page (inc page)})}))
