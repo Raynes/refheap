@@ -44,6 +44,8 @@
        :forked (when fork {:from (if-let [paste (:paste-id (paste/get-paste-by-id fork))]
                                    (str "<a href=\"/paste/" paste "\">" paste "</a>")
                                    "[deleted]")})
+       :owner (when (= user (:id (session/get :user)))
+                {:id id})
        :contents contents})))
 
 (defpage "/paste/:id/fullscreen" {:keys [id]}
