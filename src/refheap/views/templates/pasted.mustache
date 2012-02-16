@@ -1,21 +1,25 @@
 <div class="floater clearfix">
-  <div id="pasteinfo">
-    <span class="info">{{language}}</span>
-    <span class="info">{{lines}}</span>
-    <span class="info private">Private</span>
-    <span lass="info">
+  <div class="clearfix" id="pasteinfo">
+    <ul class="spacedlist" id="infolist">
+      <li>{{language}}</li>
+      <li>{{lines}}</li>
+      {{#private}}
+      <li class="private">Private</li>
+      {{/private}}
+      <li id="last">
       {{#forked}}
-        Forked by
+      Forked by
       {{/forked}}
       {{^forked}}
-        Pasted by
+      Pasted by
       {{/forked}}
       {{{username}}}
       {{#forked}}
-        from {{{from}}}
+      from {{{from}}}
       {{/forked}}
       on {{date}}
-    </span>
+      </li>
+    </ul>
     <div id="edit">
       <a href="/paste/{{id}}/embed">embed</a>
       <a href="/paste/{{id}}/raw">raw</a>

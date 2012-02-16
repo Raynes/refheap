@@ -6,9 +6,7 @@
   (:require [refheap.models.paste :as paste]
             [refheap.models.users :as users]
             [noir.session :as session]
-            [stencil.core :as stencil]
-            [hiccup.form-helpers :as fh]
-            [hiccup.page-helpers :as ph]))
+            [stencil.core :as stencil]))
 
 (defn create-paste-page [lang & [old]]
   (stencil/render-file
@@ -34,6 +32,7 @@
     (stencil/render-file
       "refheap/views/templates/pasted"
       {:language language
+       :private private
        :lines lines
        :id id
        :username (if user
