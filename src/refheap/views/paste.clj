@@ -77,8 +77,9 @@
          :paste-buttons (page-buttons "/pastes" paste-count 20 page)}))))
 
 (defn fail [error]
-  (layout
-   [:p.error error]))
+  (stencil/render-file
+    "refheap/views/templates/fail"
+    {:message error}))
 
 (defpage "/paste" {:keys [lang]}
   (layout (create-paste-page lang)))
@@ -86,7 +87,7 @@
 (defpage "/paste/:id/edit" {:keys [id]}
   (let [paste (paste/get-paste id)]
     (when (= (:user paste) (:id (session/get :user)))
-      (create-paste-page nil paste))))
+      (layout (create-paste-page nil paste)))))
 
 (defpage "/paste/:id/fork" {:keys [id]}
   (let [user (:id (session/get :user))
@@ -122,13 +123,13 @@
                (session/get :user))]
     (if (map? paste)
       (redirect (str "/paste/" (:paste-id paste)))
-      (fail paste))))
+      (layout (fail paste)))))
 
 (defpage [:post "/paste/create"] {:keys [paste language private]}
   (let [paste (paste/paste language paste private (session/get :user))]
     (if (map? paste)
       (redirect (str "/paste/" (:paste-id paste)))
-      (fail paste))))
+      (layout (fail paste)))))
 
 (defpage "/paste/:id" {:keys [id]}
   (layout (show-paste-page id)))
