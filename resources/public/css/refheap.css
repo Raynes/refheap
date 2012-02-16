@@ -314,6 +314,8 @@ div#login {
 
 #starting {
   float: left;
+  border-right: 2px solid #585858;
+  margin-right: 10px;
 }
 
 .error {
@@ -329,7 +331,11 @@ a#newer {
 #starting li {
   margin-right: 10px;
   padding-right: 10px;
-  border-right: 1px solid #DDD;
+}
+
+li#last {
+  margin-right: 10px;
+  padding-right: 0;
 }
 
 .pagebutton {
