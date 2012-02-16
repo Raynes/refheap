@@ -63,12 +63,9 @@
                 :more (> lines 5)})}))
 
 (defn render-embed-page [paste]
-  (let [{:keys [paste-id content]} paste]
-    (layout
-     (list
-      [:div.written
-       [:p "Please copy the following html element onto your webpage, and change the inline size/styling as needed:"]
-       [:p "&lt;iframe style=\"width: 648px; height: 400px; border: 0px;\" src=\"http://refheap.com/paste/" paste-id "/framed\" /&gt;"]]))))
+  (stencil/render-file
+    "refheap/views/templates/embed"
+    {:id (:paste-id paste)}))
 
 (defn all-pastes-page [page]
   (let [paste-count (paste/count-pastes false)]
@@ -114,7 +111,7 @@
 
 (defpage "/paste/:id/embed" {:keys [id]}
   (let [paste (paste/get-paste id)]
-    (render-embed-page paste)))
+    (layout (render-embed-page paste))))
 
 (defpage [:post "/paste/:id/edit"] {:keys [id paste language private]}
   (let [paste (paste/update-paste
