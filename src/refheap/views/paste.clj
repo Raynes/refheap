@@ -53,12 +53,15 @@
 (defpage "/paste/:id/framed" {:keys [id]}
   (fullscreen-paste id))
 
-(defn render-paste-previews [pastes]
+(defn render-paste-previews [pastes header-template]
   (stencil/render-file
     "refheap/views/templates/preview"
-    {:pastes (for [{:keys [paste-id lines summary date user]} pastes]
-               {:user (when user (users/get-user-by-id user))
-                :date (date-string date)
+    {:pastes (for [{:keys [paste-id lines summary date user private]} pastes]
+               {:header (stencil/render-file
+                          header-template
+                          {:user (when user (users/get-user-by-id user))
+                           :date (date-string date)
+                           :private private})
                 :id paste-id
                 :summary summary
                 :more (> lines 5)})}))
@@ -74,7 +77,9 @@
       (redirect "/paste")
       (stencil/render-file
         "refheap/views/templates/all"
-        {:pastes (render-paste-previews (paste/get-pastes page))
+        {:pastes (render-paste-previews
+                   (paste/get-pastes page)
+                   "refheap/views/templates/allheader")
          :paste-buttons (page-buttons "/pastes" paste-count 20 page)}))))
 
 (defn fail [error]

@@ -301,6 +301,10 @@ div.floater {
   padding-left: 3px;
 }
 
+.more {
+  padding-left: 3px;
+}
+
 .linenodiv a {
     text-decoration: none;
     color: gray;

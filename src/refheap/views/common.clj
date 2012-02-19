@@ -7,7 +7,7 @@
             [refheap.models.paste :as paste]))
 
 (defn avatar [email size]
-  (ph/image (gravatar email :size size)))
+  (gravatar email :size size))
 
 (defn logged-in [username]
   (stencil/render-file

@@ -1,20 +1,14 @@
 <div id="preview-container">
   {{#pastes}}
   <div class="preview-header">
-    {{#user}}
-    <a href="/users/{{username}}">{{username}}</a>
-    {{/user}}
-    {{^user}}
-    anonymous
-    {{/user}}
-    on {{date}}
+    {{{header}}}
     <div class="right">
       [<a href="/paste/{{id}}">Link</a>]
     </div>
     <div class="syntax">
       {{{summary}}}
       {{#more}}
-      <a href="paste/{{id}}">more...</a>
+      <a class="more" href="/paste/{{id}}">more...</a>
       {{/more}}
     </div>
     <br />
