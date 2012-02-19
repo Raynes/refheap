@@ -12,6 +12,7 @@ body {
     margin: 0;
     font-family: 'Open Sans', sans-serif;
     color: #DDD;
+    padding: 20px 50px 0;
 }
 
 body#fullscreen {
@@ -45,7 +46,7 @@ a#site:active { text-decoration: none; }
 
 div.headerlinks {
     margin-top: 10px;
-    padding-right: 10px;
+    padding-right: 20px;
     float: right;
 }
 
@@ -55,14 +56,16 @@ div.headerlinks {
 
 .headerlinks a {
     font-size: 20px;
-    padding-right: 10px;
     text-decoration: none;
 }
 
 div#useri {
-    padding-left: 10px;
-    border-left: 1px solid #DDD;
     float: right;
+}
+
+a#userbutton {
+  font-weight: bold;
+  margin-right: 7px;
 }
 
 div#user {
@@ -222,12 +225,18 @@ div#footer {
     font-size: 10px;
 }
 
+.header {
+  text-align: center;
+  font-weight: bold;
+  font-size: 20px;
+}
+
 #footer a {
     text-decoration: underline;
 }
 
 div.written {
-    padding: 20px 45px;
+    padding: 20px 150px;
 }
 
 .written a {
@@ -256,16 +265,30 @@ div#pasteinfo {
     font-size: 11px;
 }
 
-.info {
-    padding: 0 10px 0 10px;
-    border-right: solid 1px black;
+.spacedlist {
+  padding: 0;
+  margin: 0;
+}
+
+.spacedlist li {
+  float: left;
+  display: inline;
+}
+
+#infolist li {
+  padding: 0 10px 0 10px;
+  border-right: solid 1px black;
+}
+
+#infolist {
+  float: left;
 }
 
 .private {
     color: #22aa22;
 }
 
-span#last {
+li#last {
     border-right: none;
 }
 
@@ -280,6 +303,14 @@ div.floater {
     margin-right: 10px;
 }
 
+.linenodiv {
+  padding-left: 3px;
+}
+
+.more {
+  padding-left: 3px;
+}
+
 .linenodiv a {
     text-decoration: none;
     color: gray;
@@ -291,6 +322,12 @@ div#login {
     text-align: center;
 }
 
+#starting {
+  float: left;
+  border-right: 2px solid #585858;
+  margin-right: 10px;
+}
+
 .error {
     color: #CF0000;
     font-weight: bold;
@@ -299,6 +336,16 @@ div#login {
 
 a#newer {
     margin-right: 10px;
+}
+
+#starting li {
+  margin-right: 10px;
+  padding-right: 10px;
+}
+
+li#last {
+  margin-right: 10px;
+  padding-right: 0;
 }
 
 .pagebutton {
@@ -352,3 +399,15 @@ button#gentoken {
     height: 24px;
     border-radius: 5px;
 }
+
+.clearfix:after {
+  visibility: hidden;
+  display: block;
+  font-size: 0;
+  content: " ";
+  clear: both;
+  height: 0;
+}
+
+* html .clearfix             { zoom: 1; } /* IE6 */
+*:first-child+html .clearfix { zoom: 1; } /* IE7 */

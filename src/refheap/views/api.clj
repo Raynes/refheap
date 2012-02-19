@@ -1,34 +1,20 @@
 (ns refheap.views.api
   (:use [noir.core :only [defpage]]
-        [refheap.views.common :only [layout]]
-        [hiccup.page-helpers :only [link-to]])
+        [refheap.views.common :only [layout]])
   (:require [noir.session :as session]
+            [stencil.core :as stencil]
             [refheap.models.api :as api]
             [refheap.models.paste :as paste]
             [refheap.models.users :as users]))
 
 (defn api-page []
-  (layout
-   [:div.written
-    [:p
-     "RefHeap has a simple API for accessing and creating pastes. You can use this API without an "
-     "account with RefHeap. However, if you want pastes that you create to be created under your "
-     "account, you'll need to supply your username and an API token with the request. "
-     "You want to keep this API token a secret. However, if you accidentally push it to Github "
-     "or it is otherwise compromised, you can generate a new one at anytime. When you generate a new "
-     "token, the old one no longer works."]
-    [:p
-     "Check out the API documentation on "
-     (link-to "https://github.com/Raynes/refheap/wiki/Documentation:-API" "Github")
-     "!"]
-    (if-let [id (:id (session/get :user))]
-      [:div#token
-       [:code#tokentext (api/get-token id)]
-       [:button#gentoken {:type "button"} "Generate New Token"]]
-      [:p "Login to see your API token."])]))
+  (stencil/render-file
+    "refheap/views/templates/api"
+    {:logged (when-let [id (:id (session/get :user))]
+               {:token (api/get-token id)})}))
 
 (defpage "/api" []
-  (api-page))
+  (layout (api-page)))
 
 (defpage "/token/generate" []
   (when-let [id (:id (session/get :user))]

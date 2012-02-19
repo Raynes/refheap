@@ -1,0 +1,37 @@
+<div class="floater clearfix">
+  <div class="clearfix" id="pasteinfo">
+    <ul class="spacedlist" id="infolist">
+      <li>{{language}}</li>
+      <li>{{lines}}</li>
+      {{#private}}
+      <li class="private">Private</li>
+      {{/private}}
+      <li id="last">
+      {{#forked}}
+      Forked by
+      {{/forked}}
+      {{^forked}}
+      Pasted by
+      {{/forked}}
+      {{{username}}}
+      {{#forked}}
+      from {{{from}}}
+      {{/forked}}
+      on {{date}}
+      </li>
+    </ul>
+    <div id="edit">
+      <a href="/paste/{{id}}/embed">embed</a>
+      <a href="/paste/{{id}}/raw">raw</a>
+      <a href="/paste/{{id}}/fullscreen">maximize</a>
+      <a href="/paste/{{id}}/fork">fork</a>
+      {{#owner}}
+      <a href="/paste/{{id}}/edit">edit</a>
+      <a href="/paste/{{id}}/delete" class="evil">delete</a>
+      {{/owner}}
+    </div>
+  </div>
+  <div id="paste" class="syntax">
+    {{{contents}}}
+  </div>
+</div>
