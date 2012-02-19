@@ -5,7 +5,7 @@
         [noir.core :only [defpartial defpage]]))
 
 (defn not-found []
-  (layout [:p.centered "Just no."]))
+  (layout "<p class=\"header\">Insert fancy 404 image here.</p>"))
 
 (set-page! 404 (not-found))
 
