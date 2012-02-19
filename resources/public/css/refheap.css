@@ -225,12 +225,18 @@ div#footer {
     font-size: 10px;
 }
 
+.header {
+  text-align: center;
+  font-weight: bold;
+  font-size: 20px;
+}
+
 #footer a {
     text-decoration: underline;
 }
 
 div.written {
-    padding: 20px 45px;
+    padding: 20px 150px;
 }
 
 .written a {
