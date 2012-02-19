@@ -1,8 +1,7 @@
 (ns refheap.views.legal
-  (:use [noir.core            :only [defpage]]
+  (:use [noir.core :only [defpage]]
         [refheap.views.common :only [layout]])
-  (:require [stencil.core :as stencil]
-            [clojure.java.io :as io]))
+  (:require [clojure.java.io :as io]))
 
 (defpage "/legal/tos" []
   (layout (slurp (io/resource "refheap/views/templates/tos.mustache"))))
