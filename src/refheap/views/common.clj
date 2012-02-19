@@ -2,8 +2,6 @@
   (:use [clavatar.core :only [gravatar]])
   (:require [noir.session :as session]
             [stencil.core :as stencil]
-            [hiccup.core :as hiccup]
-            [hiccup.page-helpers :as ph]
             [refheap.models.paste :as paste]))
 
 (defn avatar [email size]
@@ -21,7 +19,7 @@
   (stencil/render-file
     "refheap/views/templates/common"
     {:user (logged-in nil)
-     :content (hiccup/html body)}))
+     :content body}))
 
 (def header nil)
 

@@ -1,6 +1,5 @@
 (ns refheap.views.login
-  (:use [hiccup.form-helpers :only [text-field submit-button form-to]]
-        [refheap.views.common :only [layout logged-in]]
+  (:use [refheap.views.common :only [layout logged-in]]
         [noir.core :only [defpage]]
         [noir.response :only [redirect json]])
   (:require [refheap.models.login :as login]

@@ -1,0 +1,22 @@
+<div class="written">
+  <p>
+  RefHeap has a simple API for accessing and creating pastes. You can use this API without an
+  account with RefHeap. However, if you want pastes that you create to be created under your
+  account, you'll need to supply your username and an API token with the request.
+  You want to keep this API token a secret. However, if you accidentally push it to Github
+  or it is otherwise compromised, you can generate a new one at anytime. When you generate a new
+  token, the old one no longer works.
+  </p>
+  <p>
+  Check out the API documentation on <a href="https://github.com/Raynes/refheap/wiki/Documentation:-API">Github</a>!
+  </p>
+  {{#logged}}
+  <div id="token">
+    <code id="tokentext">{{token}}</code>
+    <button id="gentoken" type="button">Generate New Token</button>
+  </div>
+  {{/logged}}
+  {{^logged}}
+  <p>Login to see your API token.</p>
+  {{/logged}}
+</div>
