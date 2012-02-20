@@ -1,7 +1,7 @@
 div#site-container {
     margin: 0 auto;
     max-width: 1280px;
-    min-width: 800px;
+    min-width: 960px;
     width: 100%;
     overflow: auto;
     background-color: #2E2E2E;
