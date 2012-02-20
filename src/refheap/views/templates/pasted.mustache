@@ -23,12 +23,14 @@
     <div id="edit">
       <a href="/paste/{{id}}/embed">embed</a>
       <a href="/paste/{{id}}/raw">raw</a>
-      <a href="/paste/{{id}}/fullscreen">maximize</a>
-      <a href="/paste/{{id}}/fork">fork</a>
+      <a href="/paste/{{id}}/fullscreen">maximize</a> 
       {{#owner}}
       <a href="/paste/{{id}}/edit">edit</a>
       <a href="/paste/{{id}}/delete" class="evil">delete</a>
       {{/owner}}
+      {{#fork}}
+      <a href="/paste/{{id}}/fork">fork</a>
+      {{/fork}}
     </div>
   </div>
   <div id="paste" class="syntax">

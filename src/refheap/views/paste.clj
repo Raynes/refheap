@@ -29,23 +29,24 @@
   (when-let [{:keys [lines private user contents language date fork]
               :as all}
              (paste/get-paste id)]
-    (stencil/render-file
-      "refheap/views/templates/pasted"
-      {:language language
-       :private private
-       :lines lines
-       :id id
-       :username (if user
-                   (let [user (:username (users/get-user-by-id user))]
-                     (str "<a href=\"/users/" user "\">" user "</a>"))
-                   "anonymous")
-       :date (date-string date)
-       :forked (when fork {:from (if-let [paste (:paste-id (paste/get-paste-by-id fork))]
-                                   (str "<a href=\"/paste/" paste "\">" paste "</a>")
-                                   "[deleted]")})
-       :owner (when (= user (:id (session/get :user)))
-                {:id id})
-       :contents contents})))
+    (let [user-id (:id (session/get :user))]
+      (stencil/render-file
+        "refheap/views/templates/pasted"
+        {:language language
+         :private private
+         :lines lines
+         :id id
+         :username (if user
+                     (let [user (:username (users/get-user-by-id user))]
+                       (str "<a href=\"/users/" user "\">" user "</a>"))
+                     "anonymous")
+         :date (date-string date)
+         :forked (when fork {:from (if-let [paste (:paste-id (paste/get-paste-by-id fork))]
+                                     (str "<a href=\"/paste/" paste "\">" paste "</a>")
+                                     "[deleted]")})
+         :owner (when (and user-id (= user user-id)) {:id id})
+         :fork (when (and user-id (not= user user-id)) {:id id})
+         :contents contents}))))
 
 (defpage "/paste/:id/fullscreen" {:keys [id]}
   (fullscreen-paste id))
@@ -91,9 +92,10 @@
   (layout (create-paste-page lang)))
 
 (defpage "/paste/:id/edit" {:keys [id]}
-  (let [paste (paste/get-paste id)]
-    (when (= (:user paste) (:id (session/get :user)))
-      (layout (create-paste-page nil paste)))))
+  (when-let [user (:id (session/get :user))]
+    (let [paste (paste/get-paste id)]
+      (when (= (:user paste) user)
+        (layout (create-paste-page nil paste))))))
 
 (defpage "/paste/:id/fork" {:keys [id]}
   (let [user (:id (session/get :user))
