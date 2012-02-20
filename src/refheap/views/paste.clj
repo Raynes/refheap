@@ -17,7 +17,8 @@
      :languages (for [lang (sort #(.compareToIgnoreCase % %2)
                                  (keys (dissoc paste/lexers "Clojure")))]
                   {:language lang})
-     :old (:raw-contents old)}))
+     :old (:raw-contents old)
+     :button (if old "Save!" "Paste!")}))
 
 (defn fullscreen-paste [id]
   (when-let [contents (:contents (paste/get-paste id))]
