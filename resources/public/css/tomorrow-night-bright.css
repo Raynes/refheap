@@ -1,6 +1,7 @@
 pre { 
-    font-family: monospace;
-    line-height: 1.2em;
+    font-family: 'Anonymous Pro', 'DejaVu Sans Mono', monospace;
+    line-height: 122%;
+    font-size: 14px;
 }
 .syntax .hll { background-color: #424242 }
 .syntax  { background: #000000; color: #eaeaea }
