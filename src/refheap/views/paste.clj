@@ -34,8 +34,11 @@
   (when-let [{:keys [lines private user contents language date fork]
               :as all}
              (paste/get-paste id)]
-    (layout
-      (let [user-id (:id (session/get :user))]
+    (let [user-id (:id (session/get :user))
+          paste-user (if user
+                       (:username (users/get-user-by-id user))
+                       "anonymous")]
+      (layout
         (stencil/render-file
           "refheap/views/templates/pasted"
           {:language language
@@ -43,17 +46,16 @@
            :lines lines
            :id id
            :username (if user
-                       (let [user (:username (users/get-user-by-id user))]
-                         (str "<a href=\"/users/" user "\">" user "</a>"))
-                       "anonymous")
+                       (str "<a href=\"/users/" paste-user "\">" paste-user "</a>")
+                       paste-user) 
            :date (date-string date)
            :forked (when fork {:from (if-let [paste (:paste-id (paste/get-paste-by-id fork))]
                                        (str "<a href=\"/paste/" paste "\">" paste "</a>")
                                        "[deleted]")})
            :owner (when (and user-id (= user user-id)) {:id id})
            :fork (when (and user-id (not= user user-id)) {:id id})
-           :contents contents}))
-      (str (or user "anonymous") "'s paste: " id))))
+           :contents contents})
+        (str paste-user "'s paste: " id)))))
 
 (defpage "/paste/:id/fullscreen" {:keys [id]}
   (fullscreen-paste id))
