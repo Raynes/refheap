@@ -8,16 +8,17 @@
 
 (defn create-user-page [email]
   (session/flash-put! :email email)
-  (stencil/render-file
-    "refheap/views/templates/createuser"
-    {:error (when-let [error (session/flash-get :error)]
-              {:message error})}))
+  (layout
+    (stencil/render-file
+      "refheap/views/templates/createuser"
+      {:error (when-let [error (session/flash-get :error)]
+                {:message error})})))
 
 (defpage [:post "/user/create"] {:keys [name]}
   (let [email (session/flash-get :email)]
     (if (login/create-user email name)
       (redirect "/paste")
-      (layout (create-user-page email)))))
+      (create-user-page email))))
 
 (defpage [:post "/user/login"] {:keys [email]}
   (if-let [username (login/user-exists email)]

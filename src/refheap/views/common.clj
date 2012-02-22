@@ -15,11 +15,12 @@
                                     (:username (session/get :user))))]
              {:username user})}))
 
-(defn layout [body]
+(defn layout [body & [title]]
   (stencil/render-file
     "refheap/views/templates/common"
     {:user (logged-in nil)
-     :content body}))
+     :content body
+     :title (or title "RefHeap")}))
 
 (def header nil)
 

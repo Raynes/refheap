@@ -14,19 +14,20 @@
     (let [you? (= user (:username (session/get :user)))
           others (when-not you? {:private false})
           total (users/count-user-pastes user others)]
-      (stencil/render-file
-        "refheap/views/templates/users"
-        {:user (when-not you? {:user user})
-         :private (when you? 
-                    {:private-count (users/count-user-pastes user {:private true})})
-         :public-count (users/count-user-pastes user {:private false})
-         :pastes (paste/render-paste-previews 
-                   (users/user-pastes user page others)
-                   "refheap/views/templates/userheader")
-         :paste-buttons (page-buttons (str "/users/" user) total 20 page)
-         :gravatar (avatar (:email user-data) 70)}))))
+      (layout
+        (stencil/render-file
+          "refheap/views/templates/users"
+          {:user (when-not you? {:user user})
+           :private (when you? 
+                      {:private-count (users/count-user-pastes user {:private true})})
+           :public-count (users/count-user-pastes user {:private false})
+           :pastes (paste/render-paste-previews 
+                     (users/user-pastes user page others)
+                     "refheap/views/templates/userheader")
+           :paste-buttons (page-buttons (str "/users/" user) total 20 page)
+           :gravatar (avatar (:email user-data) 70)})
+        (str user "'s pastes")))))
 
 (defpage "/users/:user" {:keys [user page]}
-  (layout
-    (user-page (.toLowerCase user) 
-               (proper-page (Long. (or page "1"))))))
+  (user-page (.toLowerCase user) 
+             (proper-page (Long. (or page "1")))))
