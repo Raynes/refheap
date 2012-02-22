@@ -130,7 +130,7 @@
 
 (defpage "/paste/:id/raw" {:keys [id]}
   (when-let [content (:raw-contents (paste/get-paste id))]
-    (content-type "text/plain" content)))
+    (content-type "text/plain; charset=utf-8" content)))
 
 (defpage "/paste/:id/embed" {:keys [id]}
   (let [paste (paste/get-paste id)]
