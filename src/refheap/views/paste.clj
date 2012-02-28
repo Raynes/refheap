@@ -131,7 +131,7 @@
   (when-let [user (:user (paste/get-paste id))]
     (when (= user (:id (session/get :user)))
       (paste/delete-paste id)
-      (redirect "/paste"))))
+      (redirect (str "/users/" (:username (session/get :user)))))))
 
 (defpage "/paste/:id/raw" {:keys [id]}
   (when-let [content (:raw-contents (paste/get-paste id))]
