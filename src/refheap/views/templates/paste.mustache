@@ -6,9 +6,10 @@
           {{#languages}}
           <option value="{{language}}">{{language}}</option>
           {{/languages}}
-          <option selected value="Clojure">Clojure</option>
+          <option selected value="{{selected}}">{{selected}}</option>
         </select>
-        <input name="private" type="checkbox" />
+        <input name="private" type="checkbox"
+{{#checked}}checked{{/checked}} />
         <label for="private">Private</label>
         <input value="{{button}}" type="submit" />
       </div>

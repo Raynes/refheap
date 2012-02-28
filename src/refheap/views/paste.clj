@@ -9,20 +9,23 @@
             [stencil.core :as stencil]))
 
 (defn create-paste-page [lang & [old]]
-  (layout
-    (stencil/render-file
-      "refheap/views/templates/paste"
-      {:url (if old
-              (str "/paste/" (:paste-id old) "/edit")
-              "/paste/create")
-       :languages (for [lang (sort #(.compareToIgnoreCase % %2)
-                                   (keys (dissoc paste/lexers "Clojure")))]
-                    {:language lang})
-       :old (:raw-contents old)
-       :button (if old "Save!" "Paste!")})
-    (if old 
-      (str "Editing paste " (:paste-id old))
-      "RefHeap")))
+  (let [lang (or (:language old) "Clojure")]
+    (layout
+      (stencil/render-file
+        "refheap/views/templates/paste"
+        {:url (if old
+                (str "/paste/" (:paste-id old) "/edit")
+                "/paste/create")
+         :languages (for [lang (sort #(.compareToIgnoreCase % %2)
+                                     (keys (dissoc paste/lexers lang)))]
+                      {:language lang})
+         :selected lang
+         :checked (:private old)
+         :old (:raw-contents old)
+         :button (if old "Save!" "Paste!")})
+      (if old 
+        (str "Editing paste " (:paste-id old))
+        "RefHeap"))))
 
 (defn fullscreen-paste [id]
   (when-let [contents (:contents (paste/get-paste id))]
