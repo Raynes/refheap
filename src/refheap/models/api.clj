@@ -2,7 +2,8 @@
   (:require [somnium.congomongo :as mongo]
             [refheap.models.users :as users]
             [refheap.models.paste :as pastes]
-            [noir.response :as response])
+            [noir.response :as response]
+            [clojure.string :as string])
   (:import java.util.UUID))
 
 (defn gen-token
@@ -55,11 +56,7 @@
       (dissoc :id :_id :raw-contents :summary)
       id->paste-id))
 
-(defn string->bool [s]
-  (case s
-    "true" true
-    "false" false
-    false))
+(defn string->bool [s] (Boolean/parseBoolean s))
 
 (defn add-status [status resp]
   (assoc resp :status status))
