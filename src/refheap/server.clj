@@ -12,11 +12,13 @@
     (when (.find matcher)
       (zipmap [:match :user :pass :host :port :db] (re-groups matcher)))))
 
-(let [{:keys [db port host]} (mongolab-info)]
-  (mongo/set-connection!
-    (mongo/make-connection (or db (config :db-name)) 
-                           :host (or host (config :db-host)) 
-                           :port (Integer. (or port (config :db-port)))))) 
+(let [{:keys [db port host user pass]} (mongolab-info)
+      connection (mongo/make-connection (or db (config :db-name)) 
+                                        :host (or host (config :db-host)) 
+                                        :port (Integer. (or port (config :db-port))))]
+  (when (and user pass)
+    (mongo/authenticate connection user pass))
+  (mongo/set-connection! connection))
 
 (mongo/add-index! :pastes [:user :date])
 (mongo/add-index! :pastes [:private])
