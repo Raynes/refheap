@@ -64,8 +64,8 @@ div#useri {
 }
 
 a#userbutton {
-  font-weight: bold;
-  margin-right: 7px;
+    font-weight: bold;
+    margin-right: 7px;
 }
 
 div#user {
@@ -226,9 +226,9 @@ div#footer {
 }
 
 .header {
-  text-align: center;
-  font-weight: bold;
-  font-size: 20px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 20px;
 }
 
 #footer a {
@@ -266,22 +266,22 @@ div#pasteinfo {
 }
 
 .spacedlist {
-  padding: 0;
-  margin: 0;
+    padding: 0;
+    margin: 0;
 }
 
 .spacedlist li {
-  float: left;
-  display: inline;
+    float: left;
+    display: inline;
 }
 
 #infolist li {
-  padding: 0 10px 0 10px;
-  border-right: solid 1px black;
+    padding: 0 10px 0 10px;
+    border-right: solid 1px black;
 }
 
 #infolist {
-  float: left;
+    float: left;
 }
 
 .private {
@@ -304,11 +304,11 @@ div.floater {
 }
 
 .linenodiv {
-  padding-left: 3px;
+    padding-left: 3px;
 }
 
 .more {
-  padding-left: 3px;
+    padding-left: 3px;
 }
 
 .linenodiv a {
@@ -323,9 +323,9 @@ div#login {
 }
 
 #starting {
-  float: left;
-  border-right: 2px solid #585858;
-  margin-right: 10px;
+    float: left;
+    border-right: 2px solid #585858;
+    margin-right: 10px;
 }
 
 .error {
@@ -339,13 +339,13 @@ a#newer {
 }
 
 #starting li {
-  margin-right: 10px;
-  padding-right: 10px;
+    margin-right: 10px;
+    padding-right: 10px;
 }
 
 li#last {
-  margin-right: 10px;
-  padding-right: 0;
+    margin-right: 10px;
+    padding-right: 0;
 }
 
 .pagebutton {
@@ -401,12 +401,12 @@ button#gentoken {
 }
 
 .clearfix:after {
-  visibility: hidden;
-  display: block;
-  font-size: 0;
-  content: " ";
-  clear: both;
-  height: 0;
+    visibility: hidden;
+    display: block;
+    font-size: 0;
+    content: " ";
+    clear: both;
+    height: 0;
 }
 
 * html .clearfix             { zoom: 1; } /* IE6 */
