@@ -153,6 +153,7 @@ div#paste-container textarea {
     -ms-box-sizing: border-box; /* Look at me, all tryin' to support IE8 and such. */ 
     -webkit-box-sizing: border-box; /* Render properly on popular Android browsers. */
     border: border-box;
+    font-family: 'DejaVu Sans Mono', 'Bitstream Vera Sans Mono', monospace;
 }
 
 #pastearea form {
