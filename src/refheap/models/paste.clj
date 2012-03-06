@@ -13,13 +13,13 @@
 (def paste-id
   "The current highest paste-id."
   (atom
-   (-> (mongo/fetch
-        :pastes
-        :sort {:id -1}
-        :limit 1)
-       first
-       :id
-       (or 0))))
+    (-> (mongo/fetch
+          :pastes
+          :sort {:id -1}
+          :limit 1)
+        first
+        :id
+        (or 0))))
 
 (def lexers
   "A map of language names to pygments lexer names."
