@@ -23,155 +23,233 @@
 
 (def lexers
   "A map of language names to pygments lexer names."
-  {"Clojure" "clojure"
-   "Factor" "factor"
-   "Fancy" "fancy"
-   "Groovy" "groovy"
-   "Io" "io"
-   "Ioke" "ioke"
-   "Lua" "lua"
-   "MiniD" "minid"
-   "Perl" "perl"
-   "Python Console" "pycon"
-   "Python" "python"
-   "Python Traceback" "pytb"
-   "Ruby Console" "irb"
-   "Ruby" "ruby"
-   "Mirah" "ruby"
-   "Tcl" "tcl" ;; Tickly.
-   "C Object Dump" "c-objdump"
-   "C++ Object Dump" "cpp-objdump"
-   "D Object Dump" "d-objdump"
-   "Gas" "gas"
-   "LLVM" "llvm"
-   "NASM" "nasm"
-   "Object Dump" "objdump"
-   "Ada" "ada"
-   "BlitzMax" "bmax"
-   "C" "c"
-   "C++" "cpp"
-   "Cython" "pyx"
-   "Pyrex" "pyx"
-   "D" "d"
-   "Delphi" "delphi"
-   "Dylan" "dylan"
-   "Felix" "flx"
-   "Fortran" "fortran"
-   "GLSL" "glsl"
-   "Go" "go"
-   "Java" "java"
-   "Modula-2" "m2"
-   "Nimrod" "nim"
-   "Objective-C" "objective-c"
-   "ooc" "ooc"
-   "Prolog" "prolog"
-   "Scala" "scala"
-   "Vala" "vala"
-   "Boo" "boo"
-   "C#" "csharp"
-   "F#" "fsharp"
-   "Nemerle" "nemerle"
-   "VB.NET" "vbnet"
-   "Common Lisp" "cl"
-   "Erlang" "erlang"
-   "Erlang Shell" "erl"
-   "Haskell" "hs"
-   "Literate Haskell" "lhs"
-   "OCaml" "ocaml"
-   "Scheme" "scm"
-   "Verilog" "v"
-   "Matlab" "matlab"
-   "MuPAD" "mupad"
-   "NumPy" "numpy"
-   "R Console" "rout"
-   "R" "r"
-   "AppleScript" "applescript"
-   "Autohotkey" "ahk"
-   "Awk" "awk"
-   "Bash" "sh"
-   "Bash Session" "console"
-   "Batch" "bat"
-   "Befunge" "befunge"
-   "Brainfuck" "bf"
-   "Cucumber" "cucumber"
-   "MOOCode" "moocode"
-   "MySQL" "mysql"
-   "NewSpeak" "newspeak"
-   "PostScript" "postscript"
-   "Protobuf" "protobuf"
-   "REBOL" "rebol"
-   "Redcode" "redcode"
-   "Smalltalk" "squeak"
-   "SQL" "sql"
-   "TCSH" "csh"
-   "Apache Configuration" "apacheconf"
-   "BBCode" "bbcode"
-   "CMake" "cmake"
-   "Darcs Patch" "dpatch"
-   "Diff" "diff"
-   "INI" "ini"
-   "IRC Logs" "irc"
-   "Lighttpd" "lighty"
-   "Makefile" "make"
-   "Nginx Configuration" "nginx"
-   "Java Properties" "properties"
-   "rST" "rst"
-   "LaTeX" "tex"
-   "VimL" "vim"
-   "YAML" "yaml"
-   "ActionScript" "as"
-   "CoffeeScript" "coffeescript"
-   "CSS" "css"
-   "DTD" "dtd"
-   "HAML" "haml"
-   "haXe" "hx"
-   "HTML" "html"
-   "Javascript" "js"
-   "PHP" "php"
-   "Plain Text" "text"
-   "SASS" "sass"
-   "Scaml" "scaml"
-   "XML" "xml"})
+  {"Clojure" {:short "clojure"
+              :exts #{"clj" "cljs"}}
+   "Factor" {:short "factor"
+             :exts #{"factor"}}
+   "Fancy" {:short "fancy"
+            :exts #{"fy"}}
+   "Groovy" {:short "groovy"
+             :exts #{"groovy"}}
+   "Io" {:short "io"
+         :exts #{"io"}}
+   "Ioke" {:short "ioke"
+           :exts #{"ioke"}}
+   "Lua" {:short "lua"
+          :exts #{"lua"}}
+   "Perl" {:short "perl"
+           :exts #{".pl"}}
+   "Python Console" {:short "pycon"}
+   "Python" {:short "python"
+             :exts #{".py"}}
+   "Python Traceback" {:short "pytb"}
+   "Ruby Console" {:short "irb"}
+   "Ruby" {:short "ruby"
+           :exts #{"rb"}}
+   "Mirah" {:short "ruby"
+            :exts #{"mirah"}}
+   "Tcl" {:short "tcl"
+          :exts #{"mirah"}}
+   "C Object Dump" {:short "c-objdump"}
+   "C++ Object Dump" {:short "cpp-objdump"}
+   "D Object Dump" {:short "d-objdump"}
+   "Gas" {:short "gas"}
+   "LLVM" {:short "llvm"}
+   "NASM" {:short "nasm"}
+   "Object Dump" {:short "objdump"}
+   "Ada" {:short "ada"
+          :exts #{"ada"}}
+   "BlitzMax" {:short "bmax"}
+   "C" {:short "c"
+        :exts #{"c" "h"}}
+   "C++" {:short "cpp"
+          :exts #{"cpp"}}
+   "Cython" {:short "pyx"
+             :exts #{"pyx"}}
+   "D" {:short "d"
+        :exts #{"d"}}
+   "Delphi" {:short "delphi"} ;; What the fuck *is* the right extension for this?
+   "Dylan" {:short "dylan"
+            :exts #{"dylan"}}
+   "Felix" {:short "flx"
+            :exts #{"flx"}}
+   "Fortran" {:short "fortran"
+              :exts #{"fortran"}}
+   "GLSL" {:short "glsl"}
+   "Go" {:short "go"
+         :exts #{"go"}}
+   "Java" {:short "java"
+           :exts #{"java"}}
+   "Modula-2" {:short "m2"
+               :exts #{"def" "mod"}}
+   "Nimrod" {:short "nim"
+             :exts #{"nim" "nimrod"}}
+   "Objective-C" {:short "objective-c"
+                  :exts #{"m"}}
+   "ooc" {:short "ooc"
+          :exts #{"ooc"}}
+   "Prolog" {:short "prolog"
+             :exts #{"pro"}}
+   "Scala" {:short "scala"
+            :exts #{"scala"}}
+   "Vala" {:short "vala"
+           :exts #{"vala"}}
+   "Boo" {:short "boo"
+          :exts #{"boo"}}
+   "C#" {:short "csharp"
+         :exts #{"cs"}}
+   "F#" {:short "fsharp"
+         :exts #{"fs"}}
+   "Nemerle" {:short "nemerle"
+              :exts #{"n"}}
+   "VB.NET" {:short "vbnet"
+             :exts #{"vb"}}
+   "Common Lisp" {:short "cl"
+                  :exts #{"lisp"}}
+   "Erlang" {:short "erlang"
+             :exts #{"erl"}}
+   "Erlang Shell" {:short "erl"}
+   "Haskell" {:short "hs"
+              :exts #{"hs"}}
+   "Literate Haskell" {:short "lhs"
+                       :exts #{"lhs"}}
+   "OCaml" {:short "ocaml"
+            :exts #{"ml"}}
+   "Scheme" {:short "scm"
+             :exts #{"scm" "ss"}}
+   "Verilog" {:short "v"
+              :exts #{"v"}}
+   "Matlab" {:short "matlab"}
+   "MuPAD" {:short "mupad"}
+   "NumPy" {:short "numpy"}
+   "R Console" {:short "rout"}
+   "R" {:short "r"
+        :exts #{"r"}}
+   "AppleScript" {:short "applescript"
+                  :exts #{"applescript"}}
+   "Autohotkey" {:short "ahk"
+                 :exts #{"ahk"}}
+   "Awk" {:short "awk"
+          :exts #{"awk"}}
+   "Bash" {:short "sh"
+           :exts #{"sh"}}
+   "Bash Session" {:short "console"}
+   "Batch" {:short "bat"
+            :exts #{"bat"}}
+   "Befunge" {:short "befunge"
+              :exts #{"befunge"}}
+   "Brainfuck" {:short "bf"
+                :exts #{"bf"}}
+   "Cucumber" {:short "cucumber"}
+   "MOOCode" {:short "moocode"}
+   "MySQL" {:short "mysql"}
+   "NewSpeak" {:short "newspeak"}
+   "PostScript" {:short "postscript"
+                 :exts #{"ps"}}
+   "Protobuf" {:short "protobuf"
+               :exts #{"proto"}}
+   "REBOL" {:short "rebol"
+            :exts #{"rebol"}}
+   "Redcode" {:short "redcode"}
+   "Smalltalk" {:short "squeak"
+                :exts #{"st"}}
+   "SQL" {:short "sql"
+          :exts #{"sql}"}}
+   "TCSH" {:short "csh"}
+   "Apache Configuration" {:short "apacheconf"}
+   "BBCode" {:short "bbcode"}
+   "CMake" {:short "cmake"}
+   "Darcs Patch" {:short "dpatch"}
+   "Diff" {:short "diff"
+           :exts #{"diff"}}
+   "INI" {:short "ini"
+          :exts #{"ini"}}
+   "IRC Logs" {:short "irc"}
+   "Lighttpd" {:short "lighty"}
+   "Makefile" {:short "make"}
+   "Nginx Configuration" {:short "nginx"}
+   "Java Properties" {:short "properties"
+                      :exts #{"properties"}}
+   "rST" {:short "rst"
+          :exts #{"rst"}}
+   "LaTeX" {:short "tex"
+            :exts #{"tex"}}
+   "VimL" {:short "vim"
+           :exts #{"vim"}}
+   "YAML" {:short "yaml"
+           :exts #{"yaml"}}
+   "ActionScript" {:short "as"
+                   :exts #{"as"}}
+   "CoffeeScript" {:short "coffeescript"
+                   :exts #{"coffeescript"}}
+   "CSS" {:short "css"
+          :exts #{"css"}}
+   "DTD" {:short "dtd"}
+   "HAML" {:short "haml"
+           :exts #{"haml"}}
+   "haXe" {:short "hx"
+           :exts #{"hx"}}
+   "HTML" {:short "html"
+           :exts #{"html"}}
+   "Javascript" {:short "js"
+                 :exts #{"js"}}
+   "PHP" {:short "php"
+          :exts #{"php"}}
+   "Plain Text" {:short "text"
+                 :ext #{"txt"}}
+   "SASS" {:short "sass"
+           :exts #{"scss" "sass"}}
+   "Scaml" {:short "scaml"
+            :exts #{"scaml"}}
+   "XML" {:short "xml"
+          :exts #{"xml"}}})
 
 (defn lookup-lexer
-  "Look up a lexer given the name of a language. If one isn't found,
-   the default plain-text lexer is used."
-  [language]
-  (lexers language "text"))
+  "Selects a language."
+  [lang]
+  (or
+    (if (and lang (.startsWith lang "."))
+      (first
+        (filter (fn [[_ v]]
+                  (when-let [exts (:exts v)]
+                    (exts (string/join (rest lang)))))
+                lexers))
+      (when-let [lang-map (lexers lang)]
+        [lang lang-map]))
+    ["Plain Text" {:short "text"}]))
 
 (defn pygmentize
   "Syntax highlight some code."
   [language text & [anchor?]]
   (:out
-   (sh "./pygmentize" "-fhtml" (str "-l" (lookup-lexer language))
+   (sh "./pygmentize" "-fhtml" (str "-l" language)
        (str "-Olinenos=table,stripnl=False,encoding=utf-8"
             (when anchor? ",anchorlinenos=true,lineanchors=L"))
        :dir "resources/pygments"
        :in text)))
 
 (defn paste-map [paste-id id user language contents date private fork]
-  {:paste-id (str paste-id)
-   :id id
-   :user (:id user)
-   :language (if (lexers language)
-               language
-               "Plain Text")
-   :raw-contents contents
-   :summary (->> contents
-                 StringReader.
-                 io/reader
-                 line-seq
-                 (take 5)
-                 (string/join "\n")
-                 (pygmentize language))
-   :private (boolean private)
-   :date date
-   :lines (let [lines (count (filter #{\newline} contents))]
-            (if (= \newline (last contents))
-              lines
-              (inc lines)))
-   :contents (pygmentize language contents true)
-   :fork fork})
+  (let [[name {:keys [short]}] (lookup-lexer language)]
+    {:paste-id (str paste-id)
+     :id id
+     :user (:id user)
+     :language name
+     :raw-contents contents
+     :summary (->> contents
+                   StringReader.
+                   io/reader
+                   line-seq
+                   (take 5)
+                   (string/join "\n")
+                   (pygmentize short))
+     :private (boolean private)
+     :date date
+     :lines (let [lines (count (filter #{\newline} contents))]
+              (if (= \newline (last contents))
+                lines
+                (inc lines)))
+     :contents (pygmentize short contents true)
+     :fork fork}))
 
 (defn validate [contents]
   (cond
@@ -203,7 +281,7 @@
         (if private
           (let [new (assoc result :paste-id (str (:_id result)))]
             (mongo/update! :pastes result new)
-            new) 
+            new)
           result)))))
 
 (defn get-paste

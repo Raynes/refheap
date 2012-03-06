@@ -9,7 +9,7 @@
             [stencil.core :as stencil]))
 
 (defn create-paste-page [lang & [old]]
-  (let [lang (or (:language old) "Clojure")]
+  (let [lang (or lang (:language old) "Clojure")]
     (layout
       (stencil/render-file
         "refheap/views/templates/paste"
