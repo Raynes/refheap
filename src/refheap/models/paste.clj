@@ -117,6 +117,8 @@
             :exts #{"ml"}}
    "Scheme" {:short "scm"
              :exts #{"scm" "ss"}}
+   "Emacs Lisp" {:short "scm"
+                 :exts #{"el"}}
    "Verilog" {:short "v"
               :exts #{"v"}}
    "Matlab" {:short "matlab"}
