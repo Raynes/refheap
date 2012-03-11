@@ -15,14 +15,14 @@
                                     (:username (session/get :user))))]
              {:username user})}))
 
-(defn layout [body & [title]]
+(defn layout [body & [head]]
   (stencil/render-file
     "refheap/views/templates/common"
-    {:user (logged-in nil)
+    {:user (logged-in nil) 
+     :title (or (:title head) "RefHeap")
      :content body
-     :title (or title "RefHeap")}))
-
-(def header nil)
+     :head (when-let [head-file (:file head)]
+             (stencil/render-file head-file (dissoc head :file :title)))}))
 
 (defn page-buttons [base n per page]
   (stencil/render-file
