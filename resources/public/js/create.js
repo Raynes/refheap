@@ -71,7 +71,8 @@ $(document).ready(function() {
                 "Verilog"         : loadFn("verilog"),
                 "XML"             : loadFn("xml"),
                 "YAML"            : loadFn("yaml"),
-                "HTML"            : loadFn("htmlmixed") }
+                "HTML"            : loadFn("htmlmixed"),
+                "MySQL"           : loadFn("mysql") }
 
   function loadMode(selected, editor) {
     lang = langs[selected]
