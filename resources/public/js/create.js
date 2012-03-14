@@ -5,12 +5,22 @@ $(document).ready(function() {
 
   var loaded = {}
 
-  function getMode(mode, callback) {
+  function syncGetScript(script) {
+    $.ajax({
+      url: script,
+      dataType: "script",
+      async: false
+    })
+  }
+
+  function getMode(mode) {
     var isLoaded = loaded[mode]
+    var callback = arguments[1]
     if (!isLoaded) {
-      $.getScript("/js/codemirror/mode/" + mode + "/" + mode + ".js", callback)
+      syncGetScript("/js/codemirror/mode/" + mode + "/" + mode + ".js")
       loaded[mode] = true
-    } else { callback() }
+      if (callback) { callback() }
+    } else if (callback) { callback() }
   }
 
   function loadFn(mode) {
@@ -19,13 +29,16 @@ $(document).ready(function() {
         cm.setOption("mode", mode)
       }
       if (mode == "htmlmixed") {
-        getMode("css", function () {
-          getMode("xml", function () {
-            getMode("javascript", function () {
-              getMode(mode, setMode)
-            })
-          })
-        })
+        getMode("css")
+        getMode("xml")
+        getMode("javascript")
+        getMode(mode, setMode)
+      } else if (mode == "php") {
+        getMode("css")
+        getMode("javascript")
+        getMode("xml")
+        getMode("clike")
+        getMode(mode, setMode)
       } else {
         getMode(mode, setMode)
       }
