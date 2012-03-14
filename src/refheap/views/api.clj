@@ -14,7 +14,8 @@
                {:token (api/get-token id)})}))
 
 (defpage "/api" []
-  (layout (api-page)))
+  (layout (api-page)
+          {:file "refheap/views/templates/apihead"}))
 
 (defpage "/token/generate" []
   (when-let [id (:id (session/get :user))]
