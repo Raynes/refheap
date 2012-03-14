@@ -5,17 +5,29 @@ $(document).ready(function() {
 
   var loaded = {}
 
+  function getMode(mode, callback) {
+    var isLoaded = loaded[mode]
+    if (!isLoaded) {
+      $.getScript("/js/codemirror/mode/" + mode + "/" + mode + ".js", callback)
+      loaded[mode] = true
+    } else { callback() }
+  }
+
   function loadFn(mode) {
     return function(cm) {
-      var isLoaded = loaded[mode]
       var setMode = function () {
-        loaded[mode] = true
         cm.setOption("mode", mode)
       }
-      if (!isLoaded) {
-        $.getScript("/js/codemirror/mode/" + mode + "/" + mode + ".js", setMode)
+      if (mode == "htmlmixed") {
+        getMode("css", function () {
+          getMode("xml", function () {
+            getMode("javascript", function () {
+              getMode(mode, setMode)
+            })
+          })
+        })
       } else {
-        setMode()
+        getMode(mode, setMode)
       }
     }
   }
@@ -45,7 +57,8 @@ $(document).ready(function() {
                 "Smalltalk"       : loadFn("smalltalk"),
                 "Verilog"         : loadFn("verilog"),
                 "XML"             : loadFn("xml"),
-                "YAML"            : loadFn("yaml") }
+                "YAML"            : loadFn("yaml"),
+                "HTML"            : loadFn("htmlmixed") }
 
   function loadMode(selected, editor) {
     lang = langs[selected]
