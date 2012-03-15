@@ -3,6 +3,7 @@ $(document).ready(function() {
   // Chosen
   $('select#language').chosen()
 
+  // CodeMirror
   var loaded = {}
 
   function syncGetScript(script) {
@@ -83,7 +84,6 @@ $(document).ready(function() {
     }
   }
 
-  // CodeMirror
   var editor = CodeMirror.fromTextArea(document.getElementById('paste'), {
     lineNumbers: true,
     theme: 'cmtn'
@@ -95,4 +95,6 @@ $(document).ready(function() {
   $("#language").change(function () {
     loadMode($("#language option:selected").text(), editor)
   })
+
+  editor.focus()
 })
