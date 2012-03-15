@@ -26,7 +26,8 @@
                      "refheap/views/templates/userheader")
            :paste-buttons (page-buttons (str "/users/" user) total 20 page)
            :gravatar (avatar (:email user-data) 70)})
-        {:title (str user "'s pastes")}))))
+        {:file "refheap/views/templates/showhead"
+         :title (str user "'s pastes")}))))
 
 (defpage "/users/:user" {:keys [user page]}
   (user-page (.toLowerCase user) 
