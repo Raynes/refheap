@@ -156,7 +156,7 @@
    "Smalltalk" {:short "squeak"
                 :exts #{"st"}}
    "SQL" {:short "sql"
-          :exts #{"sql}"}}
+          :exts #{"sql"}}
    "TCSH" {:short "csh"}
    "Apache Configuration" {:short "apacheconf"}
    "BBCode" {:short "bbcode"}
