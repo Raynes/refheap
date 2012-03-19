@@ -205,7 +205,7 @@
             :exts #{"scaml"}}
    "XML" {:short "xml"
           :exts #{"xml"}}
-   "Kotlin" {:short "Kotlin"
+   "Kotlin" {:short "kotlin"
              :exts #{"kt"}}
    "Elixir" {:short "ex"
              :exts #{"ex" "exs"}}
