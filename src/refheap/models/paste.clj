@@ -235,6 +235,11 @@
        :dir "resources/pygments"
        :in text)))
 
+(defn preview
+  "Get the first 5 lines of a string."
+  [s]
+  (->> s StringReader. io/reader line-seq (take 5) (string/join "\n")))
+
 (defn paste-map [paste-id id user language contents date private fork]
   (let [[name {:keys [short]}] (lookup-lexer language)]
     {:paste-id (str paste-id)
@@ -242,13 +247,7 @@
      :user (:id user)
      :language name
      :raw-contents contents
-     :summary (->> contents
-                   StringReader.
-                   io/reader
-                   line-seq
-                   (take 5)
-                   (string/join "\n")
-                   (pygmentize short))
+     :summary (pygmentize short (preview contents))
      :private (boolean private)
      :date date
      :lines (let [lines (count (filter #{\newline} contents))]
