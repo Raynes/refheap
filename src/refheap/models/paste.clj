@@ -204,7 +204,12 @@
    "Scaml" {:short "scaml"
             :exts #{"scaml"}}
    "XML" {:short "xml"
-          :exts #{"xml"}}})
+          :exts #{"xml"}}
+   "Kotlin" {:short "Kotlin"
+             :exts #{"kt"}}
+   "Elixir" {:short "ex"
+             :exts #{"ex" "exs"}}
+   "Elixir Console" {:short "iex"}})
 
 (defn lookup-lexer
   "Selects a language."
