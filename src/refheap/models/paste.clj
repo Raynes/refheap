@@ -1,13 +1,13 @@
 (ns refheap.models.paste
-  (:use [clojure.java.shell :only [sh]]
-        [refheap.dates :only [parse-string]]
+  (:use [refheap.dates :only [parse-string]]
         [refheap.messages :only [error]])
   (:require [somnium.congomongo :as mongo]
             [noir.session :as session]
             [clojure.java.io :as io]
             [clojure.string :as string]
             [clj-time.core :as time]
-            [clj-time.format :as format])
+            [clj-time.format :as format]
+            [conch.core :as sh])
   (:import java.io.StringReader))
 
 (def paste-id
@@ -228,12 +228,13 @@
 (defn pygmentize
   "Syntax highlight some code."
   [language text & [anchor?]]
-  (:out
-   (sh "./pygmentize" "-fhtml" (str "-l" language)
-       (str "-Olinenos=table,stripnl=False,encoding=utf-8"
-            (when anchor? ",anchorlinenos=true,lineanchors=L"))
-       :dir "resources/pygments"
-       :in text)))
+  (let [proc (sh/proc "./pygmentize" "-fhtml" (str "-l" language)
+                      (str "-Olinenos=table,stripnl=False,encoding=utf-8"
+                           (when anchor? ",anchorlinenos=true,lineanchors=L"))
+                      :dir "resources/pygments")]
+    (sh/feed-from-string proc text)
+    (sh/done proc)
+    (sh/stream-to-string proc :out)))
 
 (defn preview
   "Get the first 5 lines of a string."
