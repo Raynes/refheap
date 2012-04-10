@@ -129,14 +129,14 @@ div#paste-container {
     max-width: 879px;
     width: 70%;
     background: transparent;
-    height: 555px;
     overflow: hidden;
     float: left;
     border: none;
 }
 
 .CodeMirror-scroll {
-    height: 510px;
+    height: 100%;
+    min-height: 510px;
     overflow: auto;
     border: 2px solid #2e2e2e;
     border-radius: 3px;
