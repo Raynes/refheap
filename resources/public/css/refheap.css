@@ -17,10 +17,12 @@ body {
 
 body#fullscreen {
     background-color: #202020;
+    padding: 0;
 }
 
 #fullscreen div {
     border: 0;
+    overflow-x: visible;
 }
 
 a {
