@@ -1,1 +1,1 @@
-web: ./fetch-pyg.sh && lein run
+web: ./bootstrap.sh && lein run
