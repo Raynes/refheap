@@ -8,11 +8,10 @@
 
 (defn create-user-page [email]
   (session/flash-put! :email email)
-  (layout
-    (stencil/render-file
-      "refheap/views/templates/createuser"
-      {:error (when-let [error (session/flash-get :error)]
-                {:message error})})))
+  (stencil/render-file
+    "refheap/views/templates/createuser"
+    {:error (when-let [error (session/flash-get :error)]
+              {:message error})}))
 
 (defpage [:post "/user/create"] {:keys [name]}
   (let [email (session/flash-get :email)]
@@ -36,4 +35,6 @@
      (json {:login-html (logged-in username)})
       (do
         (session/flash-put! :email email)
+        ;; TODO: This results in css and stuff being added twice.
+        ;; It has no effect on the layout but is still dirty. Fix.
         (json {:chooselogin-html (layout (create-user-page email))})))))

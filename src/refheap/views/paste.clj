@@ -1,6 +1,6 @@
 (ns refheap.views.paste
   (:use [noir.core :only [defpage defpartial]]
-        [refheap.views.common :only [layout avatar page-buttons header]]
+        [refheap.views.common :only [layout avatar page-buttons]]
         [noir.response :only [redirect content-type]]
         [refheap.dates :only [date-string]])
   (:require [refheap.models.paste :as paste]
@@ -9,7 +9,7 @@
             [stencil.core :as stencil]))
 
 (defn create-paste-page [lang & [old]]
-  (let [lang (or (:language old) "Clojure")]
+  (let [lang (or lang (:language old) "Clojure")]
     (layout
       (stencil/render-file
         "refheap/views/templates/paste"
@@ -23,9 +23,10 @@
          :checked (:private old)
          :old (:raw-contents old)
          :button (if old "Save!" "Paste!")})
-      (if old 
-        (str "Editing paste " (:paste-id old))
-        "RefHeap"))))
+      {:file "refheap/views/templates/createhead"
+       :title (if old
+                (str "Editing paste " (:paste-id old))
+                "RefHeap")})))
 
 (defn fullscreen-paste [id]
   (when-let [contents (:contents (paste/get-paste id))]
@@ -50,7 +51,7 @@
            :id id
            :username (if user
                        (str "<a href=\"/users/" paste-user "\">" paste-user "</a>")
-                       paste-user) 
+                       paste-user)
            :date (date-string date)
            :forked (when fork {:from (if-let [paste (:paste-id (paste/get-paste-by-id fork))]
                                        (str "<a href=\"/paste/" paste "\">" paste "</a>")
@@ -58,7 +59,8 @@
            :owner (when (and user-id (= user user-id)) {:id id})
            :fork (when (and user-id (not= user user-id)) {:id id})
            :contents contents})
-        (str paste-user "'s paste: " id)))))
+        {:file "refheap/views/templates/showhead"
+         :title (str paste-user "'s paste: " id)}))))
 
 (defpage "/paste/:id/fullscreen" {:keys [id]}
   (fullscreen-paste id))
@@ -85,7 +87,7 @@
       (stencil/render-file
         "refheap/views/templates/embed"
         {:id (:paste-id paste)})
-      (str "Embedding paste " id))))
+      {:title (str "Embedding paste " id)})))
 
 (defn all-pastes-page [page]
   (let [paste-count (paste/count-pastes false)]
@@ -98,14 +100,15 @@
                      (paste/get-pastes page)
                      "refheap/views/templates/allheader")
            :paste-buttons (page-buttons "/pastes" paste-count 20 page)})
-        (str "All pastes")))))
+        {:file "refheap/views/templates/showhead"
+         :title "All pastes"}))))
 
 (defn fail [error]
   (layout
     (stencil/render-file
       "refheap/views/templates/fail"
       {:message error})
-    "You broke it"))
+    {:title "You broke it"}))
 
 (defpage "/paste" {:keys [lang]}
   (create-paste-page lang))

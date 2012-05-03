@@ -9,5 +9,10 @@
 
 (set-page! 404 (not-found))
 
-(defpage "/" []
-  (redirect "/paste"))
+(defpage "/" [] (redirect "/paste"))
+
+;; Convenience routes
+
+(defpage "/gh" [] (redirect "https://github.com/Raynes/refheap"))
+(defpage "/ghi" [] (redirect "https://github.com/Raynes/refheap/issues"))
+(defpage "/wiki" [] (redirect "https://github.com/Raynes/refheap/wiki"))
