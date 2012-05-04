@@ -30,6 +30,7 @@
 
 (defn wrap-force-ssl [app]
   (fn [req]
+    (prn req)
     (if (= :https (:scheme req))
       (app req)
       (redirect (str "https://" ((:headers req) "host") (:uri req))))))
