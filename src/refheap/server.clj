@@ -8,10 +8,11 @@
 (defn mongolab-info []
   "Parse mongodb uri from mongolab on heroku, eg.
   mongodb://user:pass@localhost:1234/db"
-  (let [matcher (re-matcher #"^.*://(.*?):(.*?)@(.*?):(\d+)/(.*)$"
-                            (System/getenv "MONGOLAB_URI"))]
-    (when (.find matcher)
-      (zipmap [:match :user :pass :host :port :db] (re-groups matcher)))))
+  (when-let [env (System/getenv "MONGOLAB_URI")]
+    (let [matcher (re-matcher #"^.*://(.*?):(.*?)@(.*?):(\d+)/(.*)$"
+                              (System/getenv "MONGOLAB_URI"))]
+      (when (.find matcher)
+        (zipmap [:match :user :pass :host :port :db] (re-groups matcher))))))
 
 (let [{:keys [db port host user pass]} (mongolab-info)
       connection (mongo/make-connection (or db (config :db-name)) 
