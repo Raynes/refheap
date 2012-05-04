@@ -44,8 +44,8 @@
                                {:assertion assertion
                                 :audience (verify-host
                                            (if hosts
-                                             (.split (System/getenv "HOSTS") ",")
-                                             ["localhost"]))}}))
+                                             (set (.split (System/getenv "HOSTS") ","))
+                                             #{"localhost"}))}}))
                   true)]
     (when (= "okay" (:status verified))
       verified)))
