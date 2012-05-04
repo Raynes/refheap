@@ -50,7 +50,7 @@
   (let [mode (keyword (or (first m) :dev))
         port (Integer. (or (get (System/getenv) "PORT") (str (config :port))))]
     (when (= mode :prod)
-      (server/add-middleware wrap-canonical-host app)
+      (server/add-middleware wrap-canonical-host)
       (server/add-middleware wrap-force-ssl))
     (server/start port {:mode mode
                         :ns 'refheap
