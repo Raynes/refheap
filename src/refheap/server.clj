@@ -37,10 +37,20 @@
         (app req)
         (redirect (str "https://" (headers "host") (:uri req)))))))
 
+(defn wrap-canonical-host [app]
+  (fn [req]
+    (let [headers (:headers req)
+          canonical (System/getenv "CANONICAL_HOST")]
+      (when canonical
+        (if (= (headers "host") canonical)
+          (app req)
+          (redirect (str "https://" canonical (:uri req))))))))
+
 (defn -main [& m]
   (let [mode (keyword (or (first m) :dev))
         port (Integer. (or (get (System/getenv) "PORT") (str (config :port))))]
     (when (= mode :prod)
+      (server/add-middleware wrap-canonical-host app)
       (server/add-middleware wrap-force-ssl))
     (server/start port {:mode mode
                         :ns 'refheap
