@@ -30,10 +30,11 @@
 
 (defn wrap-force-ssl [app]
   (fn [req]
-    (prn req)
-    (if (= :https (:scheme req))
-      (app req)
-      (redirect (str "https://" ((:headers req) "host") (:uri req))))))
+    (let [headers (:headers req)]
+      (if (or (= :https (:scheme req))
+              (= "https" (headers "x-forwarded-proto")))
+        (app req)
+        (redirect (str "https://" (headers "host") (:uri req)))))))
 
 (defn -main [& m]
   (let [mode (keyword (or (first m) :dev))
