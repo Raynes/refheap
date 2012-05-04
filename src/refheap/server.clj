@@ -1,6 +1,7 @@
 (ns refheap.server
-  (:use [refheap.config :only [config]]
-        [mongo-session.core :only [mongo-session]])
+  (:require [refheap.config :refer [config]]
+            [mongo-session.core :refer [mongo-session]]
+            [noir.response :refer [redirect]])
   (:require [noir.server :as server]
             [somnium.congomongo :as mongo]))
 
@@ -27,9 +28,17 @@
 
 (server/load-views "src/refheap/views/")
 
+(defn wrap-force-ssl [app]
+  (fn [req]
+    (if (= :https (:scheme req))
+      (app req)
+      (redirect (str "https://" ((:headers req) "host") (:uri req))))))
+
 (defn -main [& m]
   (let [mode (keyword (or (first m) :dev))
         port (Integer. (or (get (System/getenv) "PORT") (str (config :port))))]
+    (when (= mode :prod)
+      (server/add-middleware wrap-force-ssl))
     (server/start port {:mode mode
                         :ns 'refheap
                         :session-store (mongo-session :sessions)})))

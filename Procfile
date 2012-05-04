@@ -1,1 +1,1 @@
-web: ./bootstrap.sh && lein trampoline run
+web: ./bootstrap.sh && lein trampoline run prod
