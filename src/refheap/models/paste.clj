@@ -1,13 +1,13 @@
-(ns refheap.models.paste
-  (:use [refheap.dates :only [parse-string]]
-        [refheap.messages :only [error]])
+(ns refheap.models.paste 
   (:require [somnium.congomongo :as mongo]
             [noir.session :as session]
             [clojure.java.io :as io]
             [clojure.string :as string]
             [clj-time.core :as time]
             [clj-time.format :as format]
-            [conch.core :as sh])
+            [conch.core :as sh]
+            [refheap.dates :refer [parse-string]]
+            [refheap.messages :refer [error]])
   (:import java.io.StringReader))
 
 (def paste-id

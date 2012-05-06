@@ -1,10 +1,10 @@
 (ns refheap.views.login
-  (:use [refheap.views.common :only [layout logged-in]]
-        [noir.core :only [defpage]]
-        [noir.response :only [redirect json]])
   (:require [refheap.models.login :as login]
             [stencil.core :as stencil]
-            [noir.session :as session]))
+            [noir.session :as session]
+            [refheap.views.common :refer [layout logged-in]]
+            [noir.core :refer [defpage]]
+            [noir.response :refer [redirect json]]))
 
 (defn create-user-page [email]
   (session/flash-put! :email email)

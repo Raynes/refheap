@@ -1,10 +1,10 @@
 (ns refheap.models.login
-  (:use [refheap.messages :only [error]]
-        [noir.request :only [ring-request]])
   (:require [somnium.congomongo :as mongo]
             [clj-http.client :as http]
             [noir.session :as session]
-            [cheshire.core :as json]))
+            [cheshire.core :as json]
+            [refheap.messages :refer [error]]
+            [noir.request :refer [ring-request]]))
 
 (defn create-user [email name]
   (let [name (.toLowerCase name)

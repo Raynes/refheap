@@ -1,7 +1,7 @@
 (ns refheap.views.legal
-  (:use [noir.core :only [defpage]]
-        [refheap.views.common :only [layout]])
-  (:require [clojure.java.io :as io]))
+  (:require [clojure.java.io :as io]
+            [noir.core :refer [defpage]]
+            [refheap.views.common :refer [layout]]))
 
 (defpage "/legal/tos" []
   (layout (slurp (io/resource "refheap/views/templates/tos.mustache"))))

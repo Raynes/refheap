@@ -1,12 +1,12 @@
 (ns refheap.views.paste
-  (:use [noir.core :only [defpage defpartial]]
-        [refheap.views.common :only [layout avatar page-buttons]]
-        [noir.response :only [redirect content-type]]
-        [refheap.dates :only [date-string]])
   (:require [refheap.models.paste :as paste]
             [refheap.models.users :as users]
             [noir.session :as session]
-            [stencil.core :as stencil]))
+            [stencil.core :as stencil]
+            [noir.core :refer [defpage defpartial]]
+            [refheap.views.common :refer [layout avatar page-buttons]]
+            [noir.response :refer [redirect content-type]]
+            [refheap.dates :refer [date-string]]))
 
 (defn create-paste-page [lang & [old]]
   (let [lang (or lang (:language old) "Clojure")]

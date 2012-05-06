@@ -1,8 +1,8 @@
 (ns refheap.server
   (:require [refheap.config :refer [config]]
             [mongo-session.core :refer [mongo-session]]
-            [noir.response :refer [redirect]])
-  (:require [noir.server :as server]
+            [noir.response :refer [redirect]]
+            [noir.server :as server]
             [somnium.congomongo :as mongo]))
 
 (defn mongolab-info []

@@ -1,13 +1,13 @@
 (ns refheap.views.users
-  (:use [noir.core :only [defpage]]
-        [refheap.views.common :only [layout avatar page-buttons]]
-        [refheap.dates :only [date-string]]
-        [noir.response :only [redirect]]
-        [refheap.models.paste :only [count-pages proper-page]])
   (:require [refheap.models.users :as users]
             [stencil.core :as stencil]
             [refheap.views.paste :as paste]
-            [noir.session :as session]))
+            [noir.session :as session]
+            [noir.core :refer [defpage]]
+            [refheap.views.common :refer [layout avatar page-buttons]]
+            [refheap.dates :refer [date-string]]
+            [noir.response :refer [redirect]]
+            [refheap.models.paste :refer [count-pages proper-page]]))
 
 (defn user-page [user page]
   (when-let [user-data (users/get-user user)]

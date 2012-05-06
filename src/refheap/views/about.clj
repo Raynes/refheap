@@ -1,7 +1,7 @@
 (ns refheap.views.about
-  (:use [refheap.views.common :only [layout]]
-        [noir.core :only [defpage]])
-  (:require [clojure.java.io :as io]))
+  (:require [clojure.java.io :as io]
+            [refheap.views.common :refer [layout]]
+            [noir.core :refer [defpage]]))
 
 (defpage "/about" []
   (layout (slurp (io/resource "refheap/views/templates/about.mustache"))))

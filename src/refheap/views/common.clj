@@ -1,8 +1,8 @@
 (ns refheap.views.common
-  (:use [clavatar.core :only [gravatar]])
   (:require [noir.session :as session]
             [stencil.core :as stencil]
-            [refheap.models.paste :as paste]))
+            [refheap.models.paste :as paste]
+            [clavatar.core :refer [gravatar]]))
 
 (defn avatar [email size]
   (gravatar email :size size))

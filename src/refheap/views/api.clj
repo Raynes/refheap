@@ -1,11 +1,11 @@
 (ns refheap.views.api
-  (:use [noir.core :only [defpage]]
-        [refheap.views.common :only [layout]])
   (:require [noir.session :as session]
             [stencil.core :as stencil]
             [refheap.models.api :as api]
             [refheap.models.paste :as paste]
-            [refheap.models.users :as users]))
+            [refheap.models.users :as users]
+            [noir.core :refer [defpage]]
+            [refheap.views.common :refer [layout]]))
 
 (defn api-page []
   (stencil/render-file

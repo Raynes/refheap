@@ -1,8 +1,8 @@
 (ns refheap.views.home
-  (:use [refheap.views.common :only [layout]]
-        [noir.response :only [redirect]]
-        [noir.statuses :only [set-page!]]
-        [noir.core :only [defpage]]))
+  (:require [refheap.views.common :refer [layout]]
+            [noir.response :refer [redirect]]
+            [noir.statuses :refer [set-page!]]
+            [noir.core :refer [defpage]]))
 
 (defn not-found []
   (layout "<p class=\"header\">Insert fancy 404 image here.</p>"))

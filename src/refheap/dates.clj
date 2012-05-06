@@ -1,5 +1,5 @@
 (ns refheap.dates
-  (:require [clj-time.core   :as time]
+  (:require [clj-time.core :as time]
             [clj-time.format :as format]))
 
 (def months
