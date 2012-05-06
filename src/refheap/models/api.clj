@@ -63,11 +63,22 @@
 
 (defn error [msg] {:error msg})
 
-(defn response [type & [data]]
-  (case type
-    :bad (add-status 400 (response/json (error data)))
-    :unprocessable (add-status 422 (response/json (error data)))
-    :created (add-status 201 (response/json data))
-    :no-content {:status 204}
-    :not-found (add-status 404 (response/json data))
-    :ok (response/json data)))
+(defn clojure
+  "Wraps the response with the content type for Clojure and sets the body
+   and call pr-str on the Clojure data stuctures passed in."
+  [data]
+  (response/content-type
+   "application/clojure; charset=utf-8"
+   (pr-str data)))
+
+(defn response [type & [data kind]]
+  (let [respond (if (= kind "clojure")
+                  clojure
+                  response/json)]
+    (case type
+      :bad (add-status 400 (respond (error data)))
+      :unprocessable (add-status 422 (respond (error data)))
+      :created (add-status 201 (respond data))
+      :no-content {:status 204}
+      :not-found (add-status 404 (respond data))
+      :ok (respond data))))
