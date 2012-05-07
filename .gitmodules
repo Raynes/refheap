@@ -1,3 +1,3 @@
 [submodule "resources/public/js/codemirror"]
 	path = resources/public/js/codemirror
-	url = git://github.com/Raynes/CodeMirror2.git
+	url = git://github.com/marijnh/CodeMirror2.git
