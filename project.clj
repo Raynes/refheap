@@ -3,7 +3,7 @@
   :url "https://refheap.com"
   :dependencies [[org.clojure/clojure "1.4.0"]
                  [stencil "0.2.0"]
-                 [noir "1.3.0-beta3"]
+                 [noir "1.3.0-beta5"]
                  [congomongo "0.1.9"]
                  [clj-config "0.2.0"]
                  [clj-http "0.4.0"]
