@@ -35,7 +35,7 @@
       (if (or (= :https (:scheme req))
               (= "https" (headers "x-forwarded-proto")))
         (app req)
-        (permanent-redirect (str "https://" (headers "host") (:uri req)))))))
+        (redirect (str "https://" (headers "host") (:uri req)) :permanent)))))
 
 (defn wrap-canonical-host [app]
   (fn [req]
@@ -44,7 +44,7 @@
       (when canonical
         (if (= (headers "host") canonical)
           (app req)
-          (permanent-redirect (str "https://" canonical (:uri req))))))))
+          (redirect (str "https://" canonical (:uri req)) :permanent))))))
 
 (defn -main [& m]
   (let [mode (keyword (or (first m) :dev))
