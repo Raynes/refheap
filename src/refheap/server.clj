@@ -1,21 +1,18 @@
 (ns refheap.server
   (:require [refheap.config :refer [config]]
             [mongo-session.core :refer [mongo-session]]
-            [noir.response :refer [permanent-redirect]]
+            [noir.response :refer [redirect]]
             [noir.server :as server]
-            [somnium.congomongo :as mongo]))
+            [somnium.congomongo :as mongo]
+            [clojurewerkz.urly.core :as uri]))
 
 (defn mongolab-info []
-  "Parse mongodb uri from mongolab on heroku, eg.
-  mongodb://user:pass@localhost:1234/db"
   (when-let [env (System/getenv "MONGOLAB_URI")]
-    (let [matcher (re-matcher #"^.*://(.*?):(.*?)@(.*?):(\d+)/(.*)$"
-                              (System/getenv "MONGOLAB_URI"))]
-      (when (.find matcher)
-        (zipmap [:match :user :pass :host :port :db] (re-groups matcher))))))
-
-(let [{:keys [db port host user pass]} (mongolab-info)
-      connection (mongo/make-connection (or db (config :db-name)) 
+    (-> env uri/url-like uri/as-map)))
+(prn (mongolab-info))
+(let [{:keys [path port host user-info]} (mongolab-info)
+      [user pass] (and user-info (.split user-info ":"))
+      connection (mongo/make-connection (if path (subs path 1) (config :db-name)) 
                                         :host (or host (config :db-host)) 
                                         :port (Integer. (or port (config :db-port))))]
   (when (and user pass)

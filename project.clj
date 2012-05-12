@@ -10,6 +10,7 @@
                  [clavatar "0.2.0"]
                  [clj-time "0.3.3"]
                  [amalloy/mongo-session "0.0.1"]
-                 [conch "0.2.1"]]
+                 [conch "0.2.1"]
+                 [clojurewerkz/urly "2.0.0-alpha1"]]
   :main refheap.server)
 
