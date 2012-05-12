@@ -4,12 +4,12 @@
             [noir.response :refer [redirect]]
             [noir.server :as server]
             [somnium.congomongo :as mongo]
-            [clojurewerkz.urly.core :as uri]))
+            [org.bovinegenius.exploding-fish :as uri]))
 
 (defn mongolab-info []
   (when-let [env (System/getenv "MONGOLAB_URI")]
-    (-> env uri/url-like uri/as-map)))
-(prn (mongolab-info))
+    (uri/uri env)))
+
 (let [{:keys [path port host user-info]} (mongolab-info)
       [user pass] (and user-info (.split user-info ":"))
       connection (mongo/make-connection (if path (subs path 1) (config :db-name)) 
