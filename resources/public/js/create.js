@@ -97,4 +97,16 @@ $(document).ready(function() {
   })
 
   editor.focus()
+
+  // Set height of the code editor dynamically.
+  function setCodeHeight() {
+    var currentHeight = $(window).height()
+    if (currentHeight > 600) {
+      $('.CodeMirror-scroll').height(currentHeight - 200)
+    }
+  }
+
+  $(window).resize(function() { setCodeHeight() })
+
+  setCodeHeight()
 })
