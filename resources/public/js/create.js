@@ -9,7 +9,7 @@
   
   /**
    * List of available language modes. Some langauges have other mode
-   * dependencies, in this case the depencies should be listed first
+   * dependencies, in this case the dependencies should be listed first
    * with the final mode being the mode that will be set on the editor.
    */
   refheap.langs = 
