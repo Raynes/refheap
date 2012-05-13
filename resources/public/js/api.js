@@ -1,6 +1,6 @@
-$(document).ready(function() {
+$(function() {
   $("#gentoken").click(function(event) {
     $.get('/token/generate',
-          function(data) { $("#tokentext").html(data) })
-  })
-})
+          function(data) { $("#tokentext").html(data); });
+  });
+});
