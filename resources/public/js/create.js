@@ -1,113 +1,99 @@
-$(document).ready(function() {
+(function ( $, window ) {
 
-  // Chosen
-  $('select#language').chosen()
+  var refheap = refheap || {};
 
-  // CodeMirror
-  var loaded = {}
+  /**
+   * Used to keep track of which modes have been loaded.
+   */
+  refheap.loaded = {};
+  
+  /**
+   * List of available language modes. Some langauges have other mode
+   * dependencies, in this case the depencies should be listed first
+   * with the final mode being the mode that will be set on the editor.
+   */
+  refheap.langs = 
+    { "C++"             : ["clike"],
+      "C"               : ["clike"],
+      "Objective-C"     : ["clike"],
+      "Clojure"         : ["clojure"],
+      "CoffeeScript"    : ["coffeescript"],
+      "CSS"             : ["css"],
+      "Diff"            : ["diff"],
+      "Go"              : ["go"],
+      "Groovy"          : ["groovy"],
+      "Haskell"         : ["haskell"],
+      "Javascript"      : ["javascript"],
+      "Lua"             : ["lua"],
+      "Delphi"          : ["pascal"],
+      "Perl"            : ["perl"],
+      "PHP"             : ["css", "javascript", "xml", "clike", "php"],
+      "Java Properties" : ["properties"],
+      "Python"          : ["python"],
+      "R"               : ["r"],
+      "Ruby"            : ["ruby"],
+      "Rust"            : ["rust"],
+      "Scheme"          : ["scheme"],
+      "Emacs Lisp"      : ["scheme"],
+      "Smalltalk"       : ["smalltalk"],
+      "Verilog"         : ["verilog"],
+      "XML"             : ["xml"],
+      "YAML"            : ["yaml"],
+      "HTML"            : ["css", "xml", "javascript", "htmlmixed"],
+      "MySQL"           : ["mysql"] };
 
-  function syncGetScript(script) {
-    $.ajax({
-      url: script,
-      dataType: "script",
-      async: false
-    })
-  }
-
-  function getMode(mode) {
-    var isLoaded = loaded[mode]
-    var callback = arguments[1]
-    if (!isLoaded) {
-      syncGetScript("/js/codemirror/mode/" + mode + "/" + mode + ".js")
-      loaded[mode] = true
-      if (callback) { callback() }
-    } else if (callback) { callback() }
-  }
-
-  function loadFn(mode) {
-    return function(cm) {
-      var setMode = function () {
-        cm.setOption("mode", mode)
+  /**
+   * Setup the editor for the specified language.
+   */
+  refheap.setupLang = function ( lang, editor ) {
+    var modes = refheap.langs[lang], i, promises = [];
+    if ( modes ) {
+      for ( i = 0; i < modes.length; i++ ) {
+        if ( !( modes[i] in refheap.loaded ) ) {
+          promises.push( $.getScript( "/js/codemirror/mode/" + modes[i] + "/" + 
+                                      modes[i] + ".js" ) );
+        }
       }
-      if (mode == "htmlmixed") {
-        getMode("css")
-        getMode("xml")
-        getMode("javascript")
-        getMode(mode, setMode)
-      } else if (mode == "php") {
-        getMode("css")
-        getMode("javascript")
-        getMode("xml")
-        getMode("clike")
-        getMode(mode, setMode)
-      } else {
-        getMode(mode, setMode)
-      }
-    }
-  }
 
-  var langs = { "C++"             : loadFn("clike"),
-                "C"               : loadFn("clike"),
-                "Objective-C"     : loadFn("clike"),
-                "Clojure"         : loadFn("clojure"),
-                "CoffeeScript"    : loadFn("coffeescript"),
-                "CSS"             : loadFn("css"),
-                "Diff"            : loadFn("diff"),
-                "Go"              : loadFn("go"),
-                "Groovy"          : loadFn("groovy"),
-                "Haskell"         : loadFn("haskell"),
-                "Javascript"      : loadFn("javascript"),
-                "Lua"             : loadFn("lua"),
-                "Delphi"          : loadFn("pascal"),
-                "Perl"            : loadFn("perl"),
-                "PHP"             : loadFn("php"),
-                "Java Properties" : loadFn("properties"),
-                "Python"          : loadFn("python"),
-                "R"               : loadFn("r"),
-                "Ruby"            : loadFn("ruby"),
-                "Rust"            : loadFn("rust"),
-                "Scheme"          : loadFn("scheme"),
-                "Emacs Lisp"      : loadFn("scheme"),
-                "Smalltalk"       : loadFn("smalltalk"),
-                "Verilog"         : loadFn("verilog"),
-                "XML"             : loadFn("xml"),
-                "YAML"            : loadFn("yaml"),
-                "HTML"            : loadFn("htmlmixed"),
-                "MySQL"           : loadFn("mysql") }
-
-  function loadMode(selected, editor) {
-    lang = langs[selected]
-    if (lang) {
-      lang(editor)
+      $.when.apply( $, promises ).done( function () {
+        for ( var i = 0; i < modes.length; i++ ) {
+          refheap.loaded[modes[i]] = true;
+        }
+        editor.setOption( "mode", modes[modes.length - 1] );
+      }); 
     } else {
-      editor.setOption("mode", null)
+      editor.setOption( "mode", null );
     }
-  }
+  };
 
-  var editor = CodeMirror.fromTextArea(document.getElementById('paste'), {
-    lineNumbers: true,
-    theme: 'cmtn'
-  })
-
-  var selected = $("#language option:selected").text()
-  loadMode(selected, editor)
-
-  $("#language").change(function () {
-    loadMode($("#language option:selected").text(), editor)
-  })
-
-  editor.focus()
-
-  // Set height of the code editor dynamically.
-  function setCodeHeight() {
-    var currentHeight = $(window).height()
-    if (currentHeight > 600) {
-      $('.CodeMirror-scroll').height(currentHeight - 200)
+  /**
+   *  Set height of the code editor dynamically.
+   */
+  refheap.setCodeHeight = function () {
+    var currentHeight = $( window ).height();
+    if ( currentHeight > 600 ) {
+      $( ".CodeMirror-scroll" ).height( currentHeight - 200 );
     }
-  }
+  };
 
-  $(window).resize(function() { setCodeHeight() })
 
-  setCodeHeight()
-  editor.refresh()
-})
+  $( function () {
+    $( "select#language" ).chosen();
+
+    var editor = CodeMirror.fromTextArea( $('#paste')[0], { lineNumbers: true, 
+                                                            theme: 'cmtn'} ), 
+        setLang = function () {
+          refheap.setupLang( $("#language option:selected").text(), editor );
+        };
+
+    $("#language").on( "change", setLang );
+
+    setLang();
+    editor.focus();
+    $(window).on( "resize", refheap.setCodeHeight );
+    refheap.setCodeHeight();
+    editor.refresh();
+  });
+  
+}( jQuery, window ));
+

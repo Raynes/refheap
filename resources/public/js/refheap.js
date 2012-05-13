@@ -13,7 +13,6 @@ $( function ( $, window ) {
     navigator.id.get( function ( assertion ) {
       $.post( "/user/verify", { assertion: assertion }, function ( data ) {
         if ( data ) {
-          console.log( data );
           $( "#useri" ).html( data["login-html"] );
           $( "body" ).html( data["chooselogin-html"] );
         }
