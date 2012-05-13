@@ -1,5 +1,6 @@
 (ns refheap.models.login
-  (:require [somnium.congomongo :as mongo]
+  (:require [refheap.config :refer [config]]
+            [somnium.congomongo :as mongo]
             [clj-http.client :as http]
             [noir.session :as session]
             [cheshire.core :as json]
@@ -36,7 +37,7 @@
   (hosts (first (.split (get-in (ring-request) [:headers "host"]) ":"))))
 
 (defn verify-assertion [assertion]
-  (let [hosts (System/getenv "HOSTS")
+  (let [hosts (:hosts config)
         verified (json/parse-string
                   (:body
                    (http/post "https://browserid.org/verify"
@@ -44,7 +45,7 @@
                                {:assertion assertion
                                 :audience (verify-host
                                            (if hosts
-                                             (set (.split (System/getenv "HOSTS") ","))
+                                             hosts
                                              #{"localhost"}))}}))
                   true)]
     (when (= "okay" (:status verified))
