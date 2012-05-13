@@ -103,11 +103,11 @@ $(document).ready(function() {
     var currentHeight = $(window).height()
     if (currentHeight > 600) {
       $('.CodeMirror-scroll').height(currentHeight - 200)
+      editor.refresh()
     }
   }
 
   $(window).resize(function() { setCodeHeight() })
 
   setCodeHeight()
-  editor.refresh()
 })
