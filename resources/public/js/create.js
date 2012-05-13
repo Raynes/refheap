@@ -46,19 +46,19 @@
    * Setup the editor for the specified language.
    */
   refheap.setupLang = function ( lang, editor ) {
-    var modes = refheap.langs[lang], i, promises = [];
+    var modes = refheap.langs[lang];
     if ( modes ) {
-      for ( i = 0; i < modes.length; i++ ) {
-        if ( !( modes[i] in refheap.loaded ) ) {
-          promises.push( $.getScript( "/js/codemirror/mode/" + modes[i] + "/" + 
-                                      modes[i] + ".js" ) );
-        }
-      }
-
+      var notLoaded = $.grep(modes, function(mode, i) {
+        return !(mode in refheap.loaded);
+      });
+      var promises = $.map(notLoaded, function(mode, index) {
+        return $.getScript("/js/codemirror/mode/" + mode + "/" + mode + ".js");
+      });
+      
       $.when.apply( $, promises ).done( function () {
-        for ( var i = 0; i < modes.length; i++ ) {
-          refheap.loaded[modes[i]] = true;
-        }
+        $.each(notLoaded, function(mode, i) {
+          refheap.loaded[mode] = true;
+        });
         editor.setOption( "mode", modes[modes.length - 1] );
       }); 
     } else {
