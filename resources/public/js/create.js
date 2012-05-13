@@ -109,4 +109,5 @@ $(document).ready(function() {
   $(window).resize(function() { setCodeHeight() })
 
   setCodeHeight()
+  editor.refresh()
 })
