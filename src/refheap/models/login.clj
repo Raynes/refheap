@@ -36,17 +36,18 @@
 (defn verify-host [hosts]
   (hosts (first (.split (get-in (ring-request) [:headers "host"]) ":"))))
 
+(defn get-hosts []
+  (if-let [hosts (System/getenv "HOSTS")]
+    (set (.split hosts ","))
+    (or (:hosts config) #{"localhost"})))
+
 (defn verify-assertion [assertion]
-  (let [hosts (:hosts config)
-        verified (json/parse-string
+  (let [verified (json/parse-string
                   (:body
                    (http/post "https://browserid.org/verify"
                               {:form-params
                                {:assertion assertion
-                                :audience (verify-host
-                                           (if hosts
-                                             hosts
-                                             #{"localhost"}))}}))
+                                :audience (verify-host (get-hosts))}}))
                   true)]
     (when (= "okay" (:status verified))
       verified)))
