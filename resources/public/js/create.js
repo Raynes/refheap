@@ -74,6 +74,8 @@
     if ( currentHeight > 600 ) {
       $( ".CodeMirror-scroll" ).height( currentHeight - 200 );
     }
+
+    
   };
 
 
@@ -90,7 +92,11 @@
 
     setLang();
     editor.focus();
-    $(window).on( "resize", refheap.setCodeHeight );
+    $(window).on( "resize", function () {
+      refheap.setCodeHeight();
+      editor.refresh();
+    });
+
     refheap.setCodeHeight();
     editor.refresh();
   });
