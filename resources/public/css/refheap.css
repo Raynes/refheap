@@ -413,3 +413,15 @@ button#gentoken {
 
 * html .clearfix             { zoom: 1; } /* IE6 */
 *:first-child+html .clearfix { zoom: 1; } /* IE7 */
+
+pre#rawDisplay {
+    background-color: white;
+    border: double 4px black;
+}
+
+span#ctrlCPrompt {
+    font-size: xx-large;
+    font-weight: bold;
+    color: lightgray;
+    background-color: white;
+}
