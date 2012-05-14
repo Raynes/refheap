@@ -1,7 +1,7 @@
 (ns refheap.server
   (:require [refheap.config :refer [config]]
+            [refheap.middleware :as middleware]
             [mongo-session.core :refer [mongo-session]]
-            [noir.response :refer [redirect]]
             [noir.server :as server]
             [somnium.congomongo :as mongo]
             [org.bovinegenius.exploding-fish :as uri]))
@@ -25,30 +25,14 @@
 (mongo/add-index! :pastes [:paste-id])
 
 (server/load-views "src/refheap/views/")
-
-(defn wrap-force-ssl [app]
-  (fn [req]
-    (let [headers (:headers req)]
-      (if (or (= :https (:scheme req))
-              (= "https" (headers "x-forwarded-proto")))
-        (app req)
-        (redirect (str "https://" (headers "host") (:uri req)) :permanent)))))
-
-(defn wrap-canonical-host [app]
-  (fn [req]
-    (let [headers (:headers req)
-          canonical (System/getenv "CANONICAL_HOST")]
-      (when canonical
-        (if (= (headers "host") canonical)
-          (app req)
-          (redirect (str "https://" canonical (:uri req)) :permanent))))))
+(server/add-middleware middleware/wrap-strip-trailing-slash)
 
 (defn -main [& m]
   (let [mode (keyword (or (first m) :dev))
         port (Integer. (or (get (System/getenv) "PORT") (str (config :port))))]
     (when (= mode :prod)
-      (server/add-middleware wrap-canonical-host)
-      (server/add-middleware wrap-force-ssl))
+      (server/add-middleware middleware/wrap-canonical-host)
+      (server/add-middleware middleware/wrap-force-ssl))
     (server/start port {:mode mode
                         :ns 'refheap
                         :session-store (mongo-session :sessions)})))
