@@ -42,25 +42,30 @@
       "HTML"            : ["css", "xml", "javascript", "htmlmixed"],
       "MySQL"           : ["mysql"] };
 
+  refheap.notLoaded = function(mode) {
+    return !(mode in refheap.loaded);
+  };
+
+  refheap.setMode = function(modes, editor) {
+    var notLoaded = $.grep(modes, refheap.notLoaded),
+        promises = $.map(notLoaded, function(mode, index) {
+          return $.getScript("/js/codemirror/mode/" + mode + "/" + mode + ".js");
+        });
+    return $.when.apply($, promises).done(function() {
+      $.each(notLoaded, function(mode, i) {
+        refheap.loaded[mode] = true;
+      });
+      editor.setOption( "mode", modes[modes.length - 1]);
+    });
+};
+
   /**
    * Setup the editor for the specified language.
    */
   refheap.setupLang = function ( lang, editor ) {
     var modes = refheap.langs[lang];
     if ( modes ) {
-      var notLoaded = $.grep(modes, function(mode, i) {
-        return !(mode in refheap.loaded);
-      });
-      var promises = $.map(notLoaded, function(mode, index) {
-        return $.getScript("/js/codemirror/mode/" + mode + "/" + mode + ".js");
-      });
-      
-      $.when.apply( $, promises ).done( function () {
-        $.each(notLoaded, function(mode, i) {
-          refheap.loaded[mode] = true;
-        });
-        editor.setOption( "mode", modes[modes.length - 1] );
-      }); 
+      refheap.setMode(modes, editor);
     } else {
       editor.setOption( "mode", null );
     }
