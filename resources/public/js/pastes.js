@@ -19,24 +19,6 @@
     }
   };
 
-  refheap.selectText = function ( el ) {
-    var selection, range;
-    if ($.browser.msie) {
-      range = document.body.createTextRange();
-      range.moveToElementText( el );
-      range.select();
-    } else if ($.browser.mozilla || $.browser.opera) {
-      selection = window.getSelection();
-      range = document.createRange();
-      range.selectNodeContents( el );
-      selection.removeAllRanges();
-      selection.addRange(range);
-    } else if ($.browser.safari) {
-      selection = window.getSelection();
-      selection.setBaseAndExtent( el, 0, el, 1);
-    }
-  };
-
   /**
    * Hilight the line of code indicated by the current hash.
    */
