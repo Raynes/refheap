@@ -8,7 +8,7 @@ div#site-container {
 }
 
 body {
-    background-color: #2E2E2E; 
+    background-color: #2E2E2E;
     margin: 0;
     font-family: 'Open Sans', sans-serif;
     color: #DDD;
@@ -157,7 +157,7 @@ div#paste-container textarea {
     height: 510px;
     /* Dear world: stop using fucking prefixes. */
     -moz-box-sizing: border-box; /* Render properly on  Firefox */
-    -ms-box-sizing: border-box; /* Look at me, all tryin' to support IE8 and such. */ 
+    -ms-box-sizing: border-box; /* Look at me, all tryin' to support IE8 and such. */
     -webkit-box-sizing: border-box; /* Render properly on popular Android browsers. */
     border: border-box;
     font-family: 'DejaVu Sans Mono', 'Bitstream Vera Sans Mono', monospace;
@@ -361,7 +361,7 @@ li#last {
 
 div#edit {
     float: right;
-    padding: 
+    padding:
 }
 
 #edit a {
@@ -424,4 +424,63 @@ span#ctrlCPrompt {
     font-weight: bold;
     color: lightgray;
     background-color: white;
+}
+
+input#private {
+    display: none;
+}
+
+input#private + label {
+    cursor: pointer;
+    line-height: 1.5em;
+    display: inline-block;
+    vertical-align: top;
+}
+
+div#private-toggle {
+    background-color: #333;
+    border-radius: 8px;
+    width: 100px;
+}
+
+#private-toggle,
+#private-toggle div,
+#private-toggle span {
+    display: inline-block;
+    vertical-align: top;
+    text-align: center;
+}
+
+#private-toggle span {
+    width: 40px;
+    background-color: transparent;
+    position: relative;
+    z-index: 2;
+}
+
+#private-toggle span:first {
+    border-right: 1px solid #888;
+}
+
+#private-toggle div {
+    -moz-transition: all 250ms;
+    -ms-transition: all 250ms;
+    -o-transition: all 250ms;
+    -webkit-transition: all 250ms;
+    background-color: darkred;
+    border-radius: 8px 0px 0px 8px;
+    box-shadow: 0px 0px 4px red;
+    height: 1.5em;
+    position: absolute;
+    transition: all 250ms;
+    width: 45px;
+    z-index: 1;
+    margin-left: -6px;
+}
+
+input#private:checked + label > div > div {
+    background-color: darkgreen;
+    border-radius: 0px 8px 8px 0px;
+    box-shadow: 0px 0px 4px lightgreen;
+    margin-left: 45px;
 }
