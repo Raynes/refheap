@@ -6,13 +6,13 @@
    * Used to keep track of which modes have been loaded.
    */
   refheap.loaded = {};
-  
+
   /**
    * List of available language modes. Some langauges have other mode
    * dependencies, in this case the dependencies should be listed first
    * with the final mode being the mode that will be set on the editor.
    */
-  refheap.langs = 
+  refheap.langs =
     { "C++"             : ["clike"],
       "C"               : ["clike"],
       "Objective-C"     : ["clike"],
@@ -82,12 +82,28 @@
     }
   };
 
+  /**
+   * Toggles the private checkbox.
+   */
+  refheap.togglePrivate = function () {
+    $( "#private" ).attr( "checked", !$(" #private" ).attr( "checked" ) );
+  };
+
+  /**
+   * Submits the form.
+   */
+  refheap.paste = function () {
+    $( "form[name=paste]" ).submit();
+  };
+
 
   $( function () {
     $( "select#language" ).chosen();
-    
-    var editor = CodeMirror.fromTextArea( $('#paste')[0], { lineNumbers: true, 
-                                                            theme: 'cmtn'} ), 
+
+    // Setup hotkeys
+
+    var editor = CodeMirror.fromTextArea( $('#paste')[0], { lineNumbers: true,
+                                                            theme: 'cmtn'} ),
         setLang = function () {
           refheap.setupLang( $("#language option:selected").text(), editor );
         };
@@ -100,7 +116,11 @@
       refheap.setCodeHeight(editor);
     });
 
+    editor.setOption( "extraKeys", {
+      "Alt-P": refheap.togglePrivate,
+      "Ctrl-Enter": refheap.paste
+    });
     refheap.setCodeHeight(editor);
   });
-  
+
 }( jQuery, window ));

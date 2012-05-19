@@ -1,19 +1,153 @@
-function hlLine() {
-  $('a[style]').removeAttr("style")
-  $('a[href|="' + window.location.hash + '"]').attr("style", "color: #FFE93B;")
-}
+(function ( $, window ) {
+  var refheap = refheap || {};
 
-$(document).ready(function () {
-  $("#delete").click(function(event) {
-    var r = confirm("Are you sure you want to delete this paste? There is no getting it back.")
-    if (r == false) {
-      event.preventDefault()
+  /**
+   * Select all of the text in the selected elements.
+   */
+  $.fn.selectText = function(){
+    var doc = document, element = this[0], range, selection;
+    if (doc.body.createTextRange) {
+      range = document.body.createTextRange();
+      range.moveToElementText(element);
+      range.select();
+    } else if (window.getSelection) {
+      selection = window.getSelection();
+      range = document.createRange();
+      range.selectNodeContents(element);
+      selection.removeAllRanges();
+      selection.addRange(range);
     }
-  })
-  
-  $(window).bind('hashchange', hlLine)
-  
-  if (window.location.hash) {
-    hlLine()
-  }
-})
+  };
+
+  refheap.selectText = function ( el ) {
+    var selection, range;
+    if ($.browser.msie) {
+      range = document.body.createTextRange();
+      range.moveToElementText( el );
+      range.select();
+    } else if ($.browser.mozilla || $.browser.opera) {
+      selection = window.getSelection();
+      range = document.createRange();
+      range.selectNodeContents( el );
+      selection.removeAllRanges();
+      selection.addRange(range);
+    } else if ($.browser.safari) {
+      selection = window.getSelection();
+      selection.setBaseAndExtent( el, 0, el, 1);
+    }
+  };
+
+  /**
+   * Hilight the line of code indicated by the current hash.
+   */
+  refheap.hlLine = function () {
+    $('a[style]').removeAttr("style");
+    $('a[href|="' + window.location.hash + '"]').attr("style", "color: #FFE93B;");
+  };
+
+  /**
+   * Given a number, n, return that number unless it is less than min
+   * or greater than max in which case either max or min will be
+   * returned respectively.
+   */
+  refheap.limit = function ( n, min, max ) {
+    if ( n < min ) {
+      return min;
+    } else if ( n > max ) {
+      return max;
+    } else {
+      return n;
+    }
+  };
+
+  /**
+   * Display the raw content of the paste in a pop-under entirely
+   * selected for easy copying.
+   */
+  refheap.showRaw = function () {
+    refheap.getRaw().done( function ( text ) {
+      var $cont = $( "#container" ),
+	  pos = $cont.position(), pre,
+	  ctrlCHandler = function ( e ) {
+	    $( pre ).fadeOut( "fast", function () {
+	      $( document ).unbind( "keydown", ctrlCHandler );
+	    });
+	  };
+      pre = $( "<pre id=\"rawDisplay\"></pre>" )
+	.css({
+	  position: "absolute",
+	  display: "none",
+	  top: pos.top,
+	  left: pos.left,
+	  height: $cont.outerHeight(),
+	  width: $cont.outerWidth(),
+	  zIndex: 1000,
+	  overflow: "scroll"
+	})
+	.text( text )
+	.appendTo( "body" )
+	.fadeIn( "fast", function () {
+	  $( pre ).selectText();
+      	  $("<span id=\"ctrlCPrompt\">Press Ctrl+C</span>")
+	    .css({
+	      position: "absolute",
+	      top: pos.top + ( $cont.outerHeight() / 5 ),
+	      left: pos.left + ( $cont.outerWidth() / 3 )
+	    })
+	    .appendTo( pre );
+
+	  $( document ).bind( "keydown", "ctrl+c", ctrlCHandler );
+	});
+    });
+  };
+
+  /**
+   * Retrieve the raw text for the paste. Returns a promise.
+   */
+  refheap.getRaw = function () {
+    return $.get( window.location.pathname + "/raw" );
+  };
+
+  /**
+   * Prompt the user for a line number then navigate the browser to
+   * the correct hash for that line.
+   */
+  refheap.gotoLine = function () {
+    var promptLine = parseInt( prompt( "Go to line...", "1" ), 10 ),
+	lineCount = $( "a[href^=#L-]" ).length,
+	line = refheap.limit( promptLine, 1, lineCount );
+    window.location.hash = "#L-" + line;
+  };
+
+  /**
+   * Navigate the browser to the edit page for the past if the user is logged in.
+   */
+  refheap.gotoEdit = function () {
+    // This is probably not the best way to test if the user has logged in.
+    if ( $( "#userbutton" ).length > 0 ) {
+      window.location.href = window.location.pathname + "/edit";
+    }
+  };
+
+  $(function () {
+    $(window).on( "hashchange", refheap.hlLine);
+    if ( window.location.hash ) {
+      refheap.hlLine();
+    }
+
+    $("#delete").click(function(event) {
+      var r = confirm("Are you sure you want to delete this paste? There is no getting it back.");
+      if (r == false) {
+	event.preventDefault();
+      }
+    });
+
+    // Setup hotkeys
+    $( document )
+      .bind( "keydown", "alt+g", refheap.gotoLine )
+      .bind( "keydown", "alt+ctrl+e", refheap.gotoEdit )
+      .bind( "keydown", "alt+r", refheap.showRaw );
+  });
+
+}( jQuery, window ));
+
