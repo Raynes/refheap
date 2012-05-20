@@ -417,11 +417,14 @@ button#gentoken {
 pre#rawDisplay {
     background-color: white;
     border: double 4px black;
+    color: black;
 }
 
-span#ctrlCPrompt {
-    font-size: xx-large;
+span#copyTextPrompt {
+    position: absolute;
+    right: 0px;
+    top: 0px;
+    font-size: large;
     font-weight: bold;
     color: lightgray;
-    background-color: white;
 }

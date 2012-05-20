@@ -50,35 +50,36 @@
     refheap.getRaw().done( function ( text ) {
       var $cont = $( "#container" ),
 	  pos = $cont.position(), pre,
+          sizeDisplay = function () {
+            pre.css({
+	      position: "absolute",
+	      top: pos.top,
+	      left: pos.left,
+	      height: $cont.outerHeight(),
+	      width: $cont.outerWidth(),
+	      zIndex: 1000,
+	      overflow: "scroll"
+	    });         
+          },
 	  ctrlCHandler = function ( e ) {
 	    $( pre ).fadeOut( "fast", function () {
 	      $( document ).unbind( "keydown", ctrlCHandler );
+              $( window ).off( "resize", sizeDisplay );
 	    });
 	  };
       pre = $( "<pre id=\"rawDisplay\"></pre>" )
-	.css({
-	  position: "absolute",
-	  display: "none",
-	  top: pos.top,
-	  left: pos.left,
-	  height: $cont.outerHeight(),
-	  width: $cont.outerWidth(),
-	  zIndex: 1000,
-	  overflow: "scroll"
-	})
 	.text( text )
-	.appendTo( "body" )
+        .css("display", "none");
+
+      sizeDisplay();
+
+      pre.appendTo( "body" )
 	.fadeIn( "fast", function () {
 	  $( pre ).selectText();
-      	  $("<span id=\"ctrlCPrompt\">Press Ctrl+C</span>")
-	    .css({
-	      position: "absolute",
-	      top: pos.top + ( $cont.outerHeight() / 5 ),
-	      left: pos.left + ( $cont.outerWidth() / 3 )
-	    })
+      	  $("<span id=\"copyTextPrompt\">copy the text, press ESC to close</span>")
 	    .appendTo( pre );
-
-	  $( document ).bind( "keydown", "ctrl+c", ctrlCHandler );
+	  $( document ).bind( "keydown", "esc", ctrlCHandler );
+          $( window ).on( "resize", sizeDisplay );
 	});
     });
   };
