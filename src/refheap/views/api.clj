@@ -93,7 +93,7 @@
     (api/response :ok (api/process-paste paste) return)
     (api/response :not-found "Paste does not exist." return)))
 
-(defpage "/api/paste/:id/highlight" {:keys [id return]}
+(defpage "/api/paste/:id/pygmentized" {:keys [id return]}
   (if-let [paste (paste/get-paste id)]
     (api/response :ok {:content (:contents paste)} return)
     (api/response :not-found "Paste does not exist." return)))
