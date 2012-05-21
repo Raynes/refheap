@@ -25,10 +25,10 @@ $( function ( $, window ) {
 
     // help popunder
     $( "#help-bubble" ).click( function () {
-      $( "#help-dialog" ).slideDown( "fast", function () {
-      }).find( "h3 > span" ).on( "click", function () {
-        $( "#help-dialog" ).fadeOut( "fast" );
-      });
+      $( "#help-dialog" ).slideDown( "fast" )
+        .find( "h3 > span" ).on( "click", function () {
+          $( "#help-dialog" ).fadeOut( "fast" );
+        });
     });
 
   });
