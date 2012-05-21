@@ -22,6 +22,16 @@ $( function ( $, window ) {
 
   $( function () {
     $( "#signin" ).click( refheap.signIn );
+
+    // help popunder
+    $( "#help-bubble" ).click( function () {
+      $( "#help-dialog" ).slideDown( "fast", function () {
+      }).find( "h3 > span" ).on( "click", function () {
+        $( "#help-dialog" ).fadeOut( "fast" );
+      });
+    });
+
   });
+
 }( jQuery, window ));
 

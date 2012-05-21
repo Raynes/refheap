@@ -487,3 +487,121 @@ input#private:checked + label > div > div {
     box-shadow: 0px 0px 4px lightgreen;
     margin-left: 45px;
 }
+
+div#help-dialog {
+    display: none;
+    background-color: #1D1F21;
+    border-radius: 5px;
+    border: solid 2px #2E2E2E;
+    box-shadow: 10px 10px 10px black;
+    height: 320px;
+    margin-top: -2px;
+    position: absolute;
+    width: 350px;
+    margin-left: -350px;
+    z-index: 100;
+    font-size: 16px;
+}
+
+div#help-dialog > div {
+    padding-left: 20px;
+}
+
+div#help-dialog > div > ul {
+    margin: 0px;
+    padding: 0px;
+}
+
+div#help-dialog > h3 {
+    background-color: #434E48;
+    border-radius: 5px;
+    color: #A2B943;
+    margin-top: 2px;
+    margin-bottom: 0px;
+    margin-left: 2px;
+    margin-right: 2px;
+    padding: 0px;
+    text-align: center;
+    font-size: 16px;
+    height: 28px;
+    line-height: 28px;
+}
+
+div#help-dialog > h3 > span {
+    background-color: #1D1F21;
+    border-radius: 8px;
+    border: solid 1px #2E2E2E;
+    cursor: pointer;
+    display: inline-block;
+    float: right;
+    font-size: 14px;
+    line-height: 20px;
+    font-variant: small-caps;
+    margin: 4px;
+    padding-left: 2px;
+    padding-right: 2px;
+    text-align: center;
+}
+
+div#help-dialog > h3 > span:hover {
+    background-color: #2E2E2E;
+    text-shadow: 0px 0px 4px lightgreen;
+}
+
+span#help-bubble:active {
+    box-shadow: -1px -1px 3px black;
+    border-color: #767676;
+}
+
+span#help-bubble:hover {
+    border-color: white;
+    box-shadow: 1px 1px 3px black;
+}
+
+span#help-bubble {
+    cursor: pointer;
+    border: solid 2px #767676;
+    display: block;
+    border-radius: 15px;
+    width: 23px;
+    text-shadow: 0px 0px 2px black;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 900;
+    background-color: #1AB8FF;
+    background-image: linear-gradient(bottom, rgb(0,150,220) 15%, rgb(45,199,255) 81%);
+    background-image: -o-linear-gradient(bottom, rgb(0,150,220) 15%, rgb(45,199,255) 81%);
+    background-image: -moz-linear-gradient(bottom, rgb(0,150,220) 15%, rgb(45,199,255) 81%);
+    background-image: -webkit-linear-gradient(bottom, rgb(0,150,220) 15%, rgb(45,199,255) 81%);
+    background-image: -ms-linear-gradient(bottom, rgb(0,150,220) 15%, rgb(45,199,255) 81%);
+    background-image: -webkit-gradient(
+	linear,
+	left bottom,
+	left top,
+	color-stop(0.15, rgb(0,150,220)),
+	color-stop(0.81, rgb(45,199,255))
+    );
+}
+
+li.help-subject {
+    font-size: 16px;
+    color: white;
+    padding-bottom: 16px;
+}
+
+li.help-title {
+    color: #FFE93B;
+    font-size: 14px;
+}
+
+li.help-line {
+    font-size: 12px;
+}
+
+span.hotkey {
+    font-size: 12px;
+    color: #A2B943;
+    display: inline-block;
+    vertical-align: middle;
+    width: 80px;
+}
