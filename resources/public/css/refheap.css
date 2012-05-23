@@ -495,8 +495,7 @@ div#help-dialog {
     border: solid 2px #2E2E2E;
     box-shadow: 10px 10px 10px black;
     height: 320px;
-    margin-top: -2px;
-    position: absolute;
+    margin-top: -320px;
     width: 350px;
     margin-left: -350px;
     z-index: 100;
@@ -553,12 +552,26 @@ span#help-bubble:active {
     border-color: #767676;
 }
 
+div#help-bubble-tray {
+    background-color: #434E48;
+    border-top-left-radius: 15px;
+    border: solid 1px #2E2E2E;
+    bottom: 0px;
+    box-shadow: -1px -1px 5px #1D1D1D;
+    position: fixed;
+    right: 0px;
+}
+
 span#help-bubble:hover {
     border-color: white;
     box-shadow: 1px 1px 3px black;
 }
 
 span#help-bubble {
+    margin-bottom: 4px;
+    margin-right: 4px;
+    margin-top: 2px;
+    margin-left: 2px;
     cursor: pointer;
     border: solid 2px #767676;
     display: block;

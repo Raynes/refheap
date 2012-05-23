@@ -25,7 +25,7 @@ $( function ( $, window ) {
 
     // help popunder
     $( "#help-bubble" ).click( function () {
-      $( "#help-dialog" ).slideDown( "fast" )
+      $( "#help-dialog" ).slideToggle( "fast" )
         .find( "h3 > span" ).on( "click", function () {
           $( "#help-dialog" ).fadeOut( "fast" );
         });
