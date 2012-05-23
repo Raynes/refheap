@@ -8,9 +8,15 @@
           {{/languages}}
           <option selected value="{{selected}}">{{selected}}</option>
         </select>
-        <input name="private" type="checkbox" id="private"
-{{#checked}}checked{{/checked}} />
-        <label for="private">Private</label>
+        <input name="private" type="checkbox" id="private" {{#checked}}checked{{/checked}} />
+        <label for="private">
+          Private:
+          <div id="private-toggle">
+            <div></div>
+            <span>No</span>
+            <span>Yes</span>
+          </div>
+        </label>
         <input value="{{button}}" type="submit" />
       </div>
       <textarea name="paste" id="paste">{{old}}</textarea>
