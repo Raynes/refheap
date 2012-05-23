@@ -1,3 +1,7 @@
+ul {
+    list-style-type: none;
+}
+
 div#site-container {
     margin: 0 auto;
     max-width: 1280px;
@@ -415,7 +419,7 @@ button#gentoken {
 *:first-child+html .clearfix { zoom: 1; } /* IE7 */
 
 pre#rawDisplay {
-    background-color: white;
+    background-color: #DDD;
     border: double 4px black;
     color: black;
 }
@@ -563,7 +567,7 @@ div#help-bubble-tray {
 }
 
 span#help-bubble:hover {
-    border-color: white;
+    border-color: #DDD;
     box-shadow: 1px 1px 3px black;
 }
 
@@ -598,7 +602,7 @@ span#help-bubble {
 
 li.help-subject {
     font-size: 16px;
-    color: white;
+    color: #DDD;
     padding-bottom: 16px;
 }
 
