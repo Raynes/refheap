@@ -14,7 +14,7 @@
               {:message error})}))
 
 (defpage [:post "/user/create"] {:keys [name]}
-  (let [email (session/flash-get :email)]
+  (if-let [email (session/flash-get :email)]
     (if (login/create-user email name)
       (redirect "/paste")
       (create-user-page email))))
