@@ -19,12 +19,6 @@
       (redirect "/paste")
       (create-user-page email))))
 
-(defpage [:post "/user/login"] {:keys [email]}
-  (if-let [username (login/user-exists email)]
-    (redirect "/paste")
-    (do (session/flash-put! :email email)
-        (redirect "/user/create"))))
-
 (defpage "/user/logout" []
   (session/remove! :user)
   (redirect "/paste"))
