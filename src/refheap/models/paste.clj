@@ -308,25 +308,28 @@
 (defn update-paste
   "Update an existing paste."
   [old language contents private user]
-  (let [validated (validate contents)]
-    (if-let [error (:error validated)]
-      error
-      (let [old-private (:private old)
-            new-private (boolean private)
-            paste (paste-map
-                   (cond
-                    (= old-private new-private) (:paste-id old)
-                    (false? new-private) (:id old)
-                    (true? new-private) (str (:_id old)))
-                   (:id old)
-                   user
-                   language
-                   (:contents validated)
-                   (:date old)
-                   private
-                   (:fork old))]
-        (mongo/update! :pastes old paste)
-        paste))))
+  (let [validated (validate contents)
+        error (:error validated)]
+    (cond
+     error error
+     (nil? user) "You must be logged in to edit pastes."
+     (not= (:id user) (:user old)) "You can only edit your own pastes!"
+     :else (let [old-private (:private old)
+                 new-private (boolean private)
+                 paste (paste-map
+                        (cond
+                         (= old-private new-private) (:paste-id old)
+                         (false? new-private) (:id old)
+                         (true? new-private) (str (:_id old)))
+                        (:id old)
+                        user
+                        language
+                        (:contents validated)
+                        (:date old)
+                        private
+                        (:fork old))]
+             (mongo/update! :pastes old paste)
+             paste))))
 
 (defn delete-paste
   "Delete an existing paste."
