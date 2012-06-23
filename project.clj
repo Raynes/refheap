@@ -12,5 +12,6 @@
                  [amalloy/mongo-session "0.0.1"]
                  [conch "0.3.0"]
                  [org.bovinegenius/exploding-fish "0.2.0"]]
-  :main refheap.server)
-
+  :main refheap.server
+  :extra-classpath-dirs ["jython-full.jar"]
+  :source-paths ["src" "jython-full.jar"])
