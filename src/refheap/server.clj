@@ -1,17 +1,13 @@
 (ns refheap.server
   (:require [refheap.config :refer [config]]
-            [refheap.middleware :as middleware]
-            [mongo-session.core :refer [mongo-session]]
             [noir.server :as server]
-            [somnium.congomongo :as mongo]
-            [org.bovinegenius.exploding-fish :as uri]
             [noir.trailing-slash :refer [wrap-strip-trailing-slash]]
             [noir.canonical-host :refer [wrap-canonical-host]]
-            [noir.force-ssl :refer [wrap-force-ssl]]))
+            [noir.force-ssl :refer [wrap-force-ssl]]
+            [monger.ring.session-store :refer [monger-store]]))
 
 (defn mongolab-info []
-  (when-let [env (System/getenv "MONGOLAB_URI")]
-    (uri/uri env)))
+  (System/getenv "MONGOLAB_URI"))
 
 (let [{:keys [path port host user-info]} (mongolab-info)
       [user pass] (and user-info (.split user-info ":"))
@@ -38,5 +34,5 @@
       (server/add-middleware wrap-force-ssl))
     (server/start port {:mode mode
                         :ns 'refheap
-                        :session-store (mongo-session :sessions)})))
+                        :session-store (monger-store :sessions)})))
 
