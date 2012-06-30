@@ -1,25 +1,28 @@
-(ns refheap.models.paste 
-  (:require [somnium.congomongo :as mongo]
-            [noir.session :as session]
+(ns refheap.models.paste
+  (:refer-clojure :exclude [sort find])
+  (:require [noir.session :as session]
             [clojure.java.io :as io]
             [clojure.string :as string]
             [clj-time.core :as time]
             [clj-time.format :as format]
             [conch.core :as sh]
             [refheap.dates :refer [parse-string]]
-            [refheap.messages :refer [error]])
-  (:import java.io.StringReader))
+            [refheap.messages :refer [error]]
+            [monger.collection :as mc]
+            [monger.query :refer [with-collection find sort limit skip]])
+  (:import java.io.StringReader
+           org.bson.types.ObjectId))
 
 (def paste-id
   "The current highest paste-id."
   (atom
-    (-> (mongo/fetch
-          :pastes
-          :sort {:id -1}
-          :limit 1)
-        first
-        :id
-        (or 0))))
+   (-> (with-collection "pastes"
+         (find {})
+         (sort {:id -1})
+         (limit 1))
+       first
+       :id
+       (or 0))))
 
 (def lexers
   "A map of language names to pygments lexer names."
@@ -215,15 +218,15 @@
   "Selects a language."
   [lang]
   (or
-    (if (and lang (.startsWith lang "."))
-      (first
-        (filter (fn [[_ v]]
-                  (when-let [exts (:exts v)]
-                    (exts (string/join (rest lang)))))
-                lexers))
-      (when-let [lang-map (lexers lang)]
-        [lang lang-map]))
-    ["Plain Text" {:short "text"}]))
+   (if (and lang (.startsWith lang "."))
+     (first
+      (filter (fn [[_ v]]
+                (when-let [exts (:exts v)]
+                  (exts (string/join (rest lang)))))
+              lexers))
+     (when-let [lang-map (lexers lang)]
+       [lang lang-map]))
+   ["Plain Text" {:short "text"}]))
 
 (defn pygmentize
   "Syntax highlight some code."
@@ -245,6 +248,7 @@
   (let [[name {:keys [short]}] (lookup-lexer language)]
     {:paste-id (str paste-id)
      :id id
+     :_id (ObjectId.)
      :user (:id user)
      :language name
      :raw-contents contents
@@ -260,9 +264,9 @@
 
 (defn validate [contents]
   (cond
-   (>= (count contents) 64000) {:error "That paste was too big. Has to be less than 64KB"}
-   (not (re-seq #"\S" (str contents))) {:error "Your paste cannot be empty."}
-   :else {:contents contents}))
+    (>= (count contents) 64000) {:error "That paste was too big. Has to be less than 64KB"}
+    (not (re-seq #"\S" (str contents))) {:error "Your paste cannot be empty."}
+    :else {:contents contents}))
 
 (defn parse-date [date]
   (format/parse))
@@ -274,36 +278,30 @@
     (if-let [error (:error validated)]
       error
       (let [id (swap! paste-id inc)
-            result (mongo/insert!
-                    :pastes
-                    (paste-map
-                     (when-not private id)
-                     id
-                     user
-                     language
-                     (:contents validated)
-                     (format/unparse (format/formatters :date-time) (time/now))
-                     private
-                     fork))]
+            doc    (paste-map (when-not private id)
+                              id
+                              user
+                              language
+                              (:contents validated)
+                              (format/unparse (format/formatters :date-time) (time/now))
+                              private
+                              fork)
+            result (mc/insert "pastes" doc)]
         (if private
-          (let [new (assoc result :paste-id (str (:_id result)))]
-            (mongo/update! :pastes result new)
+          (let [new (assoc doc :paste-id (str (:_id doc)))]
+            (mc/update "pastes" doc new)
             new)
-          result)))))
+          doc)))))
 
 (defn get-paste
   "Get a paste."
   [id]
-  (mongo/fetch-one
-   :pastes
-   :where {:paste-id id}))
+  (mc/find-one-as-map "pastes" {:paste-id id}))
 
 (defn get-paste-by-id
   "Get a paste by its :id key (which is the same regardless of being public or private."
   [id]
-  (mongo/fetch-one
-   :pastes
-   :where {:id id}))
+  (mc/find-one-as-map "pastes" {:id id}))
 
 (defn update-paste
   "Update an existing paste."
@@ -311,47 +309,48 @@
   (let [validated (validate contents)
         error (:error validated)]
     (cond
-     error error
-     (nil? user) "You must be logged in to edit pastes."
-     (not= (:id user) (:user old)) "You can only edit your own pastes!"
-     :else (let [old-private (:private old)
-                 new-private (boolean private)
-                 paste (paste-map
-                        (cond
-                         (= old-private new-private) (:paste-id old)
-                         (false? new-private) (:id old)
-                         (true? new-private) (str (:_id old)))
-                        (:id old)
-                        user
-                        language
-                        (:contents validated)
-                        (:date old)
-                        private
-                        (:fork old))]
-             (mongo/update! :pastes old paste)
-             paste))))
+      error error
+      (nil? user) "You must be logged in to edit pastes."
+      (not= (:id user) (:user old)) "You can only edit your own pastes!"
+      :else (let [old-private (:private old)
+                  new-private (boolean private)
+                  paste (paste-map
+                         (cond
+                           (= old-private new-private) (:paste-id old)
+                           (false? new-private) (:id old)
+                           (true? new-private) (str (:_id old)))
+                         (:id old)
+                         user
+                         language
+                         (:contents validated)
+                         (:date old)
+                         private
+                         (:fork old))]
+              (mc/update "pastes" old paste)
+              paste))))
 
 (defn delete-paste
   "Delete an existing paste."
   [id]
-  (mongo/destroy! :pastes {:paste-id id}))
+  (mc/remove "pastes" {:paste-id id}))
 
 (defn get-pastes
   "Get public pastes."
   [page]
-  (mongo/fetch
-   :pastes
-   :where {:private false}
-   :sort {:date -1}
-   :limit 20
-   :skip (* 20 (dec page))))
+  ;; TODO: monger.query provides proper pagination support, I think it
+  ;; makes sense to switch to that later. MK.
+  (with-collection "pastes"
+    (find {:private false})
+    (sort {:date -1})
+    (limit 20)
+    (skip (* 20 (dec page)))))
 
 (defn count-pastes
   "Count pastes."
   [& [private?]]
-  (mongo/fetch-count
-   :pastes
-   :where (when-not (nil? private?) {:private private?})))
+  (mc/count "pastes" (if-not (nil? private?)
+                       {:private private?}
+                       {})))
 
 (defn count-pages [n per]
   (long (Math/ceil (/ n per))))
