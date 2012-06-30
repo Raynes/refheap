@@ -288,10 +288,10 @@
                               fork)
             result (mc/insert "pastes" doc)]
         (if private
-          (let [new (assoc result :paste-id (str (:_id result)))]
-            (mc/update "pastes" result new)
+          (let [new (assoc doc :paste-id (str (:_id doc)))]
+            (mc/update "pastes" doc new)
             new)
-          result)))))
+          doc)))))
 
 (defn get-paste
   "Get a paste."
