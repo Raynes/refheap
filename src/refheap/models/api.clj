@@ -1,6 +1,5 @@
 (ns refheap.models.api
-  (:require [somnium.congomongo :as mongo]
-            [refheap.models.users :as users]
+  (:require [refheap.models.users :as users]
             [refheap.models.paste :as pastes]
             [noir.response :as response]
             [clojure.string :as string])

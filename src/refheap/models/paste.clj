@@ -1,6 +1,5 @@
 (ns refheap.models.paste 
-  (:require [somnium.congomongo :as mongo]
-            [noir.session :as session]
+  (:require [noir.session :as session]
             [clojure.java.io :as io]
             [clojure.string :as string]
             [clj-time.core :as time]

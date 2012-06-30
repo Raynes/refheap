@@ -1,6 +1,5 @@
 (ns refheap.models.login
   (:require [refheap.config :refer [config]]
-            [somnium.congomongo :as mongo]
             [clj-http.client :as http]
             [noir.session :as session]
             [cheshire.core :as json]

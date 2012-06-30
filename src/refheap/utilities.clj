@@ -1,6 +1,5 @@
 (ns refheap.utilities
-  (:require [somnium.congomongo :as mongo]
-            [refheap.models.paste :as paste]))
+  (:require [refheap.models.paste :as paste]))
 
 (defn regenerate
   "Regenerates a paste's pygmentized text and preview text from

@@ -1,5 +1,4 @@
-(ns refheap.models.users
-  (:require [somnium.congomongo :as mongo]))
+(ns refheap.models.users)
 
 (defn get-user [user]
   (mongo/fetch-one
