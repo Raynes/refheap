@@ -8,7 +8,9 @@
             [conch.core :as sh]
             [refheap.dates :refer [parse-string]]
             [refheap.messages :refer [error]])
-  (:import java.io.StringReader))
+  (:import java.io.StringReader
+           java.util.Properties
+           org.python.util.PythonInterpreter))
 
 (def paste-id
   "The current highest paste-id."
@@ -225,16 +227,28 @@
         [lang lang-map]))
     ["Plain Text" {:short "text"}]))
 
+(defonce jython-initialization-state
+  (do (PythonInterpreter/initialize
+       (System/getProperties) nil (make-array String 0))
+      :done))
+
 (defn pygmentize
   "Syntax highlight some code."
   [language text & [anchor?]]
-  (let [proc (sh/proc "./pygmentize" "-fhtml" (str "-l" language)
-                      (str "-Olinenos=table,stripnl=False,encoding=utf-8"
-                           (when anchor? ",anchorlinenos=true,lineanchors=L"))
-                      :dir "resources/pygments")]
-    (sh/feed-from-string proc text)
-    (sh/done proc)
-    (sh/stream-to-string proc :out)))
+  (let [py (PythonInterpreter.)]
+    ;; straight from http://pygments.org/docs/quickstart/
+    (doseq [line ["from pygments import highlight"
+                  "from pygments.lexers import get_lexer_by_name"
+                  "from pygments.formatters import HtmlFormatter"
+                  (str "lexer = get_lexer_by_name('"
+                       language
+                       "', stripnl=False, encoding='utf-8')")
+                  (str "formatter = HtmlFormatter(linenos='table', "
+                       (when anchor? "anchorlinenos=True, lineanchors='L', ")
+                       "encoding='utf-8')")]]
+      (.exec py line))
+    (.set py "code" text)
+    (str (.eval py "highlight(code, lexer, formatter)"))))
 
 (defn preview
   "Get the first 5 lines of a string."

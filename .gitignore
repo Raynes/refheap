@@ -5,3 +5,5 @@ pom.xml
 .lein-deps-sum
 resources/pygments/
 target
+/cachedir
+/tmp
