@@ -2,7 +2,8 @@
   (:require [refheap.models.users :as users]
             [refheap.models.paste :as pastes]
             [noir.response :as response]
-            [clojure.string :as string])
+            [clojure.string :as string]
+            [monger.collection :as mc])
   (:import java.util.UUID))
 
 (defn gen-token
@@ -15,10 +16,7 @@
   [userid]
   (let [old (users/get-user-by-id userid)
         new (gen-token)]
-    (mongo/update!
-     :users
-     old
-     (assoc old :token new))
+    (mc/update "users" old (assoc old :token new))
     new))
 
 (defn get-token
@@ -31,9 +29,7 @@
   "Validate that a token exists and that the user has that token."
   [username token]
   (when (and username token)
-    (if-let [user (mongo/fetch-one
-                   :users
-                   :where {:token token, :username (.toLowerCase username)})]
+    (if-let [user (mc/find-one-as-map "users" {:token token, :username (.toLowerCase username)})]
       (-> user
           (assoc :id (str (:_id user)))
           (dissoc :_id))

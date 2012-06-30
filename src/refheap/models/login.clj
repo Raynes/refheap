@@ -4,29 +4,30 @@
             [noir.session :as session]
             [cheshire.core :as json]
             [refheap.messages :refer [error]]
-            [noir.request :refer [ring-request]]))
+            [noir.request :refer [ring-request]]
+            [monger.collection :as mc])
+  (:import org.bson.types.ObjectId))
 
 (defn create-user [email name]
   (let [name (.toLowerCase name)
         qmap {:email email
               :username name}
         name-count (count name)]
+    ;; this stuff would be much cleaner with Validateur. MK.
     (cond
      (or (> 3 name-count) (< 15 name-count)) 
      (error "Username must be between 3 and 15 characters.")
      (not= name (first (re-seq #"\w+" name)))
      (error "Username cannot contain non-alphanumeric characters.")
-     (mongo/fetch-one :users :where {:username name})
+     (mc/find-one-as-map "users" {:username name})
      (error "Username already exists.")
-     :else (let [user (mongo/insert!
-                       :users
-                       qmap)]
+     :else (let [oid  (ObjectId.)
+                 user (merge {:_id oid} qmap)]
+             (mc/insert "users" user)
              (session/put! :user (assoc qmap :id (str (:_id user))))))))
 
 (defn user-exists [email]
-  (when-let [{:keys [username _id]} (mongo/fetch-one
-                                     :users
-                                     :where {:email email})]
+  (when-let [{:keys [username _id]} (mc/find-one-as-map "users" {:email email})]
     (session/put! :user {:email email
                          :username username
                          :id (str _id)})
