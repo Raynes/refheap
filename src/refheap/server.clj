@@ -1,9 +1,7 @@
 (ns refheap.server
   (:require [refheap.config :refer [config]]
             [noir.server :as server]
-            [noir.trailing-slash :refer [wrap-strip-trailing-slash]]
-            [noir.canonical-host :refer [wrap-canonical-host]]
-            [noir.force-ssl :refer [wrap-force-ssl]]
+            [noir.util.middleware :refer [wrap-strip-trailing-slash wrap-canonical-host wrap-force-ssl]]
             [monger.core :as mg]
             [monger.collection :as mc]
             [monger.ring.session-store :refer [monger-store]]))

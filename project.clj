@@ -4,7 +4,7 @@
   :dependencies [[org.clojure/clojure "1.4.0"]
                  [stencil "0.2.0"]
                  [noir "1.3.0-beta10"]
-                 [lib-noir "0.2.0-alpha1"]
+                 [lib-noir "0.2.0-alpha2"]
                  [com.novemberain/monger "1.1.0-beta1"]
                  [clj-config "0.2.0"]
                  [clj-http "0.4.0"]
