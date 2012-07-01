@@ -322,7 +322,7 @@
                          language
                          (:contents validated)
                          (:date old)
-                         private
+                         new-private
                          (:fork old))]
               (mc/update "pastes" {:id (:id old)} paste :upsert false :multi false)
               paste))))
