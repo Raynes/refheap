@@ -21,9 +21,7 @@
      (error "Username cannot contain non-alphanumeric characters.")
      (mc/find-one-as-map "users" {:username name})
      (error "Username already exists.")
-     :else (let [oid  (ObjectId.)
-                 user (merge {:_id oid} qmap)]
-             (mc/insert "users" user)
+     :else (let [user (mc/insert-and-return "users" qmap)]
              (session/put! :user (assoc qmap :id (str (:_id user))))))))
 
 (defn user-exists [email]

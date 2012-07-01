@@ -278,20 +278,19 @@
     (if-let [error (:error validated)]
       error
       (let [id (swap! paste-id inc)
-            doc    (paste-map (when-not private id)
+            result (mc/insert-and-return "pastes" (paste-map (when-not private id)
                               id
                               user
                               language
                               (:contents validated)
                               (format/unparse (format/formatters :date-time) (time/now))
                               private
-                              fork)
-            result (mc/insert "pastes" doc)]
+                              fork))]
         (if private
-          (let [new (assoc doc :paste-id (str (:_id doc)))]
-            (mc/update "pastes" doc new)
+          (let [new (assoc result :paste-id (str (:_id result)))]
+            (mc/update "pastes" result new)
             new)
-          doc)))))
+          result)))))
 
 (defn get-paste
   "Get a paste."
