@@ -248,7 +248,6 @@
   (let [[name {:keys [short]}] (lookup-lexer language)]
     {:paste-id (str paste-id)
      :id id
-     :_id (ObjectId.)
      :user (:id user)
      :language name
      :raw-contents contents
@@ -325,7 +324,7 @@
                          (:date old)
                          private
                          (:fork old))]
-              (mc/update "pastes" old paste)
+              (mc/update "pastes" {:id (:id old)} paste :upsert false :multi false)
               paste))))
 
 (defn delete-paste
