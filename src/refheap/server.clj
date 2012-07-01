@@ -27,5 +27,5 @@
       (server/add-middleware wrap-force-ssl))
     (server/start port {:mode mode
                         :ns 'refheap
-                        :session-store (monger-store :sessions)})))
+                        :session-store (monger-store "sessions")})))
 
