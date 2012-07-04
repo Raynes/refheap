@@ -1,19 +1,47 @@
-body { 
-    background-color: #001F5C; 
+ul {
+    list-style-type: none;
+}
+
+div#site-container {
+    margin: 0 auto;
+    max-width: 1280px;
+    min-width: 775px;
+    width: 100%;
+    overflow: auto;
+    background-color: #2E2E2E;
+}
+
+body {
+    background-color: #2E2E2E;
     margin: 0;
     font-family: 'Open Sans', sans-serif;
+    color: #DDD;
+    padding: 20px 50px 0;
+}
+
+body#fullscreen {
+    background-color: #202020;
+    padding: 0;
+}
+
+#fullscreen div {
+    border: 0;
+    overflow-x: visible;
+}
+
+a {
+    color: #A2B943;
+    text-decoration: none;
 }
 
 div#header {
-    background-color: #171745;
-    padding-left: 10px;
-    border: 2px solid black;
+    padding: 10px 0px 10px 15px;
     overflow: hidden;
     min-width: 700px;
 }
 
 a#site {
-    color: white;
+    color: #FFE93B;
     font-size: 33px;
     float: left;
     margin-right: 40px;
@@ -23,20 +51,31 @@ a#site {
 a#site:active { text-decoration: none; }
 
 div.headerlinks {
-    float: left;
-    margin-top: 17px;
+    margin-top: 10px;
+    padding-right: 20px;
+    float: right;
+}
+
+.headerlinks #signin {
+    margin-top: 3px;
 }
 
 .headerlinks a {
     font-size: 20px;
-    padding-right: 10px;
-    color: white;
     text-decoration: none;
 }
 
 div#useri {
-    border-left: 1px solid lightBlue;
-    padding-left: 10px;
+    float: right;
+}
+
+a#userbutton {
+    font-weight: bold;
+    margin-right: 7px;
+}
+
+div#user {
+    padding-top: 15px;
 }
 
 #user div {
@@ -52,26 +91,80 @@ a#logout {
 }
 
 div#content {
-    min-width: 833px;
-    margin: 15px 0px 0px 15px;  
+    width: 100%;
 }
 
 div#container {
-    padding: 5px;
-    background-color: #7181A4;
-    border: 2px solid black;
-    width: 70%;
+    padding: 6px 12px 12px 12px;
+    background-color: #434E48;
+    width: initial;
+    border-radius: 5px;
 }
 
-#pastearea textarea {
+div#main-container {
+    clear: both;
+    float: left;
     width: 100%;
-    min-height: 400px;
-    box-sizing: border-box;
+}
+
+div#main-right {
+    max-width: 345px;
+    width: 27%;
+    padding-right: 10px;
+    background-color: transparent;
+    height: 507px;
+    border: 2px solid #2E2E2E;
+    float: right;
+    margin-top: 41px;
+    margin-right: 1px;
+    overflow: auto;
+}
+
+div#main-right ul li {
+    margin-bottom: 15px;
+    padding: 0 10px;
+    font-size: 15px;
+}
+
+div#main-right p {
+    font-size: 15px;
+    padding: 10px 20px 0 30px;
+}
+
+div#paste-container {
+    background: transparent;
+    overflow: hidden;
+    border: none;
+}
+
+.CodeMirror-scroll {
+    height: 510px;
+    overflow: auto;
+    border: 2px solid #2e2e2e;
+    border-radius: 3px;
+}
+
+div#paste-header {
+    margin-left: 100%;
+    float: right;
+    overflow: visible;
+    width: 400px;
+    padding-bottom: 3px;
+}
+
+div#paste-container textarea {
+    float: left;
+    clear: left;
+    width: 100%;
+    margin: 0px;
+    background-color: #DDD;
+    height: 510px;
     /* Dear world: stop using fucking prefixes. */
     -moz-box-sizing: border-box; /* Render properly on  Firefox */
     -ms-box-sizing: border-box; /* Look at me, all tryin' to support IE8 and such. */
-    -webkit-box-sizing: border-box; /* Render properly on popular Android browsers. 
-                                       And... Safari, I guess? */
+    -webkit-box-sizing: border-box; /* Render properly on popular Android browsers. */
+    border: border-box;
+    font-family: 'DejaVu Sans Mono', 'Bitstream Vera Sans Mono', monospace;
 }
 
 #pastearea form {
@@ -82,52 +175,95 @@ div#container {
     clear: both;
 }
 
-div#submit {
-    float: right;
-}
-
-#submit input[type="submit"] {
+div#paste-header input[type="submit"] {
     -webkit-appearance: default-button;
     cursor: pointer;
-    font-size: 25px;
-    padding: 4px;
-    margin-left: 25px;
-}
-
-div#submit {
-    font-size: 18px;
-}
-
-#submit input[type="checkbox"] {
-    margin-left: 7px;
-}
-
-#pastearea select {
+    font-size: 15px;
+    padding: 3px 10px;
+    margin: 0 !important;
+    border: 1.5px solid #2E2E2E;
+    background-color: #cfcfcf;
+    color: #2E2E2E;
+    border-radius: 5px;
     float: right;
+}
+
+div#paste-header input[type="checkbox"]{
+    margin-left: 15px;
+}
+
+div#paste-header label {
+    padding-top: 1px;
+    margin-left: 5px;
+    font-size: 15px;
+}
+
+div#paste-header select {
+    float: left;
+    font-size: 14px;
+    background: #CCC;
+    margin-top: 2px;
+    width: 150px;
+    border: 2px solid #2E2E2E;
+    border-image: initial;
+    height: 32px;
+    padding: 4px;
+    color: #2E2E2E;
+}
+
+div#language_chzn {
+    color: #2E2E2E;
+    font-size: 14px;
+    background: #CCC;
+    margin: 0px 2px;
+    border-radius: 5px;
 }
 
 div#footer {
-    width: 71%;
-    color: #A0BCE6;
+    width: initial;
+    color: #A2B943;
     font-size: 13px;
 }
 
 .centered {
+    width: 100%;
     text-align: center;
+    font-size: 10px;
+}
+
+.header {
+    text-align: center;
+    font-weight: bold;
+    font-size: 20px;
 }
 
 #footer a {
-    color: #A0BCE6;
+    text-decoration: underline;
+}
+
+div.written {
+    padding: 20px 150px;
 }
 
 .written a {
-    color: black;
     font-weight: bold;
 }
 
-.syntax {
-    border: 3px solid black;
+div.syntax {
+    border: 2px solid #2e2e2e;
     overflow-x: auto;
+    border-radius: 4px;
+}
+
+div.syntax div.more {
+    position: relative;
+    top: -10px;
+    padding-left: 3px;
+    font-size: 12px;
+}
+
+div.more a {
+    font-weight: bold;
 }
 
 div#pasteinfo {
@@ -135,13 +271,30 @@ div#pasteinfo {
     font-size: 11px;
 }
 
-.info {
-    font-weight: bold;
+.spacedlist {
+    padding: 0;
+    margin: 0;
+}
+
+.spacedlist li {
+    float: left;
+    display: inline;
+}
+
+#infolist li {
     padding: 0 10px 0 10px;
     border-right: solid 1px black;
 }
 
-span#last {
+#infolist {
+    float: left;
+}
+
+.private {
+    color: #22aa22;
+}
+
+li#last {
     border-right: none;
 }
 
@@ -156,6 +309,14 @@ div.floater {
     margin-right: 10px;
 }
 
+.linenodiv {
+    padding-left: 3px;
+}
+
+.more {
+    padding-left: 3px;
+}
+
 .linenodiv a {
     text-decoration: none;
     color: gray;
@@ -163,44 +324,303 @@ div.floater {
 
 div#login {
     margin: auto;
-    width: 450px;
+    width: 525px;
+    text-align: center;
+}
+
+#starting {
+    float: left;
+    border-right: 2px solid #585858;
+    margin-right: 10px;
 }
 
 .error {
-    color: red;
+    color: #CF0000;
     font-weight: bold;
+    text-align: center;
 }
 
 a#newer {
     margin-right: 10px;
 }
 
+#starting li {
+    margin-right: 10px;
+    padding-right: 10px;
+}
+
+li#last {
+    margin-right: 10px;
+    padding-right: 0;
+}
+
 .pagebutton {
-    background-color: #E8F2FF;
-    padding: 1px 4px 1px 4px;
-    text-decoration: none;
-    color: black;
-    font-size: 20px;
-    border-radius: 15px;
+    font-size: 15px;
+    padding: 5px 10px;
+    border: 2px solid #2E2E2E;
+    background-color: #CFCFCF;
+    color: #2E2E2E;
+    border-radius: 5px;
 }
 
 div#edit {
     float: right;
-    padding: 
+    padding:
 }
 
 #edit a {
     padding-right: 7px;
 }
 
-.nice { 
-    color: black;
-}
-
 .evil {
     color: #CF0000;
 }
 
-.header {
+div#preview-container {
+    padding-top: 15px;
+}
+
+div.preview-header {
+    font-size: 12px;
+    margin: 0 1px;
+}
+
+div.preview-header div.right {
+    float: right;
+}
+
+div#token {
+    text-align: center;
+}
+
+code#tokentext {
+    margin-right: 10px;
+    background-color: #DDD;
+    color: black;
+    padding: 4px;
+    border-radius: 5px;
+}
+
+button#gentoken {
+    height: 24px;
+    border-radius: 5px;
+}
+
+.clearfix:after {
+    visibility: hidden;
+    display: block;
+    font-size: 0;
+    content: " ";
+    clear: both;
+    height: 0;
+}
+
+* html .clearfix             { zoom: 1; } /* IE6 */
+*:first-child+html .clearfix { zoom: 1; } /* IE7 */
+
+pre#rawDisplay {
+    background-color: #DDD;
+    border: double 4px black;
+    color: black;
+}
+
+span#copyTextPrompt {
+    position: absolute;
+    right: 0px;
+    top: 0px;
+    font-size: large;
+    font-weight: bold;
+    color: lightgray;
+}
+
+input#private {
+    display: none;
+}
+
+input#private + label {
+    cursor: pointer;
+    line-height: 1.5em;
+    display: inline-block;
+    vertical-align: top;
+}
+
+div#private-toggle {
+    background-color: #333;
+    border-radius: 8px;
+    width: 100px;
+}
+
+#private-toggle,
+#private-toggle div,
+#private-toggle span {
+    display: inline-block;
+    vertical-align: top;
+    text-align: center;
+}
+
+#private-toggle span {
+    width: 40px;
+    background-color: transparent;
+    position: relative;
+    z-index: 2;
+}
+
+#private-toggle span:first {
+    border-right: 1px solid #888;
+}
+
+#private-toggle div {
+    -moz-transition: all 250ms;
+    -ms-transition: all 250ms;
+    -o-transition: all 250ms;
+    -webkit-transition: all 250ms;
+    background-color: darkred;
+    border-radius: 8px 0px 0px 8px;
+    box-shadow: 0px 0px 4px red;
+    height: 1.5em;
+    position: absolute;
+    transition: all 250ms;
+    width: 45px;
+    z-index: 1;
+    margin-left: -6px;
+}
+
+input#private:checked + label > div > div {
+    background-color: darkgreen;
+    border-radius: 0px 8px 8px 0px;
+    box-shadow: 0px 0px 4px lightgreen;
+    margin-left: 45px;
+}
+
+div#help-dialog {
+    display: none;
+    background-color: #1D1F21;
+    border-radius: 5px;
+    border: solid 2px #2E2E2E;
+    box-shadow: 10px 10px 10px black;
+    height: 320px;
+    margin-top: -320px;
+    width: 350px;
+    margin-left: -350px;
+    font-size: 16px;
+    position: absolute;
+    z-index: 5;
+}
+
+div#help-dialog > div {
+    padding-left: 20px;
+}
+
+div#help-dialog > div > ul {
+    margin: 0px;
+    padding: 0px;
+}
+
+div#help-dialog > h3 {
+    background-color: #434E48;
+    border-radius: 5px;
+    color: #A2B943;
+    margin-top: 2px;
+    margin-bottom: 0px;
+    margin-left: 2px;
+    margin-right: 2px;
+    padding: 0px;
+    text-align: center;
+    font-size: 16px;
+    height: 28px;
+    line-height: 28px;
+}
+
+div#help-dialog > h3 > span {
+    background-color: #1D1F21;
+    border-radius: 8px;
+    border: solid 1px #2E2E2E;
+    cursor: pointer;
+    display: inline-block;
+    float: right;
     font-size: 14px;
+    line-height: 20px;
+    font-variant: small-caps;
+    margin: 4px;
+    padding-left: 2px;
+    padding-right: 2px;
+    text-align: center;
+}
+
+div#help-dialog > h3 > span:hover {
+    background-color: #2E2E2E;
+    text-shadow: 0px 0px 4px lightgreen;
+}
+
+span#help-bubble:active {
+    box-shadow: -1px -1px 3px black;
+    border-color: #767676;
+}
+
+div#help-bubble-tray {
+    background-color: #434E48;
+    border-top-left-radius: 15px;
+    border: solid 1px #2E2E2E;
+    bottom: 0px;
+    box-shadow: -1px -1px 5px #1D1D1D;
+    position: fixed;
+    height: 30px;
+    right: 0px;
+}
+
+span#help-bubble:hover {
+    border-color: #DDD;
+    box-shadow: 1px 1px 3px black;
+}
+
+span#help-bubble {
+    margin-bottom: 4px;
+    margin-right: 4px;
+    margin-top: 2px;
+    margin-left: 2px;
+    cursor: pointer;
+    border: solid 2px #767676;
+    display: block;
+    border-radius: 15px;
+    width: 23px;
+    text-shadow: 0px 0px 2px black;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 900;
+    background-color: #1AB8FF;
+    background-image: linear-gradient(bottom, rgb(0,150,220) 15%, rgb(45,199,255) 81%);
+    background-image: -o-linear-gradient(bottom, rgb(0,150,220) 15%, rgb(45,199,255) 81%);
+    background-image: -moz-linear-gradient(bottom, rgb(0,150,220) 15%, rgb(45,199,255) 81%);
+    background-image: -webkit-linear-gradient(bottom, rgb(0,150,220) 15%, rgb(45,199,255) 81%);
+    background-image: -ms-linear-gradient(bottom, rgb(0,150,220) 15%, rgb(45,199,255) 81%);
+    background-image: -webkit-gradient(
+	linear,
+	left bottom,
+	left top,
+	color-stop(0.15, rgb(0,150,220)),
+	color-stop(0.81, rgb(45,199,255))
+    );
+}
+
+li.help-subject {
+    font-size: 16px;
+    color: #DDD;
+    padding-bottom: 16px;
+}
+
+li.help-title {
+    color: #FFE93B;
+    font-size: 14px;
+}
+
+li.help-line {
+    font-size: 12px;
+}
+
+span.hotkey {
+    font-size: 12px;
+    color: #A2B943;
+    display: inline-block;
+    vertical-align: middle;
+    width: 80px;
 }

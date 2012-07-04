@@ -1,41 +1,34 @@
 (ns refheap.views.login
-  (:use [hiccup.form-helpers :only [text-field submit-button form-to]]
-        [refheap.views.common :only [layout]]
-        [noir.core :only [defpage]]
-        [noir.response :only [redirect]])
   (:require [refheap.models.login :as login]
-            [noir.session :as session]))
+            [stencil.core :as stencil]
+            [noir.session :as session]
+            [refheap.views.common :refer [layout logged-in]]
+            [noir.core :refer [defpage]]
+            [noir.response :refer [redirect json]]))
 
 (defn create-user-page [email]
   (session/flash-put! :email email)
-  (layout
-   [:div#login
-    (when-let [error (session/flash-get :error)]
-      [:p.evil error])
-    (form-to
-     [:post "/user/create"]
-     [:p "You're almost there! Just enter a username and you'll be on your way."]
-     (text-field :name)
-     (submit-button "submit"))]))
+  (stencil/render-file
+    "refheap/views/templates/createuser"
+    {:error (when-let [error (session/flash-get :error)]
+              {:message error})}))
 
 (defpage [:post "/user/create"] {:keys [name]}
-  (let [email (session/flash-get :email)]
+  (if-let [email (session/flash-get :email)]
     (if (login/create-user email name)
       (redirect "/paste")
       (create-user-page email))))
 
-(defpage [:post "/user/login"] {:keys [email]}
-  (if-let [username (login/user-exists email)]
-    (redirect "/paste")
-    (do (session/flash-put! :email email)
-        (redirect "/user/create"))))
-
-(defpage "/users/logout" []
+(defpage "/user/logout" []
   (session/remove! :user)
   (redirect "/paste"))
 
 (defpage [:post "/user/verify"] {:keys [assertion]}
   (when-let [{:keys [email]} (login/verify-assertion assertion)]
-    (if (login/user-exists email)
-      (redirect "/paste")
-      (create-user-page email))))
+    (if-let [username (login/user-exists email)]
+     (json {:login-html (logged-in username)})
+      (do
+        (session/flash-put! :email email)
+        ;; TODO: This results in css and stuff being added twice.
+        ;; It has no effect on the layout but is still dirty. Fix.
+        (json {:chooselogin-html (layout (create-user-page email))})))))

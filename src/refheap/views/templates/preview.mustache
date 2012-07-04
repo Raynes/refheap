@@ -1,0 +1,17 @@
+<div id="preview-container">
+  {{#pastes}}
+  <div class="preview-header">
+    {{{header}}}
+    <div class="right">
+      [<a href="/paste/{{id}}">Link</a>]
+    </div>
+    <div class="syntax">
+      {{{summary}}}
+      {{#more}}
+      <a class="more" href="/paste/{{id}}">more...</a>
+      {{/more}}
+    </div>
+    <br />
+  </div>
+  {{/pastes}}
+</div>

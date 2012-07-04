@@ -1,22 +1,37 @@
-// Just some BrowserID stuff.
+/*
+ * Refheap UI Enhancements
+ */
 
-$(document).ready(function(){
-    $("#signin").click(function(event) {
-      navigator.id.getVerifiedEmail(function(assertion) {
-      if (assertion) {
-        $.post('/user/verify',
-               { assertion: assertion }, 
-               function(data) { $("body").html(data)})
-      } else {
-        alert("Login failure!")
-      }
-      })
-    })
-  
-  $("#delete").click(function(event) {
-    var r = confirm("Are you sure you want to delete this paste? There is no getting it back.")
-    if (r == false) {
-      event.preventDefault()
-    }
-  })
-});
+$( function ( $, window ) {
+
+  var refheap = refheap || {};
+
+  /**
+   * Prompt the user for their BrowserID and verify via XHR POST.
+   */
+  refheap.signIn = function () {
+    navigator.id.get( function ( assertion ) {
+      $.post( "/user/verify", { assertion: assertion }, function ( data ) {
+        if ( data ) {
+          $( "#useri" ).html( data["login-html"] );
+          $( "body" ).html( data["chooselogin-html"] );
+        }
+      });
+    });
+  };
+
+  $( function () {
+    $( "#signin" ).click( refheap.signIn );
+
+    // help popunder
+    $( "#help-bubble" ).click( function () {
+      $( "#help-dialog" ).slideToggle( "fast" )
+        .find( "h3 > span" ).on( "click", function () {
+          $( "#help-dialog" ).fadeOut( "fast" );
+        });
+    });
+
+  });
+
+}( jQuery, window ));
+

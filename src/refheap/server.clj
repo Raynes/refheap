@@ -1,24 +1,29 @@
 (ns refheap.server
-  (:use [refheap.config :only [config]]
-        [mongo-session.core :only [mongo-session]])
-  (:require [noir.server :as server]
-            [somnium.congomongo :as mongo]))
+  (:require [refheap.config :refer [config]]
+            [noir.server :as server]
+            [noir.util.middleware :refer [wrap-strip-trailing-slash wrap-canonical-host wrap-force-ssl]]
+            [monger.core :as mg]
+            [monger.collection :as mc]
+            [monger.ring.session-store :refer [monger-store]]))
 
-(mongo/set-connection!
- (mongo/make-connection (config :db-name)
-                        :host (config :db-host)
-                        :port (config :db-port)))
+(let [uri (get (System/getenv) "MONGOLAB_URI" "mongodb://127.0.0.1/refheap_development")]
+  (mg/connect-via-uri! uri))
 
-(mongo/add-index! :pastes [:user :date])
-(mongo/add-index! :pastes [:private])
-(mongo/add-index! :pastes [:id])
+(mc/ensure-index "pastes" {:user 1 :date 1})
+(mc/ensure-index "pastes" {:private 1})
+(mc/ensure-index "pastes" {:id 1})
+(mc/ensure-index "pastes" {:paste-id 1})
 
 (server/load-views "src/refheap/views/")
+(server/add-middleware wrap-strip-trailing-slash)
 
 (defn -main [& m]
   (let [mode (keyword (or (first m) :dev))
-        port (Integer. (or (get (System/getenv) "PORT") (str (config :port))))]
+        port (Integer. (or (System/getenv "PORT") (str (config :port))))]
+    (when (= mode :prod)
+      (server/add-middleware wrap-canonical-host (System/getenv "CANONICAL_HOST"))
+      (server/add-middleware wrap-force-ssl))
     (server/start port {:mode mode
                         :ns 'refheap
-                        :session-store (mongo-session :refheap-sessions)})))
+                        :session-store (monger-store "sessions")})))
 

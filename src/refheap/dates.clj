@@ -24,3 +24,9 @@
     (str (months (time/month parsed)) " "
          (time/day parsed) ", "
          (time/year parsed))))
+
+(defn datetime-string [date]
+  (let [date-string (date-string  date)
+        parsed      (parse-string date)]
+    (str date-string " at "
+         (time/hour parsed) ":" (time/minute parsed))))

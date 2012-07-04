@@ -1,20 +1,22 @@
 (ns refheap.models.users
-  (:require [somnium.congomongo :as mongo]))
+  (:refer-clojure :exclude [sort find])  
+  (:require [monger.collection :as mc]
+            [monger.query :refer [with-collection find sort limit skip]])
+  (:import org.bson.types.ObjectId))
 
 (defn get-user [user]
-  (mongo/fetch-one
-   :users
-   :where {:username user}))
+  (mc/find-one-as-map "users" {:username user}))
+
+(defn get-user-by-id [id]
+  (mc/find-map-by-id "users" (ObjectId. id)))
 
 (defn user-pastes [user page & [others]]
-  (mongo/fetch
-   :pastes
-   :where (merge {:user user} others)
-   :sort {:date -1}
-   :limit 10
-   :skip (* 10 (dec page))))
+  (with-collection "pastes"
+    (find (merge {:user (str (:_id (get-user user)))} others))
+    (sort {:date -1})
+    (limit 10)
+    ;; TODO: switch to Monger's pagination support. MK.
+    (skip (* 10 (dec page)))))
 
 (defn count-user-pastes [user & [others]]
-  (mongo/fetch-count
-   :pastes
-   :where (merge {:user user} others)))
+  (mc/count "pastes" (merge {:user (str (:_id (get-user user)))} others)))
