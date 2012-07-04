@@ -1,14 +1,14 @@
 (ns refheap.models.users
   (:refer-clojure :exclude [sort find])  
   (:require [monger.collection :as mc]
-            [monger.query :refer [with-collection find sort limit skip]]))
+            [monger.query :refer [with-collection find sort limit skip]])
+  (:import org.bson.types.ObjectId))
 
 (defn get-user [user]
   (mc/find-one-as-map "users" {:username user}))
 
 (defn get-user-by-id [id]
-  ;; Monger takes care of coercing strings to object ids if necessary.
-  (mc/find-map-by-id "users" id))
+  (mc/find-map-by-id "users" (ObjectId. id)))
 
 (defn user-pastes [user page & [others]]
   (with-collection "pastes"
