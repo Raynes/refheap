@@ -11,7 +11,7 @@
             [monger.collection :as mc]
             [monger.query :refer [with-collection find sort limit skip]])
   (:import java.io.StringReader
-           org.apache.commons.codec.binary.Base64))
+           org.apache.commons.codec.digest.DigestUtils))
 
 (def paste-id
   "The current highest paste-id."
@@ -245,13 +245,12 @@
   (->> s StringReader. io/reader line-seq (take 5) (string/join "\n")))
 
 (defn generate-id
-  "Generate a random UUID, convert it to base64, and take the first
-   20 characters."
+  "Generate a hex string of a SHA1 hack of a random UUID.
+   Return the first 25 characters."
   []
   (-> (java.util.UUID/randomUUID)
       str
-      .getBytes
-      Base64/encodeBase64String
+      DigestUtils/shaHex
       (.substring 0 25)))
 
 ;; The reason there are three ids are because they all serve a different purpose.
