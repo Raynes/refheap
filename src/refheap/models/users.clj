@@ -8,10 +8,11 @@
 
 (defn get-user-by-id [id]
   ;; Monger takes care of coercing strings to object ids if necessary.
+  (prn id)
   (mc/find-map-by-id "users" id))
 
 (defn user-pastes [user page & [others]]
-  (with-collection "users"
+  (with-collection "pastes"
     (find (merge {:user (str (:_id (get-user user)))} others))
     (sort {:date -1})
     (limit 10)
