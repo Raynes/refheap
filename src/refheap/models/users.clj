@@ -8,7 +8,6 @@
 
 (defn get-user-by-id [id]
   ;; Monger takes care of coercing strings to object ids if necessary.
-  (prn id)
   (mc/find-map-by-id "users" id))
 
 (defn user-pastes [user page & [others]]
