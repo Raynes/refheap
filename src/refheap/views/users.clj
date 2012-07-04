@@ -24,7 +24,7 @@
            :pastes (paste/render-paste-previews 
                      (users/user-pastes user page others)
                      "refheap/views/templates/userheader")
-           :paste-buttons (page-buttons (str "/users/" user) total 20 page)
+           :paste-buttons (page-buttons (str "/users/" user) total 10 page)
            :gravatar (avatar (:email user-data) 70)})
         {:file "refheap/views/templates/showhead"
          :title (str user "'s pastes")}))))

@@ -11,7 +11,7 @@
             [monger.collection :as mc]
             [monger.query :refer [with-collection find sort limit skip]])
   (:import java.io.StringReader
-           org.bson.types.ObjectId))
+           org.apache.commons.codec.digest.DigestUtils))
 
 (def paste-id
   "The current highest paste-id."
@@ -244,10 +244,27 @@
   [s]
   (->> s StringReader. io/reader line-seq (take 5) (string/join "\n")))
 
-(defn paste-map [paste-id id user language contents date private fork]
-  (let [[name {:keys [short]}] (lookup-lexer language)]
-    {:paste-id (str paste-id)
+(defn generate-id
+  "Generate a hex string of a SHA1 hack of a random UUID.
+   Return the first 25 characters."
+  []
+  (-> (java.util.UUID/randomUUID)
+      str
+      DigestUtils/shaHex
+      (.substring 0 25)))
+
+;; The reason there are three ids are because they all serve a different purpose.
+;; paste-id is the id that is public-facing. If a paste is private, it is the same
+;; as :random-id. If the paste is not private, it is the same as :id. :id is just
+;; the number of the paste in the database. random-id is an id generated with
+;; generate-id.
+(defn paste-map [id random-id user language contents date private fork]
+  (let [[name {:keys [short]}] (lookup-lexer language)
+        private (boolean private)
+        random-id (or random-id (generate-id))]
+    {:paste-id (if private random-id (str id))
      :id id
+     :random-id random-id
      :user (:id user)
      :language name
      :raw-contents contents
@@ -277,19 +294,17 @@
     (if-let [error (:error validated)]
       error
       (let [id (swap! paste-id inc)
-            result (mc/insert-and-return "pastes" (paste-map (when-not private id)
-                              id
-                              user
-                              language
-                              (:contents validated)
-                              (format/unparse (format/formatters :date-time) (time/now))
-                              private
-                              fork))]
-        (if private
-          (let [new (assoc result :paste-id (str (:_id result)))]
-            (mc/update "pastes" result new)
-            new)
-          result)))))
+            random-id (generate-id)]
+        (mc/insert-and-return
+         "pastes"
+         (paste-map id
+                    random-id
+                    user
+                    language
+                    (:contents validated)
+                    (format/unparse (format/formatters :date-time) (time/now))
+                    private
+                    fork))))))
 
 (defn get-paste
   "Get a paste."
@@ -310,21 +325,17 @@
       error error
       (nil? user) "You must be logged in to edit pastes."
       (not= (:id user) (:user old)) "You can only edit your own pastes!"
-      :else (let [old-private (:private old)
-                  new-private (boolean private)
+      :else (let [{old-id :id random-id :random-id} old
                   paste (paste-map
-                         (cond
-                           (= old-private new-private) (:paste-id old)
-                           (false? new-private) (:id old)
-                           (true? new-private) (str (:_id old)))
-                         (:id old)
+                         old-id
+                         random-id
                          user
                          language
                          (:contents validated)
                          (:date old)
-                         new-private
+                         private
                          (:fork old))]
-              (mc/update "pastes" {:id (:id old)} paste :upsert false :multi false)
+              (mc/update "pastes" {:id old-id} paste :upsert false :multi false)
               paste))))
 
 (defn delete-paste

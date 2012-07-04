@@ -10,6 +10,7 @@
                  [clj-http "0.4.0"]
                  [clavatar "0.2.0"]
                  [clj-time "0.3.3"]
-                 [conch "0.3.0"]]
+                 [conch "0.3.0"]
+                 [commons-codec/commons-codec "1.6"]]
   :main refheap.server)
 

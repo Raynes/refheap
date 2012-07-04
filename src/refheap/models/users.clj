@@ -11,7 +11,7 @@
   (mc/find-map-by-id "users" id))
 
 (defn user-pastes [user page & [others]]
-  (with-collection "users"
+  (with-collection "pastes"
     (find (merge {:user (str (:_id (get-user user)))} others))
     (sort {:date -1})
     (limit 10)
