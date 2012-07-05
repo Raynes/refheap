@@ -139,9 +139,12 @@ div#paste-container {
 
 .CodeMirror-scroll {
     height: 510px;
-    overflow: auto;
     border: 2px solid #2e2e2e;
     border-radius: 3px;
+}
+
+.CodeMirror {
+    width: 100%;
 }
 
 div#paste-header {
@@ -292,6 +295,7 @@ div#pasteinfo {
 
 .private {
     color: #22aa22;
+    margin-right: 5px;
 }
 
 li#last {
