@@ -1,7 +1,10 @@
-{{#user}}
-<a href="/users/{{username}}">{{username}}</a>
-{{/user}}
-{{^user}}
-anonymous
-{{/user}}
-on {{date}}
+<a href="/paste/{{id}}">Paste {{id}}</a>
+<div class="right">
+  {{#user}}
+  <a href="/users/{{username}}">{{username}}</a>
+  {{/user}}
+  {{^user}}
+  anonymous
+  {{/user}}
+  on {{date}}
+</div>

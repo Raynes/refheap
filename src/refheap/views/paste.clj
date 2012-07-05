@@ -76,8 +76,8 @@
                           header-template
                           {:user (when user (users/get-user-by-id user))
                            :date (date-string date)
-                           :private private})
-                :id paste-id
+                           :private private
+                           :id paste-id})
                 :summary summary
                 :more (> lines 5)})}))
 
