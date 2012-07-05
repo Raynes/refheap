@@ -1,6 +1,3 @@
 [submodule "resources/public/js/codemirror"]
 	path = resources/public/js/codemirror
 	url = git://github.com/marijnh/CodeMirror2.git
-[submodule "resources/public/js/jquery.hotkeys"]
-	path = resources/public/js/jquery.hotkeys
-	url = git://github.com/jeresig/jquery.hotkeys.git
