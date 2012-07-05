@@ -145,6 +145,7 @@ div#paste-container {
 
 .CodeMirror {
     width: 100%;
+    clear: both;
 }
 
 div#paste-header {
