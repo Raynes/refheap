@@ -1,4 +1,4 @@
-(defproject refheap "1.2.2"
+(defproject refheap "1.2.3"
   :description "This is like, totally a pastebin, dude."
   :url "https://refheap.com"
   :dependencies [[org.clojure/clojure "1.4.0"]
