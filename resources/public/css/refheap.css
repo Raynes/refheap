@@ -144,6 +144,10 @@ div#paste-container {
     border-radius: 3px;
 }
 
+.CodeMirror {
+    width: 100%;
+}
+
 div#paste-header {
     margin-left: 100%;
     float: right;
