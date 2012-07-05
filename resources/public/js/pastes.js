@@ -126,10 +126,9 @@
     });
 
     // Setup hotkeys
-    $( document )
-      .bind( "keydown", "alt+g", refheap.gotoLine )
-      .bind( "keydown", "alt+ctrl+e", refheap.gotoEdit )
-      .bind( "keydown", "alt+r", refheap.showRaw );
+    Mousetrap.bind( "alt+g", refheap.gotoLine );
+    Mousetrap.bind( "alt+ctrl+e", refheap.gotoEdit );
+    Mousetrap.bind( "alt+r", refheap.showRaw );
   });
 
 }( jQuery, window ));
