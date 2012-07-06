@@ -78,6 +78,7 @@
                            :date (date-string date)
                            :private private
                            :id paste-id})
+                :id paste-id
                 :summary summary
                 :more (> lines 5)})}))
 

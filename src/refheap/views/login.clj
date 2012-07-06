@@ -2,7 +2,7 @@
   (:require [refheap.models.login :as login]
             [stencil.core :as stencil]
             [noir.session :as session]
-            [refheap.views.common :refer [layout logged-in]]
+            [refheap.views.common :refer [body logged-in]]
             [noir.core :refer [defpage]]
             [noir.response :refer [redirect json]]))
 
@@ -29,6 +29,4 @@
      (json {:login-html (logged-in username)})
       (do
         (session/flash-put! :email email)
-        ;; TODO: This results in css and stuff being added twice.
-        ;; It has no effect on the layout but is still dirty. Fix.
-        (json {:chooselogin-html (layout (create-user-page email))})))))
+        (json {:chooselogin-html (body (create-user-page email))})))))

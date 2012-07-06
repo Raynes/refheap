@@ -237,7 +237,10 @@
                       :dir "resources/pygments")]
     (sh/feed-from-string proc text)
     (sh/done proc)
-    (sh/stream-to-string proc :out)))
+    (let [err (sh/stream-to-string proc :err)]
+      (if (empty? err)
+        {:success (sh/stream-to-string proc :out)}
+        {:error err}))))
 
 (defn preview
   "Get the first 5 lines of a string."
@@ -261,22 +264,25 @@
 (defn paste-map [id random-id user language contents date private fork]
   (let [[name {:keys [short]}] (lookup-lexer language)
         private (boolean private)
-        random-id (or random-id (generate-id))]
-    {:paste-id (if private random-id (str id))
-     :id id
-     :random-id random-id
-     :user (:id user)
-     :language name
-     :raw-contents contents
-     :summary (pygmentize short (preview contents))
-     :private (boolean private)
-     :date date
-     :lines (let [lines (count (filter #{\newline} contents))]
-              (if (= \newline (last contents))
-                lines
-                (inc lines)))
-     :contents (pygmentize short contents true)
-     :fork fork}))
+        random-id (or random-id (generate-id))
+        pygmentized (pygmentize short contents true)]
+    (if-let [highlighted (:success pygmentized)]
+      {:paste-id (if private random-id (str id))
+       :id id
+       :random-id random-id
+       :user (:id user)
+       :language name
+       :raw-contents contents
+       :summary (:success (pygmentize short (preview contents)))
+       :private (boolean private)
+       :date date
+       :lines (let [lines (count (filter #{\newline} contents))]
+                (if (= \newline (last contents))
+                  lines
+                  (inc lines)))
+       :contents highlighted
+       :fork fork}
+      {:error (:error pygmentized)})))
 
 (defn validate [contents]
   (cond
@@ -294,17 +300,18 @@
     (if-let [error (:error validated)]
       error
       (let [id (swap! paste-id inc)
-            random-id (generate-id)]
-        (mc/insert-and-return
-         "pastes"
-         (paste-map id
+            random-id (generate-id)
+            paste (paste-map id
                     random-id
                     user
                     language
                     (:contents validated)
                     (format/unparse (format/formatters :date-time) (time/now))
                     private
-                    fork))))))
+                    fork)]
+        (if-let [error (:error paste)]
+          error
+          (mc/insert-and-return "pastes" paste))))))
 
 (defn get-paste
   "Get a paste."
@@ -335,7 +342,9 @@
                          (:date old)
                          private
                          (:fork old))]
-              (mc/update "pastes" {:id old-id} paste :upsert false :multi false)
+              (if-let [error (:error paste)]
+                error
+                (mc/update "pastes" {:id old-id} paste :upsert false :multi false))
               paste))))
 
 (defn delete-paste
