@@ -8,7 +8,7 @@
   refheap.loaded = {};
 
   /**
-   * List of available language modes. Some langauges have other mode
+   * List of available language modes. Some languages have other mode
    * dependencies, in this case the dependencies should be listed first
    * with the final mode being the mode that will be set on the editor.
    */
@@ -40,7 +40,8 @@
       "XML"             : ["xml"],
       "YAML"            : ["yaml"],
       "HTML"            : ["css", "xml", "javascript", "htmlmixed"],
-      "MySQL"           : ["mysql"] };
+      "MySQL"           : ["mysql"],
+      "OCaml"           : ["ocaml"] };
 
   refheap.notLoaded = function(mode) {
     return !(mode in refheap.loaded);
