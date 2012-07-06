@@ -24,6 +24,12 @@
      :head (when-let [head-file (:file head)]
              (stencil/render-file head-file (dissoc head :file :title)))}))
 
+(defn body [contents]
+  (stencil/render-file
+   "refheap/views/templates/commonbody"
+   {:user (logged-in nil)
+    :content contents}))
+
 (defn page-buttons [base n per page]
   (stencil/render-file
     "refheap/views/templates/pagination"
