@@ -237,10 +237,10 @@
                       :dir "resources/pygments")]
     (sh/feed-from-string proc text)
     (sh/done proc)
-    (let [err (sh/stream-to-string proc :err)]
-      (if (empty? err)
-        {:success (sh/stream-to-string proc :out)}
-        {:error err}))))
+    (let [out (sh/stream-to-string proc :out)]
+      (if (seq out)
+        {:success out}
+        {:error "There was an error pasting."}))))
 
 (defn preview
   "Get the first 5 lines of a string."
