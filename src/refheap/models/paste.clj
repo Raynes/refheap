@@ -28,6 +28,8 @@
   "A map of language names to pygments lexer names."
   {"Clojure" {:short "clojure"
               :exts #{"clj" "cljs"}}
+   "Apricot" {:short "clojure"
+              :exts #{"apr"}}
    "Factor" {:short "factor"
              :exts #{"factor"}}
    "Fancy" {:short "fancy"

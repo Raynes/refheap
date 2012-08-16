@@ -17,6 +17,7 @@
       "C"               : ["clike"],
       "Objective-C"     : ["clike"],
       "Clojure"         : ["clojure"],
+      "Apricot"         : ["clojure"],
       "CoffeeScript"    : ["coffeescript"],
       "CSS"             : ["css"],
       "Diff"            : ["diff"],
