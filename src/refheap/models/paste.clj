@@ -122,6 +122,8 @@
              :exts #{"scm" "ss"}}
    "Emacs Lisp" {:short "scm"
                  :exts #{"el"}}
+   "Coq" {:short "coq"
+          :exts #{"v"}}
    "Verilog" {:short "v"
               :exts #{"v"}}
    "Matlab" {:short "matlab"}
