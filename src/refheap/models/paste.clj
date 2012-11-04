@@ -122,8 +122,9 @@
              :exts #{"scm" "ss"}}
    "Emacs Lisp" {:short "scm"
                  :exts #{"el"}}
-   "Verilog" {:short "v"
-              :exts #{"v"}}
+   "Coq" {:short "coq"
+          :exts #{"v"}}
+   "Verilog" {:short "v"}
    "Matlab" {:short "matlab"}
    "MuPAD" {:short "mupad"}
    "NumPy" {:short "numpy"}
