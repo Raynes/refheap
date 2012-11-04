@@ -124,8 +124,7 @@
                  :exts #{"el"}}
    "Coq" {:short "coq"
           :exts #{"v"}}
-   "Verilog" {:short "v"
-              :exts #{"v"}}
+   "Verilog" {:short "v"}
    "Matlab" {:short "matlab"}
    "MuPAD" {:short "mupad"}
    "NumPy" {:short "numpy"}
