@@ -75,5 +75,5 @@
       :unprocessable (add-status 422 (respond (error data)))
       :created (add-status 201 (respond data))
       :no-content {:status 204}
-      :not-found (add-status 404 (respond data))
+      :not-found (add-status 404 (error (respond data)))
       :ok (respond data))))
