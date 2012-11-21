@@ -1,1 +1,1 @@
-web: ./bootstrap.sh && lein trampoline run prod
+web: ./bootstrap.sh && lein ring server-headless
