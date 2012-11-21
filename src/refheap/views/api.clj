@@ -89,8 +89,7 @@
 (defroutes api-routes
   (GET "/api" [] (api-page))
   (GET "/token/generate" [] (generate-token))
-  (POST "/api/paste" {:keys [params] :as all}
-    (prn all)
+  (POST "/api/paste" {:keys [params]}
     (paste params))
   (POST "/api/paste/:id" {:keys [params]}
     (edit-paste params))
