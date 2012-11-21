@@ -4,7 +4,6 @@
             [noir.session :as session]
             [cheshire.core :as json]
             [refheap.messages :refer [error]]
-            [noir.request :refer [ring-request]]
             [monger.collection :as mc])
   (:import org.bson.types.ObjectId))
 
@@ -31,21 +30,23 @@
                          :id (str _id)})
     username))
 
-(defn verify-host [hosts]
-  (hosts (first (.split (get-in (ring-request) [:headers "host"]) ":"))))
+(defn verify-host [host hosts]
+  (-> (.split host ":")
+      (first)
+      (hosts)))
 
 (defn get-hosts []
   (if-let [hosts (System/getenv "HOSTS")]
     (set (.split hosts ","))
     (or (:hosts config) #{"localhost"})))
 
-(defn verify-assertion [assertion]
+(defn verify-assertion [host assertion]
   (let [verified (json/parse-string
                   (:body
                    (http/post "https://browserid.org/verify"
                               {:form-params
                                {:assertion assertion
-                                :audience (verify-host (get-hosts))}}))
+                                :audience (verify-host host (get-hosts))}}))
                   true)]
     (when (= "okay" (:status verified))
       verified)))

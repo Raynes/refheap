@@ -4,25 +4,23 @@
             [refheap.models.api :as api]
             [refheap.models.paste :as paste]
             [refheap.models.users :as users]
-            [noir.core :refer [defpage]]
+            [compojure.core :refer [defroutes GET POST DELETE]]
             [refheap.views.common :refer [layout]]))
 
 (defn api-page []
-  (stencil/render-file
+  (layout
+   (stencil/render-file
     "refheap/views/templates/api"
     {:logged (when-let [id (:id (session/get :user))]
-               {:token (api/get-token id)})}))
+               {:token (api/get-token id)})})
+   {:file "refheap/views/templates/apihead"}))
 
-(defpage "/api" []
-  (layout (api-page)
-          {:file "refheap/views/templates/apihead"}))
-
-(defpage "/token/generate" []
+(defn generate-token []
   (when-let [id (:id (session/get :user))]
     (api/new-token id)))
 
-(defpage [:post "/api/paste"] {:keys [private contents language username token return]
-                               :or {private "false"}}
+(defn paste [{:keys [private contents language username token return]
+              :or {private "false"}}]
   (let [user (api/validate-user username token)]
     (if (string? user)
       (api/response :unprocessable user return)
@@ -31,7 +29,7 @@
           (api/response :bad paste return)
           (api/response :created (api/process-paste paste) return))))))
 
-(defpage [:post "/api/paste/:id"] {:keys [id private contents language username token return]}
+(defn edit-paste [{:keys [id private contents language username token return]}]
   (if-let [paste (paste/get-paste id)]
     (let [user (api/validate-user username token)]
       (cond
@@ -55,7 +53,7 @@
                  (api/response :ok (api/process-paste paste) return)))))
     (api/response :not-found "Paste does not exist." return)))
 
-(defpage [:delete "/api/paste/:id"] {:keys [id username token return]}
+(defn delete-paste [{:keys [id username token return]}]
   (if-let [paste (paste/get-paste id)]
     (let [user (api/validate-user username token)]
       (cond
@@ -70,7 +68,7 @@
        :else (api/response :no-content (paste/delete-paste id) return)))
     (api/response :not-found "Paste doesn't exist." return)))
 
-(defpage [:post "/api/paste/:id/fork"] {:keys [id username token return]}
+(defn fork-paste [{:keys [id username token return]}]
   (if-let [paste (paste/get-paste id)]
     (let [user (api/validate-user username token)]
       (cond
@@ -88,12 +86,23 @@
                            return)))
     (api/response :not-found "Paste doesn't exist." return)))
 
-(defpage "/api/paste/:id" {:keys [id return]}
-  (if-let [paste (paste/get-paste id)]
-    (api/response :ok (api/process-paste paste) return)
-    (api/response :not-found "Paste does not exist." return)))
-
-(defpage "/api/paste/:id/highlight" {:keys [id return]}
-  (if-let [paste (paste/get-paste id)]
-    (api/response :ok {:content (:contents paste)} return)
-    (api/response :not-found "Paste does not exist." return)))
+(defroutes api-routes
+  (GET "/api" [] (api-page))
+  (GET "/token/generate" [] (generate-token))
+  (POST "/api/paste" {:keys [params] :as all}
+    (prn all)
+    (paste params))
+  (POST "/api/paste/:id" {:keys [params]}
+    (edit-paste params))
+  (DELETE "/api/paste/:id" {:keys [params]}
+    (delete-paste params))
+  (POST "/api/paste/:id/fork" {:keys [params]}
+    (fork-paste params))
+  (GET "/api/paste/:id" {{:keys [id return]} :params}
+    (if-let [paste (paste/get-paste id)]
+      (api/response :ok (api/process-paste paste) return)
+      (api/response :not-found "Paste does not exist." return)))
+  (GET "/api/paste/:id/highlight" {{:keys [id return]} :params}
+    (if-let [paste (paste/get-paste id)]
+      (api/response :ok {:content (:contents paste)} return)
+      (api/response :not-found "Paste does not exist." return))))

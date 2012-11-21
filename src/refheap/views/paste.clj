@@ -3,7 +3,7 @@
             [refheap.models.users :as users]
             [noir.session :as session]
             [stencil.core :as stencil]
-            [noir.core :refer [defpage defpartial]]
+            [compojure.core :refer [defroutes GET POST]]
             [refheap.views.common :refer [layout avatar page-buttons]]
             [noir.response :refer [redirect content-type]]
             [refheap.dates :refer [date-string]]))
@@ -62,12 +62,6 @@
         {:file "refheap/views/templates/showhead"
          :title (str paste-user "'s paste: " id)}))))
 
-(defpage "/paste/:id/fullscreen" {:keys [id]}
-  (fullscreen-paste id))
-
-(defpage "/paste/:id/framed" {:keys [id]}
-  (fullscreen-paste id))
-
 (defn render-paste-previews [pastes header-template]
   (stencil/render-file
     "refheap/views/templates/preview"
@@ -111,16 +105,13 @@
       {:message error})
     {:title "You broke it"}))
 
-(defpage "/paste" {:keys [lang]}
-  (create-paste-page lang))
+(defn edit-paste-page [{:keys [id]}]
+    (when-let [user (:id (session/get :user))]
+      (let [paste (paste/get-paste id)]
+        (when (= (:user paste) user)
+          (create-paste-page nil paste)))))
 
-(defpage "/paste/:id/edit" {:keys [id]}
-  (when-let [user (:id (session/get :user))]
-    (let [paste (paste/get-paste id)]
-      (when (= (:user paste) user)
-        (create-paste-page nil paste)))))
-
-(defpage "/paste/:id/fork" {:keys [id]}
+(defn fork-paste-page [{:keys [id]}]
   (let [user (:id (session/get :user))
         paste (paste/get-paste id)]
     (when (and user paste (not= (:user paste) user))
@@ -131,21 +122,13 @@
                                 (:id paste))]
         (redirect (str "/paste/" (:paste-id forked)))))))
 
-(defpage "/paste/:id/delete" {:keys [id]}
+(defn delete-paste-page [{:keys [id]}]
   (when-let [user (:user (paste/get-paste id))]
     (when (= user (:id (session/get :user)))
       (paste/delete-paste id)
       (redirect (str "/users/" (:username (session/get :user)))))))
 
-(defpage "/paste/:id/raw" {:keys [id]}
-  (when-let [content (:raw-contents (paste/get-paste id))]
-    (content-type "text/plain; charset=utf-8" content)))
-
-(defpage "/paste/:id/embed" {:keys [id]}
-  (let [paste (paste/get-paste id)]
-    (render-embed-page paste)))
-
-(defpage [:post "/paste/:id/edit"] {:keys [id paste language private]}
+(defn edit-paste [{:keys [id paste language private]}]
   (let [paste (paste/update-paste
                (paste/get-paste id)
                language
@@ -156,14 +139,42 @@
       (redirect (str "/paste/" (:paste-id paste)))
       (fail paste))))
 
-(defpage [:post "/paste/create"] {:keys [paste language private]}
+(defn create-paste [{:keys [paste language private]}]
   (let [paste (paste/paste language paste private (session/get :user))]
     (if (map? paste)
       (redirect (str "/paste/" (:paste-id paste)))
       (fail paste))))
 
-(defpage "/paste/:id" {:keys [id]}
-  (show-paste-page id))
+(defroutes paste-routes
+  (GET "/paste/:id/fullscreen" {{:keys [id]} :params}
+    (fullscreen-paste id))
 
-(defpage "/pastes" {:keys [page]}
-  (all-pastes-page (paste/proper-page (Long. (or page "1")))))
+  (GET "/paste/:id/framed" {{:keys [id]} :params}
+    (fullscreen-paste id))
+
+  (GET "/paste" {{:keys [lang]} :params}
+    (create-paste-page lang))
+
+  (GET "/paste/:id/edit" {:keys [params]}
+    (edit-paste-page params))
+
+  (GET "/paste/:id/fork" {:keys [params]}
+    (fork-paste-page params))
+
+  (GET "/paste/:id/delete" {:keys [params]}
+    (delete-paste-page params))
+
+  (GET "/paste/:id/raw" {{:keys [id]} :params}
+    (when-let [content (:raw-contents (paste/get-paste id))]
+      (content-type "text/plain; charset=utf-8" content)))
+  (GET "/paste/:id/embed" {{:keys [id]} :params}
+    (let [paste (paste/get-paste id)]
+      (render-embed-page paste)))
+  (POST "/paste/:id/edit" {:keys [params]}
+    (edit-paste params))
+  (POST "/paste/create" {:keys [params]}
+    (create-paste params))
+  (GET "/paste/:id" {{:keys [id]} :params}
+    (show-paste-page id))
+  (GET "/pastes" {:keys [page]}
+    (all-pastes-page (paste/proper-page (Long. (or page "1"))))))

@@ -1,7 +1,8 @@
 (ns refheap.views.about
   (:require [clojure.java.io :as io]
             [refheap.views.common :refer [layout]]
-            [noir.core :refer [defpage]]))
+            [compojure.core :refer [defroutes GET]]))
 
-(defpage "/about" []
-  (layout (slurp (io/resource "refheap/views/templates/about.mustache"))))
+(defroutes about-routes
+  (GET "/about" []
+    (layout (slurp (io/resource "refheap/views/templates/about.mustache")))))
