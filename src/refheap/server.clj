@@ -37,28 +37,18 @@
         (wrap-force-ssl))
     routes))
 
-(def site-routes
+(def handler
   (-> (routes about-routes
               legal-routes
               paste-routes
               user-routes
               home-routes
-              login-routes) 
+              login-routes
+              api-routes
+              (resources "/")
+              (not-found (four-zero-four)))
       (api)
       (wrap-noir-flash)
       (wrap-noir-session {:store (monger-store "sessions")}) 
       (wrap-strip-trailing-slash)
       (wrap-prod-middleware)))
-
-(def a-routes
-  (-> api-routes
-      (api)
-      (wrap-noir-session {:store (monger-store "sessions")})
-      (wrap-strip-trailing-slash)
-      (wrap-prod-middleware)))
-
-(defroutes handler
-  site-routes
-  a-routes
-  (resources "/")
-  (not-found (four-zero-four)))
