@@ -58,7 +58,7 @@
       (wrap-prod-middleware)))
 
 (defroutes handler
-  (ANY "*" [] site-routes)
-  (ANY "*" [] a-routes)
+  site-routes
+  a-routes
   (resources "/")
   (not-found (four-zero-four)))
