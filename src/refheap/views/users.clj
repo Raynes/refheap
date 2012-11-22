@@ -3,7 +3,7 @@
             [stencil.core :as stencil]
             [refheap.views.paste :as paste]
             [noir.session :as session]
-            [noir.core :refer [defpage]]
+            [compojure.core :refer [defroutes GET]]
             [refheap.views.common :refer [layout avatar page-buttons]]
             [refheap.dates :refer [date-string]]
             [noir.response :refer [redirect]]
@@ -29,6 +29,7 @@
         {:file "refheap/views/templates/showhead"
          :title (str user "'s pastes")}))))
 
-(defpage "/users/:user" {:keys [user page]}
-  (user-page (.toLowerCase user) 
-             (proper-page (Long. (or page "1")))))
+(defroutes user-routes
+  (GET "/users/:user" {{:keys [user page]} :params}
+    (user-page (.toLowerCase user) 
+               (proper-page (Long. (or page "1"))))))

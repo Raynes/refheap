@@ -1,10 +1,13 @@
 (ns refheap.server
   (:require [refheap.config :refer [config]]
-            [noir.server :as server]
             [noir.util.middleware :refer [wrap-strip-trailing-slash wrap-canonical-host wrap-force-ssl]]
+            [noir.session :refer [wrap-noir-session wrap-noir-flash]]
             [monger.core :as mg]
             [monger.collection :as mc]
-            [monger.ring.session-store :refer [monger-store]]))
+            [monger.ring.session-store :refer [monger-store]]
+            [compojure.core :refer [defroutes routes ANY]]
+            [compojure.handler :refer [api]]
+            [compojure.route :refer [not-found resources]]))
 
 (let [uri (get (System/getenv) "MONGOLAB_URI" "mongodb://127.0.0.1/refheap_development")]
   (mg/connect-via-uri! uri))
@@ -14,16 +17,38 @@
 (mc/ensure-index "pastes" {:id 1})
 (mc/ensure-index "pastes" {:paste-id 1})
 
-(server/load-views "src/refheap/views/")
-(server/add-middleware wrap-strip-trailing-slash)
+;; View loading has to be done after mongo is available.
+(require '[refheap.views.common :refer [layout]]
+         '[refheap.views.about :refer [about-routes]]
+         '[refheap.views.legal :refer [legal-routes]]
+         '[refheap.views.paste :refer [paste-routes]]
+         '[refheap.views.users :refer [user-routes]]
+         '[refheap.views.api :refer [api-routes]]
+         '[refheap.views.home :refer [home-routes]]
+         '[refheap.views.login :refer [login-routes]])
 
-(defn -main [& m]
-  (let [mode (keyword (or (first m) :dev))
-        port (Integer. (or (System/getenv "PORT") (str (config :port))))]
-    (when (= mode :prod)
-      (server/add-middleware wrap-canonical-host (System/getenv "CANONICAL_HOST"))
-      (server/add-middleware wrap-force-ssl))
-    (server/start port {:mode mode
-                        :ns 'refheap
-                        :session-store (monger-store "sessions")})))
+(defn four-zero-four []
+  (layout "<p class=\"header\">Insert fancy 404 image here.</p>"))
 
+(defn wrap-prod-middleware [routes]
+  (if (System/getenv "LEIN_NO_DEV")
+    (-> routes
+        (wrap-canonical-host (System/getenv "CANONICAL_HOST"))
+        (wrap-force-ssl))
+    routes))
+
+(def handler
+  (-> (routes about-routes
+              legal-routes
+              paste-routes
+              user-routes
+              home-routes
+              login-routes
+              api-routes
+              (resources "/")
+              (not-found (four-zero-four)))
+      (api)
+      (wrap-noir-flash)
+      (wrap-noir-session {:store (monger-store "sessions")}) 
+      (wrap-strip-trailing-slash)
+      (wrap-prod-middleware)))
