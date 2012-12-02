@@ -58,17 +58,9 @@
 
 (defn error [msg] {:error msg})
 
-(defn clojure
-  "Wraps the response with the content type for Clojure and sets the body
-   and call pr-str on the Clojure data stuctures passed in."
-  [data]
-  (response/content-type
-   "application/clojure; charset=utf-8"
-   (pr-str data)))
-
 (defn response [type & [data kind]]
-  (let [respond (if (= kind "clojure")
-                  clojure
+  (let [respond (if (= kind "edn")
+                  response/edn
                   response/json)]
     (case type
       :bad (add-status 400 (respond (error data)))
