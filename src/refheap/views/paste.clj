@@ -1,6 +1,7 @@
 (ns refheap.views.paste
   (:require [refheap.models.paste :as paste]
             [refheap.models.users :as users]
+            [refheap.pygments :refer [lexers]]
             [noir.session :as session]
             [stencil.core :as stencil]
             [compojure.core :refer [defroutes GET POST]]
@@ -17,7 +18,7 @@
                 (str "/paste/" (:paste-id old) "/edit")
                 "/paste/create")
          :languages (for [lang (sort #(.compareToIgnoreCase % %2)
-                                     (keys (dissoc paste/lexers lang)))]
+                                     (keys (dissoc lexers lang)))]
                       {:language lang})
          :selected lang
          :checked (:private old)
