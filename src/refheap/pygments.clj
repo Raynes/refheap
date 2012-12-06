@@ -1,5 +1,5 @@
 (ns refheap.pygments
-  (:require [conch.core :as sh]
+  (:require [conch.sh :refer [let-programs]]
             [clojure.string :as string]))
 
 (def lexers
@@ -212,13 +212,12 @@
 (defn pygmentize
   "Syntax highlight some code."
   [language text & [anchor?]]
-  (let [proc (sh/proc "./pygmentize" "-fhtml" (str "-l" language)
-                      (str "-Olinenos=table,stripnl=False,encoding=utf-8"
-                           (when anchor? ",anchorlinenos=true,lineanchors=L"))
-                      :dir "resources/pygments")]
-    (sh/feed-from-string proc text)
-    (sh/done proc)
-    (let [out (sh/stream-to-string proc :out)]
-      (if (seq out)
-        {:success out}
-        {:error "There was an error pasting."}))))
+  (let-programs [pygmentize "./pygmentize"]
+    (let [output (pygmentize "-fhtml" (str "-l" language)
+                             (str "-Olinenos=table,stripnl=False,encoding=utf-8"
+                                  (when anchor? ",anchorlinenos=true,lineanchors=L"))
+                             {:dir "resources/pygments"
+                              :in text})]
+      (if (seq output)
+        {:success output}
+        {:error "There ws an error pasting."}))))

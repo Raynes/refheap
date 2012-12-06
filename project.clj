@@ -10,7 +10,7 @@
                  [clj-http "0.4.0"]
                  [clavatar "0.2.0"]
                  [clj-time "0.3.3"]
-                 [conch "0.3.0"]
+                 [me.raynes/conch "0.4.0"]
                  [commons-codec/commons-codec "1.6"]]
   :plugins [[lein-ring "0.7.1"]]
   :ring {:handler refheap.server/handler
