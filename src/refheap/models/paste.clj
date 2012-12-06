@@ -69,7 +69,7 @@
 
 (defn validate [contents]
   (cond
-    (>= (count contents) 64000) {:error "That paste was too big. Has to be less than 64KB"}
+    (>= (count contents) 614400) {:error "That paste was too big. Has to be less than 600KB"}
     (not (re-seq #"\S" (str contents))) {:error "Your paste cannot be empty."}
     :else {:contents contents}))
 
