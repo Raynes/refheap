@@ -3,11 +3,13 @@
             [refheap.models.users :as users]
             [refheap.pygments :refer [lexers]]
             [noir.session :as session]
+            [noir.response :refer [content-type]]
             [stencil.core :as stencil]
             [compojure.core :refer [defroutes GET POST]]
             [refheap.views.common :refer [layout avatar page-buttons]]
             [noir.response :refer [redirect content-type]]
-            [refheap.dates :refer [date-string]]))
+            [refheap.dates :refer [date-string]]
+            [clojure.string :refer [split join]]))
 
 (defn create-paste-page [lang & [old]]
   (let [lang (or lang (:language old) "Clojure")]
@@ -77,13 +79,29 @@
                 :summary summary
                 :more (> lines 5)})}))
 
-(defn render-embed-page [paste]
+(defn render-embed-page [paste host scheme]
   (let [id (:paste-id paste)]
     (layout
       (stencil/render-file
         "refheap/views/templates/embed"
-        {:id (:paste-id paste)})
+        {:url (str (name scheme) "://" host "/paste/" (:paste-id paste))})
       {:title (str "Embedding paste " id)})))
+
+(defn escape-string
+  "Escapes all escape sequences in a string to make it suitable
+   for passing to another programming language. Kind of like what
+   pr-str does for strings but without the wrapper quotes."
+  [s]
+  (join (map #(char-escape-string % %) s)))
+
+(defn embed-paste [id host scheme]
+  (content-type
+   "text/javascript"
+   (stencil/render-file
+    "refheap/views/templates/embedjs"
+    {:id id
+     :content (escape-string (:contents (paste/get-paste id)))
+     :url (str (name scheme) "://" host "/css/embed.css")})))
 
 (defn all-pastes-page [page]
   (let [paste-count (paste/count-pastes false)]
@@ -168,14 +186,17 @@
   (GET "/paste/:id/raw" {{:keys [id]} :params}
     (when-let [content (:raw-contents (paste/get-paste id))]
       (content-type "text/plain; charset=utf-8" content)))
-  (GET "/paste/:id/embed" {{:keys [id]} :params}
+  (GET "/paste/:id/embed" {{:keys [id]} :params {host "host"} :headers scheme :scheme}
     (let [paste (paste/get-paste id)]
-      (render-embed-page paste)))
+      (render-embed-page paste host scheme)))
   (POST "/paste/:id/edit" {:keys [params]}
     (edit-paste params))
   (POST "/paste/create" {:keys [params]}
     (create-paste params))
-  (GET "/paste/:id" {{:keys [id]} :params}
-    (show-paste-page id))
+  (GET "/paste/:id" {{:keys [id]} :params {host "host"} :headers scheme :scheme}
+    (let [[id ext] (split id #"\.")]
+      (if ext
+        (embed-paste id host scheme)
+        (show-paste-page id))))
   (GET "/pastes" {:keys [page]}
     (all-pastes-page (paste/proper-page (Long. (or page "1"))))))
