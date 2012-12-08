@@ -84,7 +84,7 @@
     (layout
       (stencil/render-file
         "refheap/views/templates/embed"
-        {:url (str (name scheme) "://" host "/paste/" (:paste-id paste))})
+        {:url (str (name scheme) "://" host "/paste/" (:paste-id paste) ".js")})
       {:title (str "Embedding paste " id)})))
 
 (defn escape-string
