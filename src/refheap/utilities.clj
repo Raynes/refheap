@@ -20,3 +20,9 @@
       (assoc paste
              :contents (paste/pygmentize lexer contents)
              :summary (paste/pygmentize lexer (paste/preview contents))))))
+(defn escape-string
+  "Escapes all escape sequences in a string to make it suitable
+   for passing to another programming language. Kind of like what
+   pr-str does for strings but without the wrapper quotes."
+  [s]
+  (join (map #(char-escape-string % %) s)))

@@ -87,13 +87,6 @@
         {:url (str (name scheme) "://" host "/paste/" (:paste-id paste) ".js")})
       {:title (str "Embedding paste " id)})))
 
-(defn escape-string
-  "Escapes all escape sequences in a string to make it suitable
-   for passing to another programming language. Kind of like what
-   pr-str does for strings but without the wrapper quotes."
-  [s]
-  (join (map #(char-escape-string % %) s)))
-
 (defn embed-paste [id host scheme]
   (content-type
    "text/javascript"
