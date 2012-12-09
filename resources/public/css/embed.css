@@ -62,3 +62,7 @@ div#refh-12 {
     width: 30%;
     height: 40%;
 }
+
+.hide-lines {
+    display: none
+}

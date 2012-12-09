@@ -2,6 +2,7 @@
   (:require [refheap.models.paste :as paste]
             [refheap.models.users :as users]
             [refheap.pygments :refer [lexers]]
+            [refheap.utilities :refer [to-booleany escape-string]]
             [noir.session :as session]
             [noir.response :refer [content-type]]
             [stencil.core :as stencil]
@@ -87,14 +88,15 @@
         {:url (str (name scheme) "://" host "/paste/" (:paste-id paste) ".js")})
       {:title (str "Embedding paste " id)})))
 
-(defn embed-paste [id host scheme]
+(defn embed-paste [id host scheme lines?]
   (content-type
    "text/javascript"
    (stencil/render-file
     "refheap/views/templates/embedjs"
     {:id id
      :content (escape-string (:contents (paste/get-paste id)))
-     :url (str (name scheme) "://" host "/css/embed.css")})))
+     :url (str (name scheme) "://" host "/css/embed.css")
+     :nolinenos (not (to-booleany lines?))})))
 
 (defn all-pastes-page [page]
   (let [paste-count (paste/count-pastes false)]
@@ -179,17 +181,21 @@
   (GET "/paste/:id/raw" {{:keys [id]} :params}
     (when-let [content (:raw-contents (paste/get-paste id))]
       (content-type "text/plain; charset=utf-8" content)))
-  (GET "/paste/:id/embed" {{:keys [id]} :params {host "host"} :headers scheme :scheme}
+  (GET "/paste/:id/embed" {{:keys [id]} :params
+                           {host "host"} :headers
+                           scheme :scheme}
     (let [paste (paste/get-paste id)]
       (render-embed-page paste host scheme)))
   (POST "/paste/:id/edit" {:keys [params]}
     (edit-paste params))
   (POST "/paste/create" {:keys [params]}
     (create-paste params))
-  (GET "/paste/:id" {{:keys [id]} :params {host "host"} :headers scheme :scheme}
+  (GET "/paste/:id" {{:keys [id linenumbers]} :params
+                     {host "host"} :headers
+                     scheme :scheme}
     (let [[id ext] (split id #"\.")]
       (if ext
-        (embed-paste id host scheme)
+        (embed-paste id host scheme linenumbers)
         (show-paste-page id))))
   (GET "/pastes" {:keys [page]}
     (all-pastes-page (paste/proper-page (Long. (or page "1"))))))
