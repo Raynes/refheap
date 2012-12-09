@@ -1,7 +1,7 @@
 (ns refheap.utilities
   (:require [refheap.models.paste :as paste]))
 
-(defn regenerate
+#_(defn regenerate
   "Regenerates a paste's pygmentized text and preview text from
   its raw-contents. This is useful for when a lexer fails (because
   you typoed it in the language list) and you need to regenerate
