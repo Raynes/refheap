@@ -63,6 +63,10 @@ div#refh-12 {
     height: 40%;
 }
 
-.hide-lines {
+.hide-lines td.linenos {
     display: none
+}
+
+.hide-lines div.highlight {
+    margin: 8px 0 8px 8px;
 }
