@@ -96,7 +96,7 @@
     {:id id
      :content (escape-string (:contents (paste/get-paste id)))
      :url (str (name scheme) "://" host "/css/embed.css")
-     :nolinenos (not (to-booleany lines?))})))
+     :nolinenos (and lines? (not (to-booleany lines?)))})))
 
 (defn all-pastes-page [page]
   (let [paste-count (paste/count-pastes false)]
