@@ -634,8 +634,9 @@ span.hotkey {
     width: 80px;
 }
 
-div.md-code {
-    display: inline;
-    width: 300px;
+pre.md-code {
+    width: 700px;
     overflow: auto;
+    border: solid #2E2E2E 3px;
+    padding: 8px;
  }

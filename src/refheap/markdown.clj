@@ -14,9 +14,7 @@
   (laser/fragment-to-html
    (laser/fragment
     (laser/parse-fragment html)
-    (laser/child-of
-     (laser/negate (laser/element= :p))
-     (laser/element= :code)) (laser/wrap :div {:class "md-code"}))))
+    (laser/element= :pre) (laser/add-class "md-code"))))
 
 (defn to-html
   "Convert markdown to html."
