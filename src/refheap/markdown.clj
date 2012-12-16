@@ -11,10 +11,12 @@
                      Extensions/FENCED_CODE_BLOCKS])))
 
 (defn wrap-code [html]
-  (laser/fragment-to-html
-   (laser/fragment
-    (laser/parse-fragment html)
-    (laser/element= :pre) (laser/add-class "md-code"))))
+  (str "<div class=\"markdown\">\n"
+       (laser/fragment-to-html
+        (laser/fragment
+         (laser/parse-fragment html)
+         (laser/element= :pre) (laser/add-class "md-code")))
+       "</div>"))
 
 (defn to-html
   "Convert markdown to html."

@@ -51,8 +51,6 @@
           "refheap/views/templates/pasted"
           {:language language
            :private private
-           :extra (when (= language "Markdown")
-                    "markdown")
            :lines lines
            :id id
            :username (if user
