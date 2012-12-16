@@ -109,6 +109,9 @@
         setLang = function () {
           refheap.setupLang( $("#language option:selected").text(), editor );
         };
+        toggleWrapping = function () {
+          editor.setOption("lineWrapping", !editor.getOption("lineWrapping"));
+        };
 
     $("#language").on( "change", setLang );
 
@@ -120,7 +123,9 @@
 
     editor.setOption( "extraKeys", {
       "Alt-P": refheap.togglePrivate,
-      "Ctrl-Enter": refheap.paste
+      "Ctrl-Enter": refheap.paste,
+      "Alt-W": toggleWrapping
+      
     });
     refheap.setCodeHeight(editor);
   });

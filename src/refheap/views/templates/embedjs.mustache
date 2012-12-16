@@ -1,0 +1,8 @@
+document.write('<link rel="stylesheet" href="{{url}}"/>')
+
+document.write('<div id="refh-{{id}}" class="refheap">{{{content}}}</div>')
+
+{{#nolinenos}}
+var d = document.getElementById("refh-{{id}}")
+d.className = d.className + " hide-lines"
+{{/nolinenos}}

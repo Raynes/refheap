@@ -1,12 +1,16 @@
 (ns refheap.views.paste
   (:require [refheap.models.paste :as paste]
             [refheap.models.users :as users]
+            [refheap.highlight :refer [lexers]]
+            [refheap.utilities :refer [to-booleany escape-string]]
             [noir.session :as session]
+            [noir.response :refer [content-type]]
             [stencil.core :as stencil]
             [compojure.core :refer [defroutes GET POST]]
             [refheap.views.common :refer [layout avatar page-buttons]]
             [noir.response :refer [redirect content-type]]
-            [refheap.dates :refer [date-string]]))
+            [refheap.dates :refer [date-string]]
+            [clojure.string :refer [split join]]))
 
 (defn create-paste-page [lang & [old]]
   (let [lang (or lang (:language old) "Clojure")]
@@ -17,7 +21,7 @@
                 (str "/paste/" (:paste-id old) "/edit")
                 "/paste/create")
          :languages (for [lang (sort #(.compareToIgnoreCase % %2)
-                                     (keys (dissoc paste/lexers lang)))]
+                                     (keys (dissoc lexers lang)))]
                       {:language lang})
          :selected lang
          :checked (:private old)
@@ -76,13 +80,23 @@
                 :summary summary
                 :more (> lines 5)})}))
 
-(defn render-embed-page [paste]
+(defn render-embed-page [paste host scheme]
   (let [id (:paste-id paste)]
     (layout
       (stencil/render-file
         "refheap/views/templates/embed"
-        {:id (:paste-id paste)})
+        {:url (str (name scheme) "://" host "/paste/" (:paste-id paste) ".js")})
       {:title (str "Embedding paste " id)})))
+
+(defn embed-paste [id host scheme lines?]
+  (content-type
+   "text/javascript"
+   (stencil/render-file
+    "refheap/views/templates/embedjs"
+    {:id id
+     :content (escape-string (:contents (paste/get-paste id)))
+     :url (str (name scheme) "://" host "/css/embed.css")
+     :nolinenos (and lines? (not (to-booleany lines?)))})))
 
 (defn all-pastes-page [page]
   (let [paste-count (paste/count-pastes false)]
@@ -167,14 +181,23 @@
   (GET "/paste/:id/raw" {{:keys [id]} :params}
     (when-let [content (:raw-contents (paste/get-paste id))]
       (content-type "text/plain; charset=utf-8" content)))
-  (GET "/paste/:id/embed" {{:keys [id]} :params}
+  (GET "/paste/:id/embed" {{:keys [id]} :params
+                           {host "host"} :headers
+                           scheme :scheme}
     (let [paste (paste/get-paste id)]
-      (render-embed-page paste)))
+      (render-embed-page paste host scheme)))
   (POST "/paste/:id/edit" {:keys [params]}
     (edit-paste params))
   (POST "/paste/create" {:keys [params]}
     (create-paste params))
-  (GET "/paste/:id" {{:keys [id]} :params}
-    (show-paste-page id))
+  (GET "/paste/:id" {{:keys [id linenumbers]} :params
+                     {host "host"} :headers
+                     scheme :scheme}
+    (let [[id ext] (split id #"\.")]
+      (if ext
+        (embed-paste id host scheme linenumbers)
+        (show-paste-page id))))
   (GET "/pastes" {:keys [page]}
     (all-pastes-page (paste/proper-page (Long. (or page "1"))))))
+
+

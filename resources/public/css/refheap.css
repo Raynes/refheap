@@ -259,6 +259,10 @@ div.syntax {
     border-radius: 4px;
 }
 
+div.markdown {
+    padding-left: 20px;
+}
+
 div.syntax div.more {
     position: relative;
     top: -10px;
@@ -628,4 +632,21 @@ span.hotkey {
     display: inline-block;
     vertical-align: middle;
     width: 80px;
+}
+
+pre.md-code {
+    width: 700px;
+    overflow: auto;
+    border: solid #2E2E2E 3px;
+    padding: 8px;
+ }
+
+pre,code {
+    font-family: 'DejaVu Sans Mono', 'Bitstream Vera Sans Mono', monospace;
+    line-height: 1.4em;
+    font-size: 12px;
+}
+
+code {
+    color: #A786D8;
 }
