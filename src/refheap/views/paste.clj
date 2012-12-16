@@ -1,7 +1,7 @@
 (ns refheap.views.paste
   (:require [refheap.models.paste :as paste]
             [refheap.models.users :as users]
-            [refheap.pygments :refer [lexers]]
+            [refheap.highlight :refer [lexers]]
             [refheap.utilities :refer [to-booleany escape-string]]
             [noir.session :as session]
             [noir.response :refer [content-type]]
@@ -51,6 +51,8 @@
           "refheap/views/templates/pasted"
           {:language language
            :private private
+           :extra (when (= language "Markdown")
+                    "markdown")
            :lines lines
            :id id
            :username (if user
@@ -199,3 +201,5 @@
         (show-paste-page id))))
   (GET "/pastes" {:keys [page]}
     (all-pastes-page (paste/proper-page (Long. (or page "1"))))))
+
+

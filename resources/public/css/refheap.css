@@ -259,6 +259,10 @@ div.syntax {
     border-radius: 4px;
 }
 
+div.markdown {
+    padding-left: 20px;
+}
+
 div.syntax div.more {
     position: relative;
     top: -10px;
@@ -629,3 +633,9 @@ span.hotkey {
     vertical-align: middle;
     width: 80px;
 }
+
+div.md-code {
+    display: inline;
+    width: 300px;
+    overflow: auto;
+ }

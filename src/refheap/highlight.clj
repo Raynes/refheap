@@ -1,6 +1,7 @@
-(ns refheap.pygments
+(ns refheap.highlight
   (:require [conch.sh :refer [let-programs]]
-            [clojure.string :as string]))
+            [clojure.string :as string]
+            [refheap.markdown :refer [to-html]]))
 
 (def lexers
   "A map of language names to pygments lexer names."
@@ -193,7 +194,9 @@
              :exts #{"kt"}}
    "Elixir" {:short "ex"
              :exts #{"ex" "exs"}}
-   "Elixir Console" {:short "iex"}})
+   "Elixir Console" {:short "iex"}
+   "Markdown" {:short "Markdown"
+               :exts #{"md" "markdown"}}})
 
 (defn lookup-lexer
   "Selects a language."
@@ -209,15 +212,21 @@
        [lang lang-map]))
    ["Plain Text" {:short "text"}]))
 
-(defn pygmentize
-  "Syntax highlight some code."
+(defn highlight
+  "Syntax highlight some code. If anything other than markdown, highlight
+   with pygments. If markdown, render with pegdown."
   [language text & [anchor?]]
-  (let-programs [pygmentize "./pygmentize"]
-    (let [output (pygmentize "-fhtml" (str "-l" language)
-                             (str "-Olinenos=table,stripnl=False,encoding=utf-8"
-                                  (when anchor? ",anchorlinenos=true,lineanchors=L"))
-                             {:dir "resources/pygments"
-                              :in text})]
-      (if (seq output)
-        {:success output}
-        {:error "There ws an error pasting."}))))
+  (if (= language "Markdown")
+    (try
+      {:success (to-html text)}
+      (catch Exception _
+        {:error "There was an error pasting."}))
+    (let-programs [pygmentize "./pygmentize"]
+      (let [output (pygmentize "-fhtml" (str "-l" language)
+                               (str "-Olinenos=table,stripnl=False,encoding=utf-8"
+                                    (when anchor? ",anchorlinenos=true,lineanchors=L"))
+                               {:dir "resources/pygments"
+                                :in text})]
+        (if (seq output)
+          {:success output}
+          {:error "There was an error pasting."})))))

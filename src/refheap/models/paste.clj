@@ -10,7 +10,7 @@
             [refheap.messages :refer [error]]
             [monger.collection :as mc]
             [monger.query :refer [with-collection find sort limit skip]]
-            [refheap.pygments :refer [lookup-lexer pygmentize]])
+            [refheap.highlight :refer [lookup-lexer highlight]])
   (:import java.io.StringReader
            org.apache.commons.codec.digest.DigestUtils))
 
@@ -48,7 +48,7 @@
   (let [[name {:keys [short]}] (lookup-lexer language)
         private (boolean private)
         random-id (or random-id (generate-id))
-        pygmentized (pygmentize short contents true)]
+        pygmentized (highlight short contents true)]
     (if-let [highlighted (:success pygmentized)]
       {:paste-id (if private random-id (str id))
        :id id
@@ -56,7 +56,7 @@
        :user (:id user)
        :language name
        :raw-contents contents
-       :summary (:success (pygmentize short (preview contents)))
+       :summary (:success (highlight short (preview contents)))
        :private (boolean private)
        :date date
        :lines (let [lines (count (filter #{\newline} contents))]

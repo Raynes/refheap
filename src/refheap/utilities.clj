@@ -35,9 +35,13 @@
         "false" false
         false))))
 
+(def js-char-replacements
+  (merge char-escape-string
+         {\' "\\'"}))
+
 (defn escape-string
   "Escapes all escape sequences in a string to make it suitable
    for passing to another programming language. Kind of like what
    pr-str does for strings but without the wrapper quotes."
   [s]
-  (join (map #(char-escape-string % %) s)))
+  (join (map #(js-char-replacements % %) s)))
