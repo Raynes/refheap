@@ -640,3 +640,9 @@ pre.md-code {
     border: solid #2E2E2E 3px;
     padding: 8px;
  }
+
+pre {
+    font-family: 'DejaVu Sans Mono', 'Bitstream Vera Sans Mono', monospace;
+    line-height: 1.4em;
+    font-size: 12px;
+}
