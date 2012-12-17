@@ -80,7 +80,7 @@
   refheap.setCodeHeight = function (editor) {
     var currentHeight = $( window ).height();
     if ( currentHeight > 600 ) {
-      $( ".CodeMirror-scroll" ).height( currentHeight - 200 );
+      $( ".CodeMirror" ).height( currentHeight - 200 );
       editor.refresh();
     }
   };
