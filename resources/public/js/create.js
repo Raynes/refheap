@@ -15,6 +15,7 @@
   refheap.langs =
     { "C++"             : ["clike"],
       "C"               : ["clike"],
+      "Java"            : ["clike"],
       "Objective-C"     : ["clike"],
       "Clojure"         : ["clojure"],
       "Apricot"         : ["clojure"],
