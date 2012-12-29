@@ -5,6 +5,6 @@
 
 (defroutes legal-routes
   (GET "/legal/tos" []
-    (layout (slurp (io/resource "refheap/views/templates/tos.mustache"))))
+    (layout (slurp (io/resource "refheap/views/templates/tos.html"))))
   (GET "/legal/privacy" []
-    (layout (slurp (io/resource "refheap/views/templates/privacy.mustache")))))
+    (layout (slurp (io/resource "refheap/views/templates/privacy.html")))))

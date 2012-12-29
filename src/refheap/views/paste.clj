@@ -27,7 +27,7 @@
          :checked (:private old)
          :old (:raw-contents old)
          :button (if old "Save!" "Paste!")})
-      {:file "refheap/views/templates/createhead"
+      {:file "refheap/views/templates/createhead.html"
        :title (if old
                 (str "Editing paste " (:paste-id old))
                 "RefHeap")})))
@@ -63,7 +63,7 @@
            :owner (when (and user-id (= user user-id)) {:id id})
            :fork (when (and user-id (not= user user-id)) {:id id})
            :contents contents})
-        {:file "refheap/views/templates/showhead"
+        {:file "refheap/views/templates/showhead.html"
          :title (str paste-user "'s paste: " id)}))))
 
 (defn render-paste-previews [pastes header-template]
@@ -109,7 +109,7 @@
                      (paste/get-pastes page)
                      "refheap/views/templates/allheader")
            :paste-buttons (page-buttons "/pastes" paste-count 20 page)})
-        {:file "refheap/views/templates/showhead"
+        {:file "refheap/views/templates/showhead.html"
          :title "All pastes"}))))
 
 (defn fail [error]
