@@ -22,11 +22,8 @@
 (defragment head (resource "refheap/views/templates/head.html")
   [extra-head]
   (laser/id= "last-include")
-  (fn [node] (into [node] (when-let [items (or (:head-nodes extra-head) (:file extra-head))]
-                            (laser/nodes
-                             (if (string? items)
-                               (stencil/render-file items extra-head)
-                               extra-head)))))
+  (fn [node] (into [node] (when-let [items (:head-nodes extra-head)]
+                            (laser/nodes extra-head))))
   (laser/element= :title) (laser/content (or (:title extra-head) "Refheap")))
 
 (defragment body (resource "refheap/views/templates/commonbody.html")
