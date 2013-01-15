@@ -4,15 +4,25 @@ This project is a lightweight Clojure pastebin that uses [Pygments](http://pygme
 
 ## Usage
 
-Grab general project dependencies with lein, and grab Pygments with the provided bash script (requires [Mercurial](http://mercurial.selenic.com)).  This project also requires [MongoDB](http://www.mongodb.org).
+Clone the repo including submodules:
 
-     sh-tty0$ lein deps
-     sh-tty0$ ./bootstrap.sh
+``` bash
+git clone --recursive git://github.com/Raynes/refheap.git
+```
 
-Start the Mongo daemon, and in a separate terminal start the RefHeap server using lein. The server will host content from [http://localhost:8080](http://localhost:8080).
+Grab general project dependencies with lein, and grab Pygments with the provided bash script (requires [Mercurial](http://mercurial.selenic.com)). This project also requires [MongoDB](http://www.mongodb.org).
 
-     sh-tty0$ mongod
-     sh-tty1$ lein run
+``` bash
+lein deps
+./bootstrap.sh
+```
+
+Start the Mongo daemon, and then start the RefHeap server using `lein`. The server will host content from [http://localhost:3000](http://localhost:3000) (unless you have `$PORT` set).
+
+``` bash
+mongod &
+lein ring server
+```
 
 ## Who We Are
 
