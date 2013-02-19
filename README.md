@@ -9,7 +9,7 @@ Grab general project dependencies with lein, and grab Pygments with the provided
      sh-tty0$ lein deps
      sh-tty0$ ./bootstrap.sh
 
-Start the Mongo daemon, and in a separate terminal start the RefHeap server using lein. The server will host content from [http://localhost:8080](http://localhost:8080).
+Start the Mongo daemon, and in a separate terminal start the RefHeap server using lein. The server will host content from [http://localhost:3000](http://localhost:3000).
 
      sh-tty0$ mongod
      sh-tty1$ lein ring server
