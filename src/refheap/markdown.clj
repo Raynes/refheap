@@ -6,9 +6,7 @@
   "Create a PegDownProcessor instance with the hardwraps and
    fenced code blocks extensions"
   []
-  (PegDownProcessor.
-   (reduce bit-or 0 [Extensions/HARDWRAPS
-                     Extensions/FENCED_CODE_BLOCKS])))
+  (PegDownProcessor. Extensions/FENCED_CODE_BLOCKS))
 
 (defn wrap-code [html]
   (str "<div class=\"markdown\">\n"

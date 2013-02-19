@@ -1,7 +1,10 @@
 .cm-s-cmtn { background: #1d1f21; color: #c5c8c6}
 .cm-s-cmtn div.CodeMirror-selected { background: #373b41 !important; }
-.cm-s-cmtn .CodeMirror-gutter { background: #1d1f21; border-right: 1px solid #585858; }
-.cm-s-cmtn .CodeMirror-gutter-text { color: gray; }
+.cm-s-cmtn .CodeMirror-gutters {
+    background: #1d1f21;
+    border-right: 1px solid #585858;
+    color: gray;
+}
 .cm-s-cmtn .CodeMirror-cursor { border-left: 1px solid white !important; }
 .cm-s-cmtn span.cm-comment, .cm-s-cmtn span.cm-meta { color: #969896; }
 .cm-s-cmtn span.cm-atom, .cm-s-cmtn span.cm-number { color: #c5c8c6; }

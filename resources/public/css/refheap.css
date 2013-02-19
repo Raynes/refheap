@@ -1,4 +1,4 @@
-ul {
+.spacedlist ul {
     list-style-type: none;
 }
 
@@ -137,15 +137,13 @@ div#paste-container {
     border: none;
 }
 
-.CodeMirror-scroll {
-    height: 510px;
-    border: 2px solid #2e2e2e;
-    border-radius: 3px;
-}
-
 .CodeMirror {
     width: 100%;
     clear: both;
+    height: 510px;
+    border: 2px solid #2e2e2e;
+    border-radius: 3px;
+    line-height: 1.1em;
 }
 
 div#paste-header {
