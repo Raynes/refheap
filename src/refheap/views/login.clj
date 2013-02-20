@@ -4,14 +4,16 @@
             [noir.session :as session]
             [refheap.views.common :refer [body logged-in]]
             [compojure.core :refer [defroutes GET POST]]
-            [noir.response :refer [redirect json]]))
+            [noir.response :refer [redirect json]]
+            [clojure.java.io :refer [resource]]
+            [me.raynes.laser :as l]))
 
-(defn create-user-page [email]
-  (session/flash-put! :email email)
-  (stencil/render-file
-    "refheap/views/templates/createuser"
-    {:error (when-let [error (session/flash-get :error)]
-              {:message error})}))
+(let [html (-> "refheap/views/templates/createuser.html" resource l/parse-fragment)]
+  (defn create-user-page [email]
+    (session/flash-put! :email email)
+    (l/fragment html
+                (l/class= "error") #(when-let [error (session/flash-get :error)]
+                                      (l/on % (l/content error))))))
 
 (defn create-user [{:keys [name]}]
   (if-let [email (session/flash-get :email)]
@@ -27,8 +29,8 @@
   (when-let [{:keys [email]} (login/verify-assertion host assertion)]
     (json
      (if-let [username (login/user-exists email)]
-       {:login-html (logged-in username)}
-       {:chooselogin-html (body (create-user-page email))}))))
+       {:login-html (l/fragment-to-html (logged-in username))}
+       {:chooselogin-html (-> email create-user-page body l/fragment-to-html)}))))
 
 (defroutes login-routes
   (POST "/user/create" {:keys [params]}

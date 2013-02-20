@@ -10,13 +10,9 @@
   <p>
   Check out the API documentation on <a href="https://github.com/Raynes/refheap/wiki/Documentation:-API">Github</a>!
   </p>
-  {{#logged}}
   <div id="token">
-    <code id="tokentext">{{token}}</code>
+    <code id="tokentext"></code>
     <button id="gentoken" type="button">Generate New Token</button>
   </div>
-  {{/logged}}
-  {{^logged}}
-  <p>Login to see your API token.</p>
-  {{/logged}}
+  <p id="please-login">Login to see your token.</p>
 </div>

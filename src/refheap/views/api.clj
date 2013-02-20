@@ -1,19 +1,24 @@
 (ns refheap.views.api
   (:require [noir.session :as session]
-            [stencil.core :as stencil]
+            [me.raynes.laser :as laser]
+            [clojure.java.io :refer [resource]]
             [refheap.models.api :as api]
             [refheap.models.paste :as paste]
             [refheap.models.users :as users]
             [compojure.core :refer [defroutes GET POST DELETE]]
-            [refheap.views.common :refer [layout]]))
+            [refheap.views.common :refer [layout static]]))
 
-(defn api-page []
-  (layout
-   (stencil/render-file
-    "refheap/views/templates/api"
-    {:logged (when-let [id (:id (session/get :user))]
-               {:token (api/get-token id)})})
-   {:file "refheap/views/templates/apihead"}))
+(let [nodes (laser/parse-fragment (resource "refheap/views/templates/api.html"))
+      api-head (static "refheap/views/templates/apihead.html")]
+  (defn api-page []
+    (layout
+     (if-let [id (:id (session/get :user))]
+       (laser/fragment nodes
+                       (laser/id= "tokentext") (laser/content (api/get-token id))
+                       (laser/id= "please-login") (laser/remove))
+       (laser/fragment nodes (laser/id= "token") (laser/remove)))
+     nil
+     api-head)))
 
 (defn generate-token []
   (when-let [id (:id (session/get :user))]

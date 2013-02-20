@@ -6,87 +6,116 @@
             [noir.session :as session]
             [noir.response :refer [content-type]]
             [stencil.core :as stencil]
+            [me.raynes.laser :refer [defragment] :as l]
+            [clojure.java.io :refer [resource]]
             [compojure.core :refer [defroutes GET POST]]
-            [refheap.views.common :refer [layout avatar page-buttons]]
+            [refheap.views.common :refer [layout avatar page-buttons static]]
             [noir.response :refer [redirect content-type]]
             [refheap.dates :refer [date-string]]
             [clojure.string :refer [split join]]))
 
-(defn create-paste-page [lang & [old]]
-  (let [lang (or lang (:language old) "Clojure")]
-    (layout
-      (stencil/render-file
-        "refheap/views/templates/paste"
-        {:url (if old
-                (str "/paste/" (:paste-id old) "/edit")
-                "/paste/create")
-         :languages (for [lang (sort #(.compareToIgnoreCase % %2)
-                                     (keys (dissoc lexers lang)))]
-                      {:language lang})
-         :selected lang
-         :checked (:private old)
-         :old (:raw-contents old)
-         :button (if old "Save!" "Paste!")})
-      {:file "refheap/views/templates/createhead"
-       :title (if old
-                (str "Editing paste " (:paste-id old))
-                "RefHeap")})))
+(defragment paste-page-fragment (resource "refheap/views/templates/paste.html")
+  [lang & [old]]
+  (l/child-of (l/id= "language")
+              (l/negate (l/attr? :selected)))
+  (fn [node] 
+    (for [lang (sort #(.compareToIgnoreCase % %2)
+                     (keys (dissoc lexers lang)))] 
+      (l/on node (l/attr :value lang) (l/content lang))))
+  (l/attr? :selected) (let [lang (or lang "Clojure")]
+                        (comp (l/attr :value lang)
+                              (l/content lang)))
+  (l/element= :form) (l/attr :action (if old
+                                       (str "/paste/" (:paste-id old) "/edit")
+                                       "/paste/create"))
+  (l/attr= :name "private") #(if (:private old)
+                               (l/on % (l/attr :checked ""))
+                               %)
+  (l/id= "submit-button") (l/attr :value (if old "Save!" "Paste!"))
+  (l/element= :textarea) #(if old
+                            (l/on % (l/content (:raw-contents old)))
+                            %))
 
-(defn fullscreen-paste [id]
-  (when-let [contents (:contents (paste/get-paste id))]
-    (stencil/render-file
-      "refheap/views/templates/fullscreen"
-      {:contents contents})))
+(let [head (static "refheap/views/templates/createhead.html")]
+  (defn paste-page [lang & [old]]
+    (layout
+     (paste-page-fragment lang old)
+     (if old
+       (str "Editing paste " (:paste-id old))
+       "RefHeap")
+     head)))
+
+(def show-head (static "refheap/views/templates/showhead.html"))
+
+(let [head (static "refheap/views/templates/head.html")
+      html (l/parse (resource "refheap/views/templates/fullscreen.html"))]
+  (defn fullscreen-paste [id]
+    (when-let [contents (:contents (paste/get-paste id))]
+      (l/document html
+                  (l/element= :head) (l/content [head show-head])
+                  (l/class= "syntax") (l/content (l/unescaped contents))))))
+
+(defragment show-paste-page-fragment (resource "refheap/views/templates/pasted.html")
+  [{:keys [lines private user contents language date fork]} id paste-user]
+  [user-id (:id (session/get :user))]
+  (l/id= "language") (l/content language)
+  (l/element= :abbr) (comp #(update-in % [:attrs :title] str lines)
+                           (l/content (str lines " L")))
+  (l/class= "private") #(and private %)
+  (l/id= "last") (l/content [(if fork "Forked by " "Pasted by ")
+                             (if user
+                               (l/node :a :attrs {:href (str "/users/" paste-user)} :content paste-user) 
+                               paste-user) 
+                             (if fork
+                               (str " from "
+                                    (if-let [paste (:paste-id (paste/get-paste-by-id fork))]
+                                      (l/node :a :attrs {:href (str "/paste/" paste)} :content paste)
+                                      "[deleted]"))
+                               "")
+                             " on "
+                             (date-string date)])
+  (l/id= "embed") (l/attr :href (str "/paste/" id "/embed"))
+  (l/id= "raw") (l/attr :href (str "/paste/" id "/raw"))
+  (l/id= "fullscreen") (l/attr :href (str "/paste/" id "/fullscreen"))
+  (l/id= "owner") #(when (and user-id (= user user-id))
+                     (l/fragment (l/zip (:content %))
+                                 (l/id= "edit") (l/attr :href (str "/paste/" id "/edit"))
+                                 (l/id= "delete") (l/attr :href (str "/paste/" id "/delete"))))
+  (l/id= "fork") #(when (and user-id (not= user user-id))
+                    (l/on % (l/attr :href (str "/paste/" id "/fork"))))
+  (l/id= "paste") (l/content (l/unescaped contents)))
 
 (defn show-paste-page [id]
-  (when-let [{:keys [lines private user contents language date fork]
-              :as all}
-             (paste/get-paste id)]
-    (let [user-id (:id (session/get :user))
-          paste-user (if user
+  (when-let [paste (paste/get-paste id)]
+    (let [paste-user (if-let [user (:user paste)]
                        (:username (users/get-user-by-id user))
                        "anonymous")]
       (layout
-        (stencil/render-file
-          "refheap/views/templates/pasted"
-          {:language language
-           :private private
-           :lines lines
-           :id id
-           :username (if user
-                       (str "<a href=\"/users/" paste-user "\">" paste-user "</a>")
-                       paste-user)
-           :date (date-string date)
-           :forked (when fork {:from (if-let [paste (:paste-id (paste/get-paste-by-id fork))]
-                                       (str "<a href=\"/paste/" paste "\">" paste "</a>")
-                                       "[deleted]")})
-           :owner (when (and user-id (= user user-id)) {:id id})
-           :fork (when (and user-id (not= user user-id)) {:id id})
-           :contents contents})
-        {:file "refheap/views/templates/showhead"
-         :title (str paste-user "'s paste: " id)}))))
+       (show-paste-page-fragment paste id paste-user)
+       (str paste-user "'s paste: " id)
+       show-head))))
 
-(defn render-paste-previews [pastes header-template]
-  (stencil/render-file
-    "refheap/views/templates/preview"
-    {:pastes (for [{:keys [paste-id lines summary date user private]} pastes]
-               {:header (stencil/render-file
-                          header-template
-                          {:user (when user (users/get-user-by-id user))
-                           :date (date-string date)
-                           :private private
-                           :id paste-id})
-                :id paste-id
-                :summary summary
-                :more (> lines 5)})}))
+(defn paste-preview [node paste header]
+  (let [{:keys [paste-id lines summary date user private]} paste]
+    (l/at node
+          (l/class= "more") (comp (l/insert :left (l/unescaped summary))
+                                  #(when (> lines 5)
+                                     (l/on % (l/attr :href (str "/paste/" paste-id)))))
+          (l/class= "syntax") (l/insert :left header))))
 
-(defn render-embed-page [paste host scheme]
+(defragment render-paste-previews (resource "refheap/views/templates/preview.html")
+  [pastes header-fn] 
+  (l/class= "preview-header") #(for [paste pastes]
+                                 (paste-preview % paste (header-fn paste))))
+
+(defragment embed-page-fragment (resource "refheap/views/templates/embed.html")
+  [id host scheme]
+  (l/id= "script") (l/content (str "<script src=\"" (name scheme) "://" host "/paste/" id ".js\"></script>")))
+
+(defn embed-page [paste host scheme]
   (let [id (:paste-id paste)]
-    (layout
-      (stencil/render-file
-        "refheap/views/templates/embed"
-        {:url (str (name scheme) "://" host "/paste/" (:paste-id paste) ".js")})
-      {:title (str "Embedding paste " id)})))
+    (layout (embed-page-fragment id host scheme)
+            (str "Embedding paste " id))))
 
 (defn embed-paste [id host scheme lines?]
   (content-type
@@ -98,19 +127,27 @@
      :url (str (name scheme) "://" host "/css/embed.css")
      :nolinenos (and lines? (not (to-booleany lines?)))})))
 
+(defragment paste-header (resource "refheap/views/templates/allheader.html")
+  [paste]
+  [{:keys [paste-id date user]} paste]
+  (l/id= "id") (comp (l/attr :href (str "/paste/" paste-id))
+                     (l/content (str "Paste " paste-id)))
+  (l/class= "right") (l/content [(if-let [user (and user (:username (users/get-user-by-id user)))]
+                                   (l/node :a :attrs {:href (str "/users/" user)} :content user)
+                                   "anonymous")
+                                 " on "
+                                 (date-string date)]))
+
 (defn all-pastes-page [page]
   (let [paste-count (paste/count-pastes false)]
     (if (> page (paste/count-pages paste-count 20))
       (redirect "/paste")
       (layout
-        (stencil/render-file
-          "refheap/views/templates/all"
-          {:pastes (render-paste-previews
-                     (paste/get-pastes page)
-                     "refheap/views/templates/allheader")
-           :paste-buttons (page-buttons "/pastes" paste-count 20 page)})
-        {:file "refheap/views/templates/showhead"
-         :title "All pastes"}))))
+       (l/node :div :attrs {:class "clearfix"}
+               :content (concat (render-paste-previews (paste/get-pastes page) paste-header)
+                                (page-buttons "/pastes" paste-count 20 page)))
+       "All pastes"
+       show-head))))
 
 (defn fail [error]
   (layout
@@ -123,7 +160,7 @@
     (when-let [user (:id (session/get :user))]
       (let [paste (paste/get-paste id)]
         (when (= (:user paste) user)
-          (create-paste-page nil paste)))))
+          (paste-page nil paste)))))
 
 (defn fork-paste-page [{:keys [id]}]
   (let [user (:id (session/get :user))
@@ -167,7 +204,7 @@
     (fullscreen-paste id))
 
   (GET "/paste" {{:keys [lang]} :params}
-    (create-paste-page lang))
+    (paste-page lang))
 
   (GET "/paste/:id/edit" {:keys [params]}
     (edit-paste-page params))
@@ -181,15 +218,19 @@
   (GET "/paste/:id/raw" {{:keys [id]} :params}
     (when-let [content (:raw-contents (paste/get-paste id))]
       (content-type "text/plain; charset=utf-8" content)))
+  
   (GET "/paste/:id/embed" {{:keys [id]} :params
                            {host "host"} :headers
                            scheme :scheme}
     (let [paste (paste/get-paste id)]
-      (render-embed-page paste host scheme)))
+      (embed-page paste host scheme)))
+  
   (POST "/paste/:id/edit" {:keys [params]}
     (edit-paste params))
+  
   (POST "/paste/create" {:keys [params]}
     (create-paste params))
+  
   (GET "/paste/:id" {{:keys [id linenumbers]} :params
                      {host "host"} :headers
                      scheme :scheme}
@@ -197,6 +238,7 @@
       (if ext
         (embed-paste id host scheme linenumbers)
         (show-paste-page id))))
+  
   (GET "/pastes" {:keys [page]}
     (all-pastes-page (paste/proper-page (Long. (or page "1"))))))
 
