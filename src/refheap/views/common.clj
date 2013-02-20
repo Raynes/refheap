@@ -1,7 +1,6 @@
 (ns refheap.views.common
   (:require [noir.session :as session]
             [refheap.models.paste :as paste]
-            [stencil.core :as stencil]
             [clavatar.core :refer [gravatar]]
             [me.raynes.laser :refer [defdocument defragment] :as l]
             [clojure.java.io :refer [resource]]))

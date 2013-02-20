@@ -1,5 +1,5 @@
 (ns refheap.highlight
-  (:require [conch.sh :refer [let-programs]]
+  (:require [me.raynes.conch :refer [let-programs]]
             [clojure.string :as string]
             [refheap.markdown :refer [to-html]]))
 

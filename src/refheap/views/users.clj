@@ -1,6 +1,5 @@
 (ns refheap.views.users
   (:require [refheap.models.users :as users]
-            [stencil.core :as stencil]
             [refheap.views.paste :as paste]
             [noir.session :as session]
             [compojure.core :refer [defroutes GET]]

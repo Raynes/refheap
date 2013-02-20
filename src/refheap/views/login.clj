@@ -1,6 +1,5 @@
 (ns refheap.views.login
   (:require [refheap.models.login :as login]
-            [stencil.core :as stencil]
             [noir.session :as session]
             [refheap.views.common :refer [body logged-in]]
             [compojure.core :refer [defroutes GET POST]]
