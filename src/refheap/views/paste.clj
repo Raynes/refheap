@@ -70,7 +70,7 @@
                                (l/unescaped
                                 (str " from "
                                      (if-let [paste (:paste-id (paste/get-paste-by-id fork))]
-                                       (str "<a href=\"/paste/" paste ">" paste "</a>") 
+                                       (str "<a href=\"/paste/" paste "\">" paste "</a>") 
                                        "[deleted]"))))
                              " on "
                              (date-string date)])
