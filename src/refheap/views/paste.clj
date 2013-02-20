@@ -9,7 +9,7 @@
             [me.raynes.laser :refer [defragment] :as l]
             [clojure.java.io :refer [resource]]
             [compojure.core :refer [defroutes GET POST]]
-            [refheap.views.common :refer [layout avatar page-buttons]]
+            [refheap.views.common :refer [layout avatar page-buttons static]]
             [noir.response :refer [redirect content-type]]
             [refheap.dates :refer [date-string]]
             [clojure.string :refer [split join]]))
@@ -36,7 +36,7 @@
                             (l/on % (l/content (:raw-contents old)))
                             %))
 
-(let [head (-> "refheap/views/templates/createhead.html" resource slurp)]
+(let [head (static "refheap/views/templates/createhead.html")]
   (defn paste-page [lang & [old]]
     (layout
      (paste-page-fragment lang old)
@@ -45,18 +45,15 @@
        "RefHeap")
      head)))
 
-(def show-head
-  (-> "refheap/views/templates/showhead.html"
-      resource
-      slurp))
+(def show-head (static "refheap/views/templates/showhead.html"))
 
-(let [head (-> "refheap/views/templates/head.html" resource slurp)
+(let [head (static "refheap/views/templates/head.html")
       html (l/parse (resource "refheap/views/templates/fullscreen.html"))]
   (defn fullscreen-paste [id]
     (when-let [contents (:contents (paste/get-paste id))]
       (l/document html
-                  (l/element= :head) (l/content head)
-                  (l/class= "syntax") (l/content contents)))))
+                  (l/element= :head) (l/content [head show-head])
+                  (l/class= "syntax") (l/content (l/unescaped contents))))))
 
 (defragment show-paste-page-fragment (resource "refheap/views/templates/pasted.html")
   [{:keys [lines private user contents language date fork]} id paste-user]
@@ -81,12 +78,11 @@
   (l/id= "raw") (l/attr :href (str "/paste/" id "/raw"))
   (l/id= "fullscreen") (l/attr :href (str "/paste/" id "/fullscreen"))
   (l/id= "owner") #(when (and user-id (= user user-id))
-                     (l/fragment (:content %)
+                     (l/fragment (l/zip (:content %))
                                  (l/id= "edit") (l/attr :href (str "/paste/" id "/edit"))
                                  (l/id= "delete") (l/attr :href (str "/paste/" id "/delete"))))
   (l/id= "fork") #(when (and user-id (not= user user-id))
-                    (l/fragment (:content %)
-                                (l/id= "fork") (l/attr :href (str "/paste/" id "/fork"))))
+                    (l/on % (l/attr :href (str "/paste/" id "/fork"))))
   (l/id= "paste") (l/content (l/unescaped contents)))
 
 (defn show-paste-page [id]

@@ -9,19 +9,24 @@
 (defn avatar [email size]
   (gravatar email :size size))
 
-(defn logged-in [username]
-  (let [user (or username
-                 (and (bound? #'session/*noir-session*)
-                      (:username (session/get :user))))]
-    (if user
-      (l/fragment (l/parse-fragment (resource "refheap/views/templates/loggedin.html"))
-                      (l/id= "userbutton") (comp (l/attr :href (str "/users/" user))
-                                                 (l/content user)))
-      (l/nodes (resource "refheap/views/templates/loggedout.html")))))
+(defn static [file]
+  (-> file resource slurp l/unescaped))
+
+(let [html (l/parse-fragment (resource "refheap/views/templates/loggedin.html"))
+      logged-out (static "refheap/views/templates/loggedout.html")]
+  (defn logged-in [username]
+    (let [user (or username
+                   (and (bound? #'session/*noir-session*)
+                        (:username (session/get :user))))]
+      (if user
+        (l/fragment html
+                    (l/id= "userbutton") (comp (l/attr :href (str "/users/" user))
+                                               (l/content user)))
+        logged-out))))
 
 (defragment head (resource "refheap/views/templates/head.html")
   [title heads]
-  (l/id= "last-include") #(if heads [% (l/unescaped heads)] %)
+  (l/id= "last-include") #(if heads [% heads] %)
   (l/element= :title) (l/content (or title "Refheap")))
 
 (defragment body (resource "refheap/views/templates/commonbody.html")

@@ -6,21 +6,19 @@
             [refheap.models.paste :as paste]
             [refheap.models.users :as users]
             [compojure.core :refer [defroutes GET POST DELETE]]
-            [refheap.views.common :refer [layout]]))
+            [refheap.views.common :refer [layout static]]))
 
-(defn api-page []
-  (let [nodes (laser/parse-fragment
-               (resource "refheap/views/templates/api.html"))]
+(let [nodes (laser/parse-fragment (resource "refheap/views/templates/api.html"))
+      api-head (static "refheap/views/templates/apihead.html")]
+  (defn api-page []
     (layout
      (if-let [id (:id (session/get :user))]
-       (laser/fragment
-        nodes
-        (laser/id= "tokentext") (laser/content (api/get-token id))
-        (laser/id= "please-login") (laser/remove))
+       (laser/fragment nodes
+                       (laser/id= "tokentext") (laser/content (api/get-token id))
+                       (laser/id= "please-login") (laser/remove))
        (laser/fragment nodes (laser/id= "token") (laser/remove)))
-     {:extra-head (-> (resource "refheap/views/templates/apihead.html")
-                      (slurp)
-                      (laser/nodes))})))
+     nil
+     api-head)))
 
 (defn generate-token []
   (when-let [id (:id (session/get :user))]
