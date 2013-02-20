@@ -66,8 +66,8 @@
                              (if user
                                (l/node :a :attrs {:href (str "/users/" paste-user)} :content paste-user) 
                                paste-user)
-                             (l/unescaped
-                              (when fork
+                             (when fork
+                               (l/unescaped
                                 (str " from "
                                      (if-let [paste (:paste-id (paste/get-paste-by-id fork))]
                                        (str "<a href=\"/paste/" paste ">" paste "</a>") 
@@ -79,7 +79,7 @@
   (l/id= "fullscreen") (l/attr :href (str "/paste/" id "/fullscreen"))
   (l/id= "owner") #(when (and user-id (= user user-id))
                      (l/fragment (l/zip (:content %))
-                                 (l/id= "edit") (l/attr :href (str "/paste/" id "/edit"))
+                                 (l/id= "editb") (l/attr :href (str "/paste/" id "/edit"))
                                  (l/id= "delete") (l/attr :href (str "/paste/" id "/delete"))))
   (l/id= "fork") #(when (and user-id (not= user user-id))
                     (l/on % (l/attr :href (str "/paste/" id "/fork"))))
