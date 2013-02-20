@@ -61,7 +61,7 @@
   (l/id= "language") (l/content language)
   (l/element= :abbr) (comp #(update-in % [:attrs :title] str lines)
                            (l/content (str lines " L")))
-  (l/class= "private") #(and private %)
+  (l/class= "private") #(when private %)
   (l/id= "last") (l/content [(if fork "Forked by " "Pasted by ")
                              (if user
                                (l/node :a :attrs {:href (str "/users/" paste-user)} :content paste-user) 
