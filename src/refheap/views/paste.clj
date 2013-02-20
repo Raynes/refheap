@@ -66,12 +66,12 @@
                              (if user
                                (l/node :a :attrs {:href (str "/users/" paste-user)} :content paste-user) 
                                paste-user)
-                             (if fork
-                               (str " from "
-                                    (if-let [paste (:paste-id (paste/get-paste-by-id fork))]
-                                      (l/node :a :attrs {:href (str "/paste/" paste)} :content paste)
-                                      "[deleted]"))
-                               "")
+                             (l/unescaped
+                              (when fork
+                                (str " from "
+                                     (if-let [paste (:paste-id (paste/get-paste-by-id fork))]
+                                       (str "<a href=\"/paste/" paste ">" paste "</a>") 
+                                       "[deleted]"))))
                              " on "
                              (date-string date)])
   (l/id= "embed") (l/attr :href (str "/paste/" id "/embed"))
