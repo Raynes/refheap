@@ -1,12 +1,6 @@
 (ns refheap.markdown
-  (:require [me.raynes.laser :as laser])
-  (:import (org.pegdown PegDownProcessor Extensions)))
-
-(defn make-pegdown
-  "Create a PegDownProcessor instance with the hardwraps and
-   fenced code blocks extensions"
-  []
-  (PegDownProcessor. Extensions/FENCED_CODE_BLOCKS))
+  (:require [me.raynes.laser :as laser]
+            [me.raynes.cegdown :as md]))
 
 (defn wrap-code [html]
   (str "<div class=\"markdown\">\n"
@@ -19,4 +13,4 @@
 (defn to-html
   "Convert markdown to html."
   [s]
-  (wrap-code (.markdownToHtml (make-pegdown) s)))
+  (wrap-code (md/to-html s [:fenced-code-blocks])))
