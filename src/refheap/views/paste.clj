@@ -65,7 +65,7 @@
   (l/id= "last") (l/content [(if fork "Forked by " "Pasted by ")
                              (if user
                                (l/node :a :attrs {:href (str "/users/" paste-user)} :content paste-user) 
-                               paste-user) 
+                               paste-user)
                              (if fork
                                (str " from "
                                     (if-let [paste (:paste-id (paste/get-paste-by-id fork))]
@@ -235,7 +235,7 @@
         (embed-paste id host scheme linenumbers)
         (show-paste-page id))))
   
-  (GET "/pastes" {:keys [page]}
+  (GET "/pastes" [page]
     (all-pastes-page (paste/proper-page (Long. (or page "1"))))))
 
 
