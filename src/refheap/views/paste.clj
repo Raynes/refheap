@@ -150,11 +150,7 @@
        show-head))))
 
 (defn fail [error]
-  (layout
-    (stencil/render-file
-      "refheap/views/templates/fail"
-      {:message error})
-    {:title "You broke it"}))
+  (layout (l/node :p :attrs {:class "error"} :content error) "You broke it."))
 
 (defn edit-paste-page [{:keys [id]}]
     (when-let [user (:id (session/get :user))]
