@@ -238,4 +238,3 @@
   (GET "/pastes" [page]
     (all-pastes-page (paste/proper-page (Long. (or page "1"))))))
 
-
