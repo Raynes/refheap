@@ -99,6 +99,8 @@
                        :exts #{"lhs"}}
    "OCaml" {:short "ocaml"
             :exts #{"ml"}}
+   "Racket" {:short "racket"
+             :exts #{"rkt" "rktl"}}
    "Scheme" {:short "scm"
              :exts #{"scm" "ss"}}
    "Emacs Lisp" {:short "scm"
@@ -131,12 +133,33 @@
    "MOOCode" {:short "moocode"}
    "MySQL" {:short "mysql"}
    "NewSpeak" {:short "newspeak"}
+   "NewLisp" {:short "newlisp"
+              :exts #{"lsp" "nl"}}
    "PostScript" {:short "postscript"
                  :exts #{"ps"}}
    "Protobuf" {:short "protobuf"
                :exts #{"proto"}}
    "REBOL" {:short "rebol"
             :exts #{"rebol"}}
+   "COBOL" {:short "cobol"
+            :exts #{"cob" "COB" "cpy" "CPY"}}
+   "Rust" {:short "rust"
+           :exts #{"rs" "rc"}}
+   "Smali" {:short "smali"
+            :exts #{"smali"}}
+   "Ceylon" {:short "ceylon"
+             :exts #{"ceylon"}}
+   "Julila" {:short "julia"
+             :exts #{"jl"}}
+   "Julia Console" {:short "jlcon"}
+   "AutoIt" {:short "autoit"
+             :exts #{"au3"}}
+   "Puppet" {:short "puppet"
+             :exts #{"pp"}}
+   "HXML" {:short "hxml"
+           :exts #{"hxml"}}
+   "TypeScript" {:short "ts"
+                 :exts #{"ts"}}
    "Redcode" {:short "redcode"}
    "Smalltalk" {:short "squeak"
                 :exts #{"st"}}
