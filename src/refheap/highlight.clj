@@ -123,6 +123,8 @@
    "Bash" {:short "sh"
            :exts #{"sh"}}
    "Bash Session" {:short "console"}
+   "Shell Session" {:short "shell-session"
+                    :exts #{"shell-session"}}
    "Batch" {:short "bat"
             :exts #{"bat"}}
    "Befunge" {:short "befunge"
@@ -149,7 +151,7 @@
             :exts #{"smali"}}
    "Ceylon" {:short "ceylon"
              :exts #{"ceylon"}}
-   "Julila" {:short "julia"
+   "Julia" {:short "julia"
              :exts #{"jl"}}
    "Julia Console" {:short "jlcon"}
    "AutoIt" {:short "autoit"
