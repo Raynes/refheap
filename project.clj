@@ -9,7 +9,7 @@
                  [clj-config "0.2.0"]
                  [clj-http "0.6.4"]
                  [clavatar "0.2.1"]
-                 [clj-time "0.3.3"]
+                 [clj-time "0.4.4"]
                  [me.raynes/conch "0.5.1"]
                  [commons-codec/commons-codec "1.6"]
                  [me.raynes/cegdown "0.1.0"]
