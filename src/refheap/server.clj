@@ -7,7 +7,8 @@
             [monger.ring.session-store :refer [monger-store]]
             [compojure.core :refer [defroutes routes ANY]]
             [compojure.handler :refer [api]]
-            [compojure.route :refer [not-found resources]]))
+            [compojure.route :refer [not-found resources]]
+            [me.raynes.laser :as l]))
 
 (let [uri (get (System/getenv) "MONGOLAB_URI" "mongodb://127.0.0.1/refheap_development")]
   (mg/connect-via-uri! uri))
@@ -28,7 +29,7 @@
          '[refheap.views.login :refer [login-routes]])
 
 (defn four-zero-four []
-  (layout "<p class=\"header\">Insert fancy 404 image here.</p>"))
+  (layout (l/unescaped "<p class=\"header\">Insert fancy 404 image here.</p>")))
 
 (defn wrap-prod-middleware [routes]
   (if (System/getenv "LEIN_NO_DEV")
