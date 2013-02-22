@@ -107,30 +107,6 @@ div#main-container {
     width: 100%;
 }
 
-div#main-right {
-    max-width: 345px;
-    width: 27%;
-    padding-right: 10px;
-    background-color: transparent;
-    height: 507px;
-    border: 2px solid #2E2E2E;
-    float: right;
-    margin-top: 41px;
-    margin-right: 1px;
-    overflow: auto;
-}
-
-div#main-right ul li {
-    margin-bottom: 15px;
-    padding: 0 10px;
-    font-size: 15px;
-}
-
-div#main-right p {
-    font-size: 15px;
-    padding: 10px 20px 0 30px;
-}
-
 div#paste-container {
     background: transparent;
     overflow: hidden;
@@ -167,14 +143,6 @@ div#paste-container textarea {
     -webkit-box-sizing: border-box; /* Render properly on popular Android browsers. */
     border: border-box;
     font-family: 'DejaVu Sans Mono', 'Bitstream Vera Sans Mono', monospace;
-}
-
-#pastearea form {
-    margin-bottom: 0;
-}
-
-.clear {
-    clear: both;
 }
 
 div#paste-header input[type="submit"] {
