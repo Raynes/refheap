@@ -13,7 +13,7 @@
                  [me.raynes/conch "0.5.1"]
                  [commons-codec/commons-codec "1.6"]
                  [me.raynes/cegdown "0.1.0"]
-                 [me.raynes/laser "0.1.27"]]
+                 [me.raynes/laser "0.1.30"]]
   :plugins [[lein-ring "0.8.2"]]
   :ring {:handler refheap.server/handler})
 

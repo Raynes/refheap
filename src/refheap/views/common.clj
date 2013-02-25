@@ -25,13 +25,14 @@
 
 (defragment head (resource "refheap/views/templates/head.html")
   [title heads]
-  (l/id= "last-include") #(if heads [% heads] %)
+  (when heads
+    [(l/id= :last-include) (l/insert :right heads)])
   (l/element= :title) (l/content (or title "Refheap")))
 
 (defragment body (resource "refheap/views/templates/commonbody.html")
   [contents]
-  (l/id= "useri") (l/content (logged-in nil))
-  (l/id= "container") (l/content contents))
+  (l/id= :useri) (l/content (logged-in nil))
+  (l/id= :container) (l/content contents))
 
 (let [html (l/parse (resource "refheap/views/templates/common.html"))]
   (defn layout
@@ -45,7 +46,9 @@
 
 (defragment page-buttons (resource "refheap/views/templates/pagination.html")
   [base n per page]
-  (l/id= "newer") #(when-not (= 1 page)
-                     (assoc-in % [:attrs :href] (str base "?page=" (dec page))))
-  (l/id= "older") #(when-not (or (zero? n) (= page (paste/count-pages n per)))
-                     (assoc-in % [:attrs :href] (str base "?page=" (inc page)))))
+  (if-not (= 1 page)
+    [(l/id= :newer) (l/attr :href (str base "?page=" (dec page)))]
+    [(l/id= :newer) (l/remove)])
+  (if-not (or (zero? n) (= page (paste/count-pages n per)))
+    [(l/id= :older) (l/attr :href (str base "?page=" (inc page)))]
+    [(l/id= :older) (l/remove)]))

@@ -15,7 +15,8 @@
   [{:keys [paste-id date private]} paste]
   (l/element= :a) (comp (l/attr :href (str "/paste/" paste-id))
                         (l/content (str "Paste " paste-id)))
-  (l/element= :span) #(when private %)
+  (when-not private
+    [(l/element= :span) (l/remove)])
   (l/element= :div) #(update-in % [:content] conj (date-string date)))
 
 (defragment user-page-fragment (resource "refheap/views/templates/users.html")
@@ -24,7 +25,7 @@
    others (when-not you? {:private false})
    total (users/count-user-pastes user others)]
   (l/element= :img) (l/attr :src (avatar (:email user-data) 70))
-  (l/id= "header-data") (l/content [(if you?
+  (l/id= :header-data) (l/content [(if you?
                                       (str "You have ")
                                       (str user " has "))
                                     (str (users/count-user-pastes user {:private false}))
@@ -32,7 +33,7 @@
                                     (when you?
                                       (str "and " (users/count-user-pastes user {:private true}) " private "))
                                     "pastes."])
-  (l/id= "pastes") (l/content
+  (l/id= :pastes) (l/content
                     (concat (paste/render-paste-previews (users/user-pastes user page others) paste-header)
                             (page-buttons (str "/users/" user) total 10 page))))
 
