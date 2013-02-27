@@ -1,7 +1,7 @@
 (ns refheap.models.users
   (:refer-clojure :exclude [sort find])  
   (:require [monger.collection :as mc]
-            [monger.query :refer [with-collection find sort limit skip]])
+            [monger.query :refer [with-collection find sort paginate]])
   (:import org.bson.types.ObjectId))
 
 (defn get-user [user]
@@ -14,9 +14,7 @@
   (with-collection "pastes"
     (find (merge {:user (str (:_id (get-user user)))} others))
     (sort {:date -1})
-    (limit 10)
-    ;; TODO: switch to Monger's pagination support. MK.
-    (skip (* 10 (dec page)))))
+    (paginate :page page :per-page 10)))
 
 (defn count-user-pastes [user & [others]]
   (mc/count "pastes" (merge {:user (str (:_id (get-user user)))} others)))

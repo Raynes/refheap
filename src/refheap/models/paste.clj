@@ -8,7 +8,7 @@
             [refheap.dates :refer [parse-string]]
             [refheap.messages :refer [error]]
             [monger.collection :as mc]
-            [monger.query :refer [with-collection find sort limit skip]]
+            [monger.query :refer [with-collection find sort limit paginate]]
             [refheap.highlight :refer [lookup-lexer highlight]])
   (:import java.io.StringReader
            org.apache.commons.codec.digest.DigestUtils))
@@ -137,13 +137,10 @@
 (defn get-pastes
   "Get public pastes."
   [page]
-  ;; TODO: monger.query provides proper pagination support, I think it
-  ;; makes sense to switch to that later. MK.
   (with-collection "pastes"
     (find {:private false})
     (sort {:date -1})
-    (limit 20)
-    (skip (* 20 (dec page)))))
+    (paginate :page page :per-page 20)))
 
 (defn count-pastes
   "Count pastes."
