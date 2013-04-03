@@ -39,9 +39,8 @@
   (defn paste-page [lang & [old]]
     (layout
      (paste-page-fragment lang old)
-     (if old
-       (str "Editing paste " (:paste-id old))
-       "RefHeap")
+     (when old
+       (str "Editing paste " (:paste-id old)))
      head)))
 
 (def show-head (static "refheap/views/templates/showhead.html"))
