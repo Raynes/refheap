@@ -27,7 +27,7 @@
   [title heads]
   (when heads
     [(l/id= :last-include) (l/insert :right heads)])
-  (l/element= :title) (l/content (or title "Refheap")))
+  (l/element= :title) (l/content (or title "Refheap - The pastebin for your, you know, pastes")))
 
 (defragment body (resource "refheap/views/templates/commonbody.html")
   [contents]
