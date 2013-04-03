@@ -36,7 +36,7 @@
 
 (let [html (l/parse (resource "refheap/views/templates/common.html"))]
   (defn layout
-    ([content] (layout content "Refheap" nil))
+    ([content] (layout content nil nil))
     ([content title] (layout content title nil))
     ([content title heads]
        (l/document
