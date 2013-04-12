@@ -22,10 +22,10 @@
    "Lua" {:short "lua"
           :exts #{"lua"}}
    "Perl" {:short "perl"
-           :exts #{".pl"}}
+           :exts #{"pl"}}
    "Python Console" {:short "pycon"}
    "Python" {:short "python"
-             :exts #{".py"}}
+             :exts #{"py"}}
    "Python Traceback" {:short "pytb"}
    "Ruby Console" {:short "irb"}
    "Ruby" {:short "ruby"
