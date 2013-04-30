@@ -221,7 +221,9 @@
              :exts #{"ex" "exs"}}
    "Elixir Console" {:short "iex"}
    "Markdown" {:short "Markdown"
-               :exts #{"md" "markdown"}}})
+               :exts #{"md" "markdown"}}
+   "RPM Spec" {:short "spec"
+               :exts #{"spec"}}})
 
 (defn lookup-lexer
   "Selects a language."
