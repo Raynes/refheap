@@ -33,6 +33,7 @@
       "Java Properties" : ["properties"],
       "Python"          : ["python"],
       "R"               : ["r"],
+      "RPM Spec"        : null,
       "Ruby"            : ["ruby"],
       "Rust"            : ["rust"],
       "Scheme"          : ["scheme"],
@@ -71,17 +72,32 @@
       });
       editor.setOption("mode", modes[modes.length - 1].mode);
     });
-};
+  };
+
+  /** This is ugly and horrible. */
+  refheap.setNonStandardMode = function(lang, mode, relpath, editor) {
+    $.getScript("/js/codemirror/mode/" + relpath, function() {
+      refheap.loaded[lang] = true;
+      editor.setOption("mode", mode);
+    });
+  };
 
   /**
    * Setup the editor for the specified language.
    */
   refheap.setupLang = function ( lang, editor ) {
-    var modes = refheap.langs[lang];
-    if ( modes ) {
-      refheap.setMode(modes, editor);
-    } else {
-      editor.setOption( "mode", null );
+    switch (lang) {
+      case "RPM Spec":
+        refheap.setNonStandardMode(lang, "spec", "rpm/spec/spec.js", editor);
+        break;
+      default:
+        var modes = refheap.langs[lang];
+        if ( modes ) {
+          refheap.setMode(modes, editor);
+        } else {
+          editor.setOption( "mode", null );
+        }
+        break;
     }
   };
 
