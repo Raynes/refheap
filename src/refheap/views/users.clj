@@ -46,5 +46,5 @@
 
 (defroutes user-routes
   (GET "/users/:user" {{:keys [user page]} :params}
-    (user-page (.toLowerCase user) 
+    (user-page (.toLowerCase user)
                (proper-page (Long. (or page "1"))))))

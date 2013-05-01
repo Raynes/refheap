@@ -50,6 +50,6 @@
               (not-found (four-zero-four)))
       (api)
       (wrap-noir-flash)
-      (wrap-noir-session {:store (monger-store "sessions")}) 
+      (wrap-noir-session {:store (monger-store "sessions")})
       (wrap-strip-trailing-slash)
       (wrap-prod-middleware)))

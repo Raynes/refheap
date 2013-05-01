@@ -1,5 +1,5 @@
 (ns refheap.views.legal
-  (:require [compojure.core :refer [defroutes GET]] 
+  (:require [compojure.core :refer [defroutes GET]]
             [refheap.views.common :refer [static layout]]))
 
 (defroutes legal-routes
