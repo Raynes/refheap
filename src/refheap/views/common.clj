@@ -41,7 +41,7 @@
     ([content title heads]
        (l/document
         html
-        (l/element= :head) (l/content (head title heads)) 
+        (l/element= :head) (l/content (head title heads))
         (l/element= :body) (l/content (body content))))))
 
 (defragment page-buttons (resource "refheap/views/templates/pagination.html")

@@ -14,7 +14,7 @@
         name-count (count name)]
     ;; this stuff would be much cleaner with Validateur. MK.
     (cond
-     (or (> 3 name-count) (< 15 name-count)) 
+     (or (> 3 name-count) (< 15 name-count))
      (error "Username must be between 3 and 15 characters.")
      (not= name (first (re-seq #"\w+" name)))
      (error "Username cannot contain non-alphanumeric characters.")

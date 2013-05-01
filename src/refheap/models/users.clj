@@ -1,5 +1,5 @@
 (ns refheap.models.users
-  (:refer-clojure :exclude [sort find])  
+  (:refer-clojure :exclude [sort find])
   (:require [monger.collection :as mc]
             [monger.query :refer [with-collection find sort paginate]])
   (:import org.bson.types.ObjectId))

@@ -18,9 +18,9 @@
   [lang & [old]]
   (l/child-of (l/id= "language")
               (l/negate (l/attr? :selected)))
-  (fn [node] 
+  (fn [node]
     (for [lang (sort #(.compareToIgnoreCase % %2)
-                     (keys (dissoc lexers lang)))] 
+                     (keys (dissoc lexers lang)))]
       (l/on node (l/attr :value lang) (l/content lang))))
   (l/attr? :selected) (let [lang (or lang (:language old) "Clojure")]
                         (comp (l/attr :value lang)
@@ -33,7 +33,7 @@
   (when old
     [(l/element= :textarea) (l/content (:raw-contents old))])
   (l/id= :submit-button) (l/attr :value (if old "Save!" "Paste!")))
-  
+
 
 (let [head (static "refheap/views/templates/createhead.html")]
   (defn paste-page [lang & [old]]
@@ -63,13 +63,13 @@
     [(l/class= :private) (l/remove)])
   (l/id= :last) (l/content [(if fork "Forked by " "Pasted by ")
                             (if user
-                              (l/node :a :attrs {:href (str "/users/" paste-user)} :content paste-user) 
+                              (l/node :a :attrs {:href (str "/users/" paste-user)} :content paste-user)
                               paste-user)
                             (when fork
                               (l/unescaped
                                (str " from "
                                     (if-let [paste (:paste-id (paste/get-paste-by-id fork))]
-                                      (str "<a href=\"/paste/" paste "\">" paste "</a>") 
+                                      (str "<a href=\"/paste/" paste "\">" paste "</a>")
                                       "[deleted]"))))
                             " on "
                             (date-string date)])
@@ -106,7 +106,7 @@
           (l/class= :syntax) (l/insert :left header))))
 
 (defragment render-paste-previews (resource "refheap/views/templates/preview.html")
-  [pastes header-fn] 
+  [pastes header-fn]
   (l/class= :preview-header) #(for [paste pastes]
                                  (paste-preview % paste (header-fn paste))))
 
@@ -216,19 +216,19 @@
   (GET "/paste/:id/raw" {{:keys [id]} :params}
     (when-let [content (:raw-contents (paste/get-paste id))]
       (content-type "text/plain; charset=utf-8" content)))
-  
+
   (GET "/paste/:id/embed" {{:keys [id]} :params
                            {host "host"} :headers
                            scheme :scheme}
     (let [paste (paste/get-paste id)]
       (embed-page paste host scheme)))
-  
+
   (POST "/paste/:id/edit" {:keys [params]}
     (edit-paste params))
-  
+
   (POST "/paste/create" {:keys [params]}
     (create-paste params))
-  
+
   (GET "/paste/:id" {{:keys [id linenumbers]} :params
                      {host "host"} :headers
                      scheme :scheme}
@@ -236,7 +236,7 @@
       (if ext
         (embed-paste id host scheme linenumbers)
         (show-paste-page id))))
-  
+
   (GET "/pastes" [page]
     (all-pastes-page (paste/proper-page (Long. (or page "1"))))))
 
