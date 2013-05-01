@@ -43,22 +43,33 @@
       "YAML"            : ["yaml"],
       "HTML"            : ["css", "xml", "javascript", "htmlmixed"],
       "MySQL"           : ["mysql"],
-      "OCaml"           : ["ocaml"] };
+      "OCaml"           : ["ocaml"],
+      "RPM Spec"        : [{mode: "spec", path: "rpm/spec/spec"}]};
+
+  refheap.isString = function(obj) {
+    return toString.call(obj) == '[object String]';
+  };
+
+  refheap.normalizeMode = function(mode) {
+    if (refheap.isString(mode)) return {mode: mode, path: mode + '/' + mode};
+    else return mode;
+  };
 
   refheap.notLoaded = function(mode) {
     return !(mode in refheap.loaded);
   };
 
   refheap.setMode = function(modes, editor) {
-    var notLoaded = $.grep(modes, refheap.notLoaded),
+    var modes = $.map(modes, function(mode, index) { return refheap.normalizeMode(mode) }),
+        notLoaded = $.grep(modes, refheap.notLoaded),
         promises = $.map(notLoaded, function(mode, index) {
-          return $.getScript("/js/codemirror/mode/" + mode + "/" + mode + ".js");
+          return $.getScript("/js/codemirror/mode/" + mode.path + ".js");
         });
     return $.when.apply($, promises).done(function() {
       $.each(notLoaded, function(mode, i) {
         refheap.loaded[mode] = true;
       });
-      editor.setOption( "mode", modes[modes.length - 1]);
+      editor.setOption("mode", modes[modes.length - 1].mode);
     });
 };
 
