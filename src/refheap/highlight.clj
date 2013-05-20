@@ -189,8 +189,7 @@
    "VimL" {:short "vim"
            :exts #{"vim"}}
    "YAML" {:short "yaml"
-           :exts #{"yaml"
-                   "yml"}}
+           :exts #{"yaml" "yml"}}
    "ActionScript" {:short "as"
                    :exts #{"as"}}
    "CoffeeScript" {:short "coffeescript"
