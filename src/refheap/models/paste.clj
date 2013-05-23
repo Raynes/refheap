@@ -78,6 +78,7 @@
 (defn paste
   "Create a new paste."
   [language contents private user & [fork]]
+  (session/put! :last-lang language)
   (let [validated (validate contents)]
     (if-let [error (:error validated)]
       error
