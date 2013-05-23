@@ -22,7 +22,7 @@
     (for [lang (sort #(.compareToIgnoreCase % %2)
                      (keys (dissoc lexers lang)))]
       (l/on node (l/attr :value lang) (l/content lang))))
-  (l/attr? :selected) (let [lang (or lang (:language old) "Clojure")]
+  (l/attr? :selected) (let [lang (or lang (:language old) (session/get :last-lang) "Clojure")]
                         (comp (l/attr :value lang)
                               (l/content lang)))
   (l/element= :form) (l/attr :action (if old
