@@ -4,13 +4,12 @@
             [refheap.highlight :refer [lexers]]
             [refheap.utilities :refer [to-booleany escape-string]]
             [noir.session :as session]
-            [noir.response :refer [content-type]]
+            [noir.response :refer [redirect content-type]]
             [stencil.core :as stencil]
             [me.raynes.laser :refer [defragment] :as l]
             [clojure.java.io :refer [resource]]
             [compojure.core :refer [defroutes GET POST]]
             [refheap.views.common :refer [layout avatar page-buttons static]]
-            [noir.response :refer [redirect content-type]]
             [refheap.dates :refer [date-string]]
             [clojure.string :refer [split join]]))
 
