@@ -72,6 +72,10 @@
     (not (re-seq #"\S" (str contents))) {:error "Your paste cannot be empty."}
     :else {:contents contents}))
 
+(defn same-user? [user paste]
+  (or (and user (= (:id user) (:user paste)))
+      (some #{(:paste-id paste)} (session/get :anon-pastes))))
+
 (defn parse-date [date]
   (format/parse))
 
@@ -116,7 +120,7 @@
         error (:error validated)]
     (cond
       error error
-      (not (or (and user (= (:id user) (:user old))) (some #{(:paste-id old)} (session/get :anon-pastes)))) "You can only edit your own pastes!"
+      (not (same-user? user old)) "You can only edit your own pastes!"
       :else (let [{old-id :id random-id :random-id} old
                   paste (paste-map
                          old-id

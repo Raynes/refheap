@@ -155,10 +155,8 @@
   (layout (l/node :p :attrs {:class "error"} :content error) "You broke it."))
 
 (defn edit-paste-page [{:keys [id]}]
-  (let [user (session/get-in [:user :id])
-        anon-pastes (session/get :anon-pastes)
-        paste (paste/get-paste id)]
-    (when (or (and user (= (:user paste) user)) (some #{id} anon-pastes))
+  (let [paste (paste/get-paste id)]
+    (when (paste/same-user? (session/get :user) paste)
       (paste-page nil paste))))
 
 (defn fork-paste-page [{:keys [id]}]
