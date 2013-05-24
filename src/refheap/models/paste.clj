@@ -94,7 +94,10 @@
                     fork)]
         (if-let [error (:error paste)]
           error
-          (mc/insert-and-return "pastes" paste))))))
+          (do
+            (when-not user
+              (session/update-in! [:anon-pastes] conj (:paste-id paste)))
+            (mc/insert-and-return "pastes" paste)))))))
 
 (defn get-paste
   "Get a paste."
@@ -113,8 +116,7 @@
         error (:error validated)]
     (cond
       error error
-      (nil? user) "You must be logged in to edit pastes."
-      (not= (:id user) (:user old)) "You can only edit your own pastes!"
+      (not (or (and user (= (:id user) (:user old))) (some #{(:paste-id old)} (session/get :anon-pastes)))) "You can only edit your own pastes!"
       :else (let [{old-id :id random-id :random-id} old
                   paste (paste-map
                          old-id

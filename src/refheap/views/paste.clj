@@ -76,7 +76,7 @@
   (l/id= :embed) (l/attr :href (str "/paste/" id "/embed"))
   (l/id= :raw) (l/attr :href (str "/paste/" id "/raw"))
   (l/id= :fullscreen) (l/attr :href (str "/paste/" id "/fullscreen"))
-  (if (and user-id (= user user-id))
+  (if (or (and user-id (= user user-id)) (some #{id} (session/get :anon-pastes)))
     [(l/id= :owner) #(l/fragment (l/zip (:content %))
                                  (l/id= "editb") (l/attr :href (str "/paste/" id "/edit"))
                                  (l/id= "delete") (l/attr :href (str "/paste/" id "/delete")))]
@@ -155,10 +155,11 @@
   (layout (l/node :p :attrs {:class "error"} :content error) "You broke it."))
 
 (defn edit-paste-page [{:keys [id]}]
-    (when-let [user (:id (session/get :user))]
-      (let [paste (paste/get-paste id)]
-        (when (= (:user paste) user)
-          (paste-page nil paste)))))
+  (let [user (session/get-in [:user :id])
+        anon-pastes (session/get :anon-pastes)
+        paste (paste/get-paste id)]
+    (when (or (and user (= (:user paste) user)) (some #{id} anon-pastes))
+      (paste-page nil paste))))
 
 (defn fork-paste-page [{:keys [id]}]
   (let [user (:id (session/get :user))
@@ -172,10 +173,13 @@
         (redirect (str "/paste/" (:paste-id forked)))))))
 
 (defn delete-paste-page [{:keys [id]}]
-  (when-let [user (:user (paste/get-paste id))]
-    (when (= user (:id (session/get :user)))
+  (if-let [user (:user (paste/get-paste id))]
+    (when (= user (session/get-in [:user :id]))
       (paste/delete-paste id)
-      (redirect (str "/users/" (:username (session/get :user)))))))
+      (redirect (str "/users/" (:username (session/get :user)))))
+    (when (some #{id} (session/get :anon-pastes))
+      (paste/delete-paste id)
+      (redirect "/pastes"))))
 
 (defn edit-paste [{:keys [id paste language private]}]
   (let [paste (paste/update-paste
