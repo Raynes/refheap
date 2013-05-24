@@ -14,6 +14,9 @@
             [refheap.dates :refer [date-string]]
             [clojure.string :refer [split join]]))
 
+(defn pluralize [n s]
+  (str n " " s (when-not (= n 1) "s")))
+
 (defragment paste-page-fragment (resource "refheap/views/templates/paste.html")
   [lang & [old]]
   (l/child-of (l/id= "language")
@@ -57,8 +60,7 @@
   [{:keys [lines private user contents language date fork] :as paste} id paste-user]
   [user-id (:id (session/get :user))]
   (l/id= :language) (l/content language)
-  (l/element= :abbr) (comp #(update-in % [:attrs :title] str lines)
-                           (l/content (str lines " L")))
+  (l/id= :lines) (l/content (pluralize lines "line"))
   (when-not private
     [(l/class= :private) (l/remove)])
   (l/id= :last) (l/content [(if fork "Forked by " "Pasted by ")
