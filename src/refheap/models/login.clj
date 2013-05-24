@@ -4,8 +4,13 @@
             [noir.session :as session]
             [cheshire.core :as json]
             [refheap.messages :refer [error]]
-            [monger.collection :as mc])
+            [monger.collection :as mc]
+            [monger.operators :refer [$set]])
   (:import org.bson.types.ObjectId))
+
+(defn transfer-anon-pastes [user]
+  (doseq [id (session/get! :anon-pastes)]
+    (mc/update "pastes" {:paste-id id} {$set {:user user}} :upsert false :multi false)))
 
 (defn create-user [email name]
   (let [name (.toLowerCase name)
@@ -20,11 +25,14 @@
      (error "Username cannot contain non-alphanumeric characters.")
      (mc/find-one-as-map "users" {:username name})
      (error "Username already exists.")
-     :else (let [user (mc/insert-and-return "users" qmap)]
-             (session/put! :user (assoc qmap :id (str (:_id user))))))))
+     :else (let [user (mc/insert-and-return "users" qmap)
+                 id (str (:_id user))]
+             (transfer-anon-pastes id)
+             (session/put! :user (assoc qmap :id id))))))
 
 (defn user-exists [email]
   (when-let [{:keys [username _id]} (mc/find-one-as-map "users" {:email email})]
+    (transfer-anon-pastes (str _id))
     (session/put! :user {:email email
                          :username username
                          :id (str _id)})
