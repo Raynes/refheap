@@ -10,7 +10,8 @@
 
 (defn transfer-anon-pastes [user]
   (doseq [id (session/get! :anon-pastes)]
-    (mc/update "pastes" {:paste-id id} {$set {:user user}} :upsert false :multi false)))
+    (mc/update "pastes" {:paste-id id} {$set {:user user}}
+               :upsert false :multi false)))
 
 (defn create-user [email name]
   (let [name (.toLowerCase name)
