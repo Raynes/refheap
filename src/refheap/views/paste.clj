@@ -2,7 +2,7 @@
   (:require [refheap.models.paste :as paste]
             [refheap.models.users :as users]
             [refheap.highlight :refer [lexers]]
-            [refheap.utilities :refer [to-booleany escape-string]]
+            [refheap.utilities :refer [to-booleany escape-string pluralize]]
             [noir.session :as session]
             [noir.response :refer [redirect content-type]]
             [stencil.core :as stencil]
@@ -12,9 +12,6 @@
             [refheap.views.common :refer [layout avatar page-buttons static]]
             [refheap.dates :refer [date-string]]
             [clojure.string :refer [split join]]))
-
-(defn pluralize [n s]
-  (str n " " s (when-not (= n 1) "s")))
 
 (defragment paste-page-fragment (resource "refheap/views/templates/paste.html")
   [lang & [old]]

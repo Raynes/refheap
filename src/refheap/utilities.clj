@@ -40,3 +40,6 @@
              (f acc)))
          (apply start args)
          tail)))))
+
+(defn pluralize [n s]
+  (str n " " s (when-not (= n 1) "s")))
