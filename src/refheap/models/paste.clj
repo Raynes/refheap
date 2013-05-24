@@ -72,6 +72,10 @@
     (not (re-seq #"\S" (str contents))) {:error "Your paste cannot be empty."}
     :else {:contents contents}))
 
+(defn same-user? [user paste]
+  (or (and user (= (:id user) (:user paste)))
+      (some #{(:paste-id paste)} (session/get :anon-pastes))))
+
 (defn parse-date [date]
   (format/parse))
 
@@ -94,7 +98,10 @@
                     fork)]
         (if-let [error (:error paste)]
           error
-          (mc/insert-and-return "pastes" paste))))))
+          (do
+            (when-not user
+              (session/update-in! [:anon-pastes] conj (:paste-id paste)))
+            (mc/insert-and-return "pastes" paste)))))))
 
 (defn get-paste
   "Get a paste."
@@ -113,8 +120,7 @@
         error (:error validated)]
     (cond
       error error
-      (nil? user) "You must be logged in to edit pastes."
-      (not= (:id user) (:user old)) "You can only edit your own pastes!"
+      (not (same-user? user old)) "You can only edit your own pastes!"
       :else (let [{old-id :id random-id :random-id} old
                   paste (paste-map
                          old-id
