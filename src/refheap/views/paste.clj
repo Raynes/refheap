@@ -51,16 +51,17 @@
 (let [head (static "refheap/views/templates/head.html")
       html (l/parse (resource "refheap/views/templates/fullscreen.html"))]
   (defn fullscreen-paste [id]
-    (when-let [contents (:contents (paste/get-paste id))]
+    (when-let [contents (:contents (paste/view-paste id))]
       (l/document html
                   (l/element= :head) (l/content [head show-head])
                   (l/class= :syntax) (l/content (l/unescaped contents))))))
 
 (defragment show-paste-page-fragment (resource "refheap/views/templates/pasted.html")
-  [{:keys [lines private user contents language date fork] :as paste} id paste-user]
+  [{:keys [lines private user contents language date fork views] :as paste} id paste-user]
   [user-id (:id (session/get :user))]
   (l/id= :language) (l/content language)
   (l/id= :lines) (l/content (pluralize lines "line"))
+  (l/id= :views) (l/content (pluralize views "view"))
   (when-not private
     [(l/class= :private) (l/remove)])
   (l/id= :last) (l/content [(if fork "Forked by " "Pasted by ")
@@ -89,7 +90,7 @@
   (l/id= :paste) (l/content (l/unescaped contents)))
 
 (defn show-paste-page [id]
-  (when-let [paste (paste/get-paste id)]
+  (when-let [paste (paste/view-paste id)]
     (let [paste-user (if-let [user (:user paste)]
                        (:username (users/get-user-by-id user))
                        "anonymous")]

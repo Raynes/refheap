@@ -9,6 +9,7 @@
             [refheap.messages :refer [error]]
             [monger.collection :as mc]
             [monger.query :refer [with-collection find sort limit paginate]]
+            [monger.operators :refer [$inc]]
             [refheap.highlight :refer [lookup-lexer highlight]])
   (:import java.io.StringReader
            org.apache.commons.codec.digest.DigestUtils))
@@ -43,7 +44,7 @@
 ;; as :random-id. If the paste is not private, it is the same as :id. :id is just
 ;; the number of the paste in the database. random-id is an id generated with
 ;; generate-id.
-(defn paste-map [id random-id user language contents date private fork]
+(defn paste-map [id random-id user language contents date private fork views]
   (let [[name {:keys [short]}] (lookup-lexer language)
         private (boolean private)
         random-id (or random-id (generate-id))
@@ -63,7 +64,8 @@
                   lines
                   (inc lines)))
        :contents highlighted
-       :fork fork}
+       :fork fork
+       :views views}
       {:error (:error pygmentized)})))
 
 (defn validate [contents]
@@ -96,7 +98,8 @@
                     (:contents validated)
                     (format/unparse (format/formatters :date-time) (time/now))
                     private
-                    fork)]
+                    fork
+                    0)]
         (if-let [error (:error paste)]
           error
           (do
@@ -108,6 +111,17 @@
   "Get a paste."
   [id]
   (mc/find-one-as-map "pastes" {:paste-id id}))
+
+(defn view-paste
+  "Get a paste and increment its view count."
+  [id]
+  (if (some #{id} (session/get :views))
+    (get-paste id)
+    (do
+      (session/update-in! [:views] conj id)
+      (mc/find-and-modify "pastes" {:paste-id id}
+                          {$inc {:views 1}}
+                          :return-new true))))
 
 (defn get-paste-by-id
   "Get a paste by its :id key (which is the same regardless of being public or private."
@@ -131,7 +145,8 @@
                          (:contents validated)
                          (:date old)
                          private
-                         (:fork old))]
+                         (:fork old)
+                         (:views old))]
               (if-let [error (:error paste)]
                 error
                 (mc/update "pastes" {:id old-id} paste :upsert false :multi false))
