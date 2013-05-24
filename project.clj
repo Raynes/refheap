@@ -4,7 +4,7 @@
   :dependencies [[org.clojure/clojure "1.5.0-RC16"]
                  [stencil "0.2.0"]
                  [compojure "1.1.5"]
-                 [lib-noir "0.3.8"]
+                 [lib-noir "0.5.6"]
                  [com.novemberain/monger "1.5.0-beta1"]
                  [clj-config "0.2.0"]
                  [clj-http "0.6.4" :exclusions [org.jsoup/jsoup]]

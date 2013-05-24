@@ -54,7 +54,7 @@
                   (l/class= :syntax) (l/content (l/unescaped contents))))))
 
 (defragment show-paste-page-fragment (resource "refheap/views/templates/pasted.html")
-  [{:keys [lines private user contents language date fork]} id paste-user]
+  [{:keys [lines private user contents language date fork] :as paste} id paste-user]
   [user-id (:id (session/get :user))]
   (l/id= :language) (l/content language)
   (l/element= :abbr) (comp #(update-in % [:attrs :title] str lines)
@@ -76,7 +76,7 @@
   (l/id= :embed) (l/attr :href (str "/paste/" id "/embed"))
   (l/id= :raw) (l/attr :href (str "/paste/" id "/raw"))
   (l/id= :fullscreen) (l/attr :href (str "/paste/" id "/fullscreen"))
-  (if (and user-id (= user user-id))
+  (if (paste/same-user? {:id user-id} paste)
     [(l/id= :owner) #(l/fragment (l/zip (:content %))
                                  (l/id= "editb") (l/attr :href (str "/paste/" id "/edit"))
                                  (l/id= "delete") (l/attr :href (str "/paste/" id "/delete")))]
@@ -155,10 +155,9 @@
   (layout (l/node :p :attrs {:class "error"} :content error) "You broke it."))
 
 (defn edit-paste-page [{:keys [id]}]
-    (when-let [user (:id (session/get :user))]
-      (let [paste (paste/get-paste id)]
-        (when (= (:user paste) user)
-          (paste-page nil paste)))))
+  (let [paste (paste/get-paste id)]
+    (when (paste/same-user? (session/get :user) paste)
+      (paste-page nil paste))))
 
 (defn fork-paste-page [{:keys [id]}]
   (let [user (:id (session/get :user))
@@ -172,10 +171,13 @@
         (redirect (str "/paste/" (:paste-id forked)))))))
 
 (defn delete-paste-page [{:keys [id]}]
-  (when-let [user (:user (paste/get-paste id))]
-    (when (= user (:id (session/get :user)))
+  (if-let [user (:user (paste/get-paste id))]
+    (when (= user (session/get-in [:user :id]))
       (paste/delete-paste id)
-      (redirect (str "/users/" (:username (session/get :user)))))))
+      (redirect (str "/users/" (:username (session/get :user)))))
+    (when (some #{id} (session/get :anon-pastes))
+      (paste/delete-paste id)
+      (redirect "/pastes"))))
 
 (defn edit-paste [{:keys [id paste language private]}]
   (let [paste (paste/update-paste
