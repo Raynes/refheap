@@ -54,7 +54,7 @@
                   (l/class= :syntax) (l/content (l/unescaped contents))))))
 
 (defragment show-paste-page-fragment (resource "refheap/views/templates/pasted.html")
-  [{:keys [lines private user contents language date fork]} id paste-user]
+  [{:keys [lines private user contents language date fork] :as paste} id paste-user]
   [user-id (:id (session/get :user))]
   (l/id= :language) (l/content language)
   (l/element= :abbr) (comp #(update-in % [:attrs :title] str lines)
@@ -76,7 +76,7 @@
   (l/id= :embed) (l/attr :href (str "/paste/" id "/embed"))
   (l/id= :raw) (l/attr :href (str "/paste/" id "/raw"))
   (l/id= :fullscreen) (l/attr :href (str "/paste/" id "/fullscreen"))
-  (if (or (and user-id (= user user-id)) (some #{id} (session/get :anon-pastes)))
+  (if (paste/same-user? {:id user-id} paste)
     [(l/id= :owner) #(l/fragment (l/zip (:content %))
                                  (l/id= "editb") (l/attr :href (str "/paste/" id "/edit"))
                                  (l/id= "delete") (l/attr :href (str "/paste/" id "/delete")))]
