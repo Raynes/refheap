@@ -115,13 +115,16 @@
 (defn view-paste
   "Get a paste and increment its view count."
   [id]
-  (if (some #{id} (session/get :views))
-    (get-paste id)
-    (do
-      (session/update-in! [:views] conj id)
-      (mc/find-and-modify "pastes" {:paste-id id}
-                          {$inc {:views 1}}
-                          :return-new true))))
+  (let [views (session/get :views)]
+    (when (>= (count views) 5000)
+      (session/remove! :views))
+    (if (some #{id} views)
+      (get-paste id)
+      (do
+        (session/update-in! [:views] conj id)
+        (mc/find-and-modify "pastes" {:paste-id id}
+                            {$inc {:views 1}}
+                            :return-new true)))))
 
 (defn get-paste-by-id
   "Get a paste by its :id key (which is the same regardless of being public or private."
