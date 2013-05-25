@@ -120,11 +120,11 @@
       (session/remove! :views))
     (if (some #{id} views)
       (get-paste id)
-      (do
+      (when-let [paste (mc/find-and-modify "pastes" {:paste-id id}
+                                           {$inc {:views 1}}
+                                           :return-new true)]
         (session/update-in! [:views] conj id)
-        (mc/find-and-modify "pastes" {:paste-id id}
-                            {$inc {:views 1}}
-                            :return-new true)))))
+        paste))))
 
 (defn get-paste-by-id
   "Get a paste by its :id key (which is the same regardless of being public or private."
