@@ -196,7 +196,7 @@
       (fail paste))))
 
 (defroutes paste-routes
-  (GET "/" {{:keys [lang]} :params}
+  (GET "/" [lang]
     (paste-page lang))
 
   (GET "/pastes" [page]
@@ -222,8 +222,8 @@
       (content-type "text/plain; charset=utf-8" content)))
 
   (GET "/:id/embed" {{:keys [id]} :params
-                           {host "host"} :headers
-                           scheme :scheme}
+                     {host "host"} :headers
+                     scheme :scheme}
     (let [paste (paste/get-paste id)]
       (embed-page paste host scheme)))
 
@@ -234,12 +234,14 @@
     (create-paste params))
 
   (GET "/:id" {{:keys [id linenumbers]} :params
-                     {host "host"} :headers
-                     scheme :scheme}
+               {host "host"} :headers
+               scheme :scheme}
     (let [[id ext] (split id #"\.")]
       (if ext
         (embed-paste id host scheme linenumbers)
         (show-paste-page id))))
+
+  ; Redirect legacy /paste/ prefixed URLs
 
   (GET ["/paste/:uri", :uri #".*"] {{:keys [uri]} :params
                                     query-string :query-string}
