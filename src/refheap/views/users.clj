@@ -13,7 +13,7 @@
 (defragment paste-header (resource "refheap/views/templates/userheader.html")
   [paste]
   [{:keys [paste-id date private]} paste]
-  (l/element= :a) (comp (l/attr :href (str "/paste/" paste-id))
+  (l/element= :a) (comp (l/attr :href (str "/" paste-id))
                         (l/content (str "Paste " paste-id)))
   (when-not private
     [(l/element= :span) (l/remove)])

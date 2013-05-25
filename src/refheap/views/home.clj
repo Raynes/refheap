@@ -3,7 +3,6 @@
             [compojure.core :refer [defroutes GET]]))
 
 (defroutes home-routes
-  (GET "/"     [] (redirect "/paste"))
   (GET "/gh"   [] (redirect "https://github.com/Raynes/refheap"))
   (GET "/ghi"  [] (redirect "https://github.com/Raynes/refheap/issues"))
   (GET "/wiki" [] (redirect "https://github.com/Raynes/refheap/wiki")))
