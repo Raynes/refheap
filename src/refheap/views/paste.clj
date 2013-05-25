@@ -25,8 +25,8 @@
                         (comp (l/attr :value lang)
                               (l/content lang)))
   (l/element= :form) (l/attr :action (if old
-                                       (str "/paste/" (:paste-id old) "/edit")
-                                       "/paste/create"))
+                                       (str "/" (:paste-id old) "/edit")
+                                       "/create"))
   (when (:private old)
     [(l/attr= :name :private) (l/attr :checked "")])
   (when old
@@ -68,20 +68,20 @@
                               (l/unescaped
                                (str " from "
                                     (if-let [paste (:paste-id (paste/get-paste-by-id fork))]
-                                      (str "<a href=\"/paste/" paste "\">" paste "</a>")
+                                      (str "<a href=\"/" paste "\">" paste "</a>")
                                       "[deleted]"))))
                             " on "
                             (date-string date)])
-  (l/id= :embed) (l/attr :href (str "/paste/" id "/embed"))
-  (l/id= :raw) (l/attr :href (str "/paste/" id "/raw"))
-  (l/id= :fullscreen) (l/attr :href (str "/paste/" id "/fullscreen"))
+  (l/id= :embed) (l/attr :href (str "/" id "/embed"))
+  (l/id= :raw) (l/attr :href (str "/" id "/raw"))
+  (l/id= :fullscreen) (l/attr :href (str "/" id "/fullscreen"))
   (if (paste/same-user? {:id user-id} paste)
     [(l/id= :owner) #(l/fragment (l/zip (:content %))
-                                 (l/id= "editb") (l/attr :href (str "/paste/" id "/edit"))
-                                 (l/id= "delete") (l/attr :href (str "/paste/" id "/delete")))]
+                                 (l/id= "editb") (l/attr :href (str "/" id "/edit"))
+                                 (l/id= "delete") (l/attr :href (str "/" id "/delete")))]
     [(l/id= :owner) (l/remove)])
   (if (and user-id (not= user user-id))
-    [(l/id= :fork) (l/attr :href (str "/paste/" id "/fork"))]
+    [(l/id= :fork) (l/attr :href (str "/" id "/fork"))]
     [(l/id= :fork) (l/remove)])
   (l/id= :paste) (l/content (l/unescaped contents)))
 
@@ -100,7 +100,7 @@
     (l/at node
           (l/class= :more) (l/insert :left (l/unescaped summary))
           (if (> lines 5)
-            [(l/class= :more) (l/attr :href (str "/paste/" paste-id))]
+            [(l/class= :more) (l/attr :href (str "/" paste-id))]
             [(l/class= :more) (l/remove)])
           (l/class= :syntax) (l/insert :left header))))
 
@@ -111,7 +111,7 @@
 
 (defragment embed-page-fragment (resource "refheap/views/templates/embed.html")
   [id host scheme]
-  (l/id= :script) (l/content (str "<script src=\"" (name scheme) "://" host "/paste/" id ".js\"></script>")))
+  (l/id= :script) (l/content (str "<script src=\"" (name scheme) "://" host "/" id ".js\"></script>")))
 
 (defn embed-page [paste host scheme]
   (let [id (:paste-id paste)]
@@ -131,7 +131,7 @@
 (defragment paste-header (resource "refheap/views/templates/allheader.html")
   [paste]
   [{:keys [paste-id date user]} paste]
-  (l/id= :id) (comp (l/attr :href (str "/paste/" paste-id))
+  (l/id= :id) (comp (l/attr :href (str "/" paste-id))
                      (l/content (str "Paste " paste-id)))
   (l/class= :right) (l/content [(if-let [user (and user (:username (users/get-user-by-id user)))]
                                   (l/node :a :attrs {:href (str "/users/" user)} :content user)
@@ -153,12 +153,12 @@
 (defn fail [error]
   (layout (l/node :p :attrs {:class "error"} :content error) "You broke it."))
 
-(defn edit-paste-page [{:keys [id]}]
+(defn edit-paste-page [id]
   (let [paste (paste/get-paste id)]
     (when (paste/same-user? (session/get :user) paste)
       (paste-page nil paste))))
 
-(defn fork-paste-page [{:keys [id]}]
+(defn fork-paste-page [id]
   (let [user (:id (session/get :user))
         paste (paste/get-paste id)]
     (when (and user paste (not= (:user paste) user))
@@ -167,9 +167,9 @@
                                 (:private paste)
                                 (session/get :user)
                                 (:id paste))]
-        (redirect (str "/paste/" (:paste-id forked)))))))
+        (redirect (str "/" (:paste-id forked)))))))
 
-(defn delete-paste-page [{:keys [id]}]
+(defn delete-paste-page [id]
   (if-let [user (:user (paste/get-paste id))]
     (when (= user (session/get-in [:user :id]))
       (paste/delete-paste id)
@@ -186,51 +186,54 @@
                private
                (session/get :user))]
     (if (map? paste)
-      (redirect (str "/paste/" (:paste-id paste)))
+      (redirect (str "/" (:paste-id paste)))
       (fail paste))))
 
 (defn create-paste [{:keys [paste language private]}]
   (let [paste (paste/paste language paste private (session/get :user))]
     (if (map? paste)
-      (redirect (str "/paste/" (:paste-id paste)))
+      (redirect (str "/" (:paste-id paste)))
       (fail paste))))
 
 (defroutes paste-routes
-  (GET "/paste/:id/fullscreen" {{:keys [id]} :params}
-    (fullscreen-paste id))
-
-  (GET "/paste/:id/framed" {{:keys [id]} :params}
-    (fullscreen-paste id))
-
-  (GET "/paste" {{:keys [lang]} :params}
+  (GET "/" {{:keys [lang]} :params}
     (paste-page lang))
 
-  (GET "/paste/:id/edit" {:keys [params]}
-    (edit-paste-page params))
+  (GET "/pastes" [page]
+    (all-pastes-page (paste/proper-page (Long. (or page "1")))))
 
-  (GET "/paste/:id/fork" {:keys [params]}
-    (fork-paste-page params))
+  (GET "/:id/fullscreen" [id]
+    (fullscreen-paste id))
 
-  (GET "/paste/:id/delete" {:keys [params]}
-    (delete-paste-page params))
+  (GET "/:id/framed" [id]
+    (fullscreen-paste id))
 
-  (GET "/paste/:id/raw" {{:keys [id]} :params}
+  (GET "/:id/edit" [id]
+    (edit-paste-page id))
+
+  (GET "/:id/fork" [id]
+    (fork-paste-page id))
+
+  (GET "/:id/delete" [id]
+    (delete-paste-page id))
+
+  (GET "/:id/raw" [id]
     (when-let [content (:raw-contents (paste/get-paste id))]
       (content-type "text/plain; charset=utf-8" content)))
 
-  (GET "/paste/:id/embed" {{:keys [id]} :params
+  (GET "/:id/embed" {{:keys [id]} :params
                            {host "host"} :headers
                            scheme :scheme}
     (let [paste (paste/get-paste id)]
       (embed-page paste host scheme)))
 
-  (POST "/paste/:id/edit" {:keys [params]}
+  (POST "/:id/edit" {:keys [params]}
     (edit-paste params))
 
-  (POST "/paste/create" {:keys [params]}
+  (POST "/create" {:keys [params]}
     (create-paste params))
 
-  (GET "/paste/:id" {{:keys [id linenumbers]} :params
+  (GET "/:id" {{:keys [id linenumbers]} :params
                      {host "host"} :headers
                      scheme :scheme}
     (let [[id ext] (split id #"\.")]
@@ -238,6 +241,9 @@
         (embed-paste id host scheme linenumbers)
         (show-paste-page id))))
 
-  (GET "/pastes" [page]
-    (all-pastes-page (paste/proper-page (Long. (or page "1"))))))
+  (GET ["/paste/:uri", :uri #".*"] {{:keys [uri]} :params
+                                    query-string :query-string}
+    (redirect (apply str "/" uri (when query-string ["?" query-string]))))
 
+  (GET "/paste" {:keys [query-string]}
+    (redirect (if query-string (str "/?" query-string) "/"))))
