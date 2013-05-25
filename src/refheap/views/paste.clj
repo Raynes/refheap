@@ -54,10 +54,15 @@
 
 (defragment show-paste-page-fragment (resource "refheap/views/templates/pasted.html")
   [{:keys [lines private user contents language date fork views] :as paste} id paste-user]
-  [user-id (:id (session/get :user))]
+  [user-id (:id (session/get :user))
+   forks (paste/count-forks paste)]
   (l/id= :language) (l/content language)
   (l/id= :lines) (l/content (pluralize lines "line"))
   (l/id= :views) (l/content (pluralize views "view"))
+  (l/id= :forks) (if (pos? forks)
+                   (l/content (l/node :a :attrs {:href (str "/" id "/forks")}
+                                      :content (pluralize forks "fork")))
+                   (l/remove))
   (when-not private
     [(l/class= :private) (l/remove)])
   (l/id= :last) (l/content [(if fork "Forked by " "Pasted by ")
@@ -150,6 +155,18 @@
        "All pastes"
        show-head))))
 
+(defn forks-page [id page]
+  (let [paste (paste/get-paste id)
+        fork-count (paste/count-forks paste)]
+    (if (> page (paste/count-pages fork-count 20))
+      (redirect (str "/" id))
+      (layout
+        (l/node :div :attrs {:class "clearfix"}
+                :content (concat (render-paste-previews (paste/get-forks paste page) paste-header)
+                                 (page-buttons (str "/" id "/forks") fork-count 20 page)))
+        (str "Forks of paste: " id)
+        show-head))))
+
 (defn fail [error]
   (layout (l/node :p :attrs {:class "error"} :content error) "You broke it."))
 
@@ -201,6 +218,9 @@
 
   (GET "/pastes" [page]
     (all-pastes-page (paste/proper-page (Long. (or page "1")))))
+
+  (GET "/:id/forks" [id page]
+    (forks-page id (paste/proper-page (Long. (or page "1")))))
 
   (GET "/:id/fullscreen" [id]
     (fullscreen-paste id))
