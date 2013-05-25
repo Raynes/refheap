@@ -175,6 +175,19 @@
                        {:private private?}
                        {})))
 
+(defn get-forks [paste page]
+  "Get forks of a paste."
+  (with-collection "pastes"
+    (find {:fork (:id paste)
+           :private false})
+    (sort {:date -1})
+    (paginate :page page :per-page 20)))
+
+(defn count-forks [paste]
+  "Count forks of a paste."
+  (mc/count "pastes" {:fork (:id paste)
+                      :private false}))
+
 (defn count-pages [n per]
   (long (Math/ceil (/ n per))))
 
