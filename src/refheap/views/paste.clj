@@ -132,7 +132,7 @@
         {:id id
          :content (escape-string (:contents paste))
          :url (str (name scheme) "://" host "/css/embed.css")
-         :nolinenos (and lines? (not (to-booleany lines?)))}))))
+         :nolinenos (and lines? (not (to-booleany lines?)) {})}))))
 
 (defragment paste-header (resource "refheap/views/templates/allheader.html")
   [paste]
