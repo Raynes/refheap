@@ -124,14 +124,15 @@
             (str "Embedding paste " id))))
 
 (defn embed-paste [id host scheme lines?]
-  (content-type
-   "text/javascript"
-   (stencil/render-file
-    "refheap/views/templates/embedjs"
-    {:id id
-     :content (escape-string (:contents (paste/get-paste id)))
-     :url (str (name scheme) "://" host "/css/embed.css")
-     :nolinenos (and lines? (not (to-booleany lines?)))})))
+  (when-let [paste (paste/get-paste id)]
+    (content-type
+      "text/javascript"
+      (stencil/render-file
+        "refheap/views/templates/embedjs"
+        {:id id
+         :content (escape-string (:contents paste))
+         :url (str (name scheme) "://" host "/css/embed.css")
+         :nolinenos (and lines? (not (to-booleany lines?)))}))))
 
 (defragment paste-header (resource "refheap/views/templates/allheader.html")
   [paste]
@@ -247,19 +248,19 @@
     (let [paste (paste/get-paste id)]
       (embed-page paste host scheme)))
 
+  (GET "/:id.js" {{:keys [id linenumbers]} :params
+                  {host "host"} :headers
+                  scheme :scheme}
+    (embed-paste id host scheme linenumbers))
+
+  (GET "/:id" [id]
+    (show-paste-page id))
+
   (POST "/:id/edit" {:keys [params]}
     (edit-paste params))
 
   (POST "/create" {:keys [params]}
     (create-paste params))
-
-  (GET "/:id" {{:keys [id linenumbers]} :params
-               {host "host"} :headers
-               scheme :scheme}
-    (let [[id ext] (split id #"\.")]
-      (if ext
-        (embed-paste id host scheme linenumbers)
-        (show-paste-page id))))
 
   ; Redirect legacy /paste/ prefixed URLs
 
