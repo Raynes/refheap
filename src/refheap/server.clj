@@ -17,6 +17,7 @@
 (mc/ensure-index "pastes" {:private 1})
 (mc/ensure-index "pastes" {:id 1})
 (mc/ensure-index "pastes" {:paste-id 1})
+(mc/ensure-index "pastes" {:fork 1})
 
 ;; View loading has to be done after mongo is available.
 (require '[refheap.views.common :refer [layout]]
