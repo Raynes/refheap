@@ -80,7 +80,7 @@
   (l/id= :embed) (l/attr :href (str "/" id "/embed"))
   (l/id= :raw) (l/attr :href (str "/" id "/raw"))
   (l/id= :fullscreen) (l/attr :href (str "/" id "/fullscreen"))
-  (if (paste/same-user? {:id user-id} paste)
+  (if (paste/same-user? (and user-id {:id user-id}) paste)
     [(l/id= :owner) #(l/fragment (l/zip (:content %))
                                  (l/id= "editb") (l/attr :href (str "/" id "/edit"))
                                  (l/id= "delete") (l/attr :href (str "/" id "/delete")))]
