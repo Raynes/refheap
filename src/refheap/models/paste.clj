@@ -152,7 +152,7 @@
                          (:views old))
                   old-version (-> old
                                   (dissoc :history)
-                                  (assoc :version (-> old :history last :version (or 0) inc)))]
+                                  (assoc :version (-> old :history count inc)))]
               (if-let [error (:error paste)]
                 error
                 (mc/update "pastes" {:id old-id} {$set paste, $push {:history old-version}}
