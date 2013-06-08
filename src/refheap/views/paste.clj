@@ -178,6 +178,25 @@
         (str "Forks of paste: " id)
         show-head))))
 
+(defragment version-header (resource "refheap/views/templates/allheader.html")
+  [paste]
+  [{:keys [version date]} paste]
+  (l/id= :id) (comp (l/attr :href (paste-url paste))
+                    (l/content (str "Version " version)))
+  (l/class= :right) (l/content (date-string date)))
+
+(defn history-page [id page]
+  (let [paste (paste/get-paste id)
+        history-count (paste/count-history paste)]
+    (if (> page (paste/count-pages history-count 20))
+      (redirect (paste-url paste))
+      (layout
+        (l/node :div :attrs {:class "clearfix"}
+                :content (concat (render-paste-previews (paste/get-history paste page) version-header)
+                                 (page-buttons (paste-url paste "/history") history-count 20 page)))
+        (str "History of paste: " id)
+        show-head))))
+
 (defn fail [error]
   (layout (l/node :p :attrs {:class "error"} :content error) "You broke it."))
 
@@ -232,6 +251,9 @@
 
   (GET "/:id/forks" [id page]
     (forks-page id (paste/proper-page (safe-parse-long page 1))))
+
+  (GET "/:id/history" [id page]
+    (history-page id (paste/proper-page (safe-parse-long page 1))))
 
   (GET "/:id/fullscreen" [id]
     (fullscreen-paste id))
