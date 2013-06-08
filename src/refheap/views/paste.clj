@@ -61,11 +61,14 @@
   [{:keys [lines private user contents language date fork views] :as paste} paste-user]
   [user-id (:id (session/get :user))
    forks (paste/count-forks paste)
-   history (paste/count-history paste)]
+   history (paste/count-history paste)
+   current? (not (:version paste))]
   (l/id= :language) (l/content language)
   (l/id= :lines) (l/content (pluralize lines "line"))
-  (l/id= :views) (l/content (pluralize views "view"))
-  (l/id= :forks) (if (pos? forks)
+  (l/id= :views) (if current? 
+                   (l/content (pluralize views "view"))
+                   (l/remove))
+  (l/id= :forks) (if (and current? (pos? forks))
                    (l/content (l/node :a :attrs {:href (paste-url paste "/forks")}
                                       :content (pluralize forks "fork")))
                    (l/remove))
@@ -87,10 +90,12 @@
                                       "[deleted]"))))
                             " on "
                             (date-string date)])
-  (l/id= :embed) (l/attr :href (paste-url paste "/embed"))
+  (l/id= :embed) (if current?
+                   (l/attr :href (paste-url paste "/embed"))
+                   (l/remove))
   (l/id= :raw) (l/attr :href (paste-url paste "/raw"))
   (l/id= :fullscreen) (l/attr :href (paste-url paste "/fullscreen"))
-  (if (paste/same-user? (and user-id {:id user-id}) paste)
+  (if (and current? (paste/same-user? (and user-id {:id user-id}) paste))
     [(l/id= :owner) #(l/fragment (l/zip (:content %))
                                  (l/id= "editb") (l/attr :href (paste-url paste "/edit"))
                                  (l/id= "delete") (l/attr :href (paste-url paste "/delete")))]
@@ -109,6 +114,17 @@
        (show-paste-page-fragment paste paste-user)
        (str paste-user "'s paste: " id)
        show-head))))
+
+(defn show-version-page [id version]
+  (let [current-paste (paste/get-paste id)
+        paste-user (if-let [user (:user current-paste)]
+                     (:username (users/get-user-by-id user))
+                     "anonymous")]
+    (when-let [paste (paste/get-version current-paste version)]
+      (layout
+        (show-paste-page-fragment paste paste-user)
+        (str "Version " version " of paste: " id)
+        show-head))))
 
 (defn paste-preview [node paste header]
   (let [{:keys [lines summary date user private]} paste]
@@ -287,6 +303,9 @@
 
   (GET "/:id" [id]
     (show-paste-page id))
+
+  (GET "/:id/history/:version" [id version]
+    (show-version-page id (safe-parse-long version)))
 
   (POST "/:id/edit" {:keys [params]}
     (edit-paste params))
