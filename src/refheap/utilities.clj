@@ -2,9 +2,22 @@
   (:require [refheap.models.paste :as paste]
             [clojure.string :refer [lower-case join]]))
 
+(defn safe-parse-long
+  "Same as Long/parseLong, but catches exceptions for malformed input and
+   either returns nil if you passed one argument, or its second argument
+   if you gave it one."
+  ([n] (safe-parse-long n nil))
+  ([n default]
+   (try
+     (if n
+       (Long/parseLong n)
+       default)
+     (catch NumberFormatException _
+       default))))
+
 (defn to-booleany
   "Convert numbers and various representations of 'true' and 'false'
-   to their actual true or false counterparts."
+  to their actual true or false counterparts."
   [s]
   (when s
     (let [s (lower-case s)]

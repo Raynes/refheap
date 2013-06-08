@@ -2,7 +2,7 @@
   (:require [refheap.models.paste :as paste]
             [refheap.models.users :as users]
             [refheap.highlight :refer [lexers]]
-            [refheap.utilities :refer [to-booleany escape-string pluralize]]
+            [refheap.utilities :refer [to-booleany escape-string pluralize safe-parse-long]]
             [noir.session :as session]
             [noir.response :refer [redirect content-type]]
             [stencil.core :as stencil]
@@ -218,10 +218,10 @@
     (paste-page lang))
 
   (GET "/pastes" [page]
-    (all-pastes-page (paste/proper-page (Long. (or page "1")))))
+    (all-pastes-page (paste/proper-page (safe-parse-long page 1))))
 
   (GET "/:id/forks" [id page]
-    (forks-page id (paste/proper-page (Long. (or page "1")))))
+    (forks-page id (paste/proper-page (safe-parse-long page 1))))
 
   (GET "/:id/fullscreen" [id]
     (fullscreen-paste id))

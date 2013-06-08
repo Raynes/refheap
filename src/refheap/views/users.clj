@@ -1,6 +1,7 @@
 (ns refheap.views.users
   (:require [refheap.models.users :as users]
             [refheap.views.paste :as paste]
+            [refheap.utilities :refer [safe-parse-long]]
             [noir.session :as session]
             [compojure.core :refer [defroutes GET]]
             [refheap.views.common :refer [layout avatar page-buttons]]
@@ -47,4 +48,4 @@
 (defroutes user-routes
   (GET "/users/:user" {{:keys [user page]} :params}
     (user-page (.toLowerCase user)
-               (proper-page (Long. (or page "1"))))))
+               (proper-page (safe-parse-long page 1)))))
