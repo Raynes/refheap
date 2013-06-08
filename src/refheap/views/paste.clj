@@ -55,13 +55,18 @@
 (defragment show-paste-page-fragment (resource "refheap/views/templates/pasted.html")
   [{:keys [lines private user contents language date fork views] :as paste} id paste-user]
   [user-id (:id (session/get :user))
-   forks (paste/count-forks paste)]
+   forks (paste/count-forks paste)
+   history (paste/count-history paste)]
   (l/id= :language) (l/content language)
   (l/id= :lines) (l/content (pluralize lines "line"))
   (l/id= :views) (l/content (pluralize views "view"))
   (l/id= :forks) (if (pos? forks)
                    (l/content (l/node :a :attrs {:href (str "/" id "/forks")}
                                       :content (pluralize forks "fork")))
+                   (l/remove))
+  (l/id= :edits) (if (pos? history)
+                   (l/content (l/node :a :attrs {:href (str "/" id "/history")}
+                                      :content (pluralize history "edit")))
                    (l/remove))
   (when-not private
     [(l/class= :private) (l/remove)])
