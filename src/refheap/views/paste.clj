@@ -58,7 +58,7 @@
                   (l/class= :syntax) (l/content (l/unescaped contents))))))
 
 (defragment show-paste-page-fragment (resource "refheap/views/templates/pasted.html")
-  [{:keys [lines private user contents language date fork views] :as paste} id paste-user]
+  [{:keys [lines private user contents language date fork views] :as paste} paste-user]
   [user-id (:id (session/get :user))
    forks (paste/count-forks paste)
    history (paste/count-history paste)]
@@ -106,7 +106,7 @@
                        (:username (users/get-user-by-id user))
                        "anonymous")]
       (layout
-       (show-paste-page-fragment paste id paste-user)
+       (show-paste-page-fragment paste paste-user)
        (str paste-user "'s paste: " id)
        show-head))))
 
