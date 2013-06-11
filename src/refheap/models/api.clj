@@ -48,7 +48,7 @@
       (assoc :user (when-let [user (:user paste)]
                      (:username (users/get-user-by-id user))))
       (assoc :url (str "https://www.refheap.com/" (:paste-id paste)))
-      (dissoc :id :_id :raw-contents :summary)
+      (dissoc :id :_id :raw-contents :summary :history)
       id->paste-id))
 
 (defn string->bool [s] (Boolean/parseBoolean s))
