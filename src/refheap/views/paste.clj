@@ -63,7 +63,7 @@
     (when-let [contents (:contents (paste/view-paste id))]
       (fullscreen contents)))
   (defn fullscreen-version [id version]
-    (when-let [contents (:contents (paste/get-version (paste/get-paste id) version))]
+    (when-let [contents (:contents (paste/get-version id version))]
       (fullscreen contents))))
 
 (defragment show-paste-page-fragment (resource "refheap/views/templates/pasted.html")
@@ -123,12 +123,11 @@
         show-head))))
 
 (defn show-version-page [id version]
-  (let [current-paste (paste/get-paste id)]
-    (when-let [paste (paste/get-version current-paste version)]
-      (layout
-        (show-paste-page-fragment paste (paste-username paste))
-        (str "Version " version " of paste: " id)
-        show-head))))
+  (when-let [paste (paste/get-version id version)]
+    (layout
+      (show-paste-page-fragment paste (paste-username paste))
+      (str "Version " version " of paste: " id)
+      show-head)))
 
 (defn paste-preview [node paste header]
   (let [{:keys [lines summary date user private]} paste]
@@ -312,10 +311,7 @@
     (fullscreen-version id (safe-parse-long version)))
 
   (GET "/:id/history/:version/raw" [id version]
-    (when-let [content (->> version
-                            safe-parse-long
-                            (paste/get-version (paste/get-paste id))
-                            :raw-contents)]
+    (when-let [content (:raw-contents (paste/get-version id (safe-parse-long version)))]
       (content-type "text/plain; charset=utf-8" content)))
 
   (POST "/:id/edit" {:keys [params]}
