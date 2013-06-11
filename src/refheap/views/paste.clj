@@ -274,9 +274,6 @@
   (GET "/:id/fullscreen" [id]
     (fullscreen-paste id))
 
-  (GET "/:id/framed" [id]
-    (fullscreen-paste id))
-
   (GET "/:id/edit" [id]
     (edit-paste-page id))
 
