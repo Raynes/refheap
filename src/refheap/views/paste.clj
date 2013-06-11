@@ -18,6 +18,11 @@
     (str "/" (:paste-id paste) "/history/" version suffix)
     (str "/" (:paste-id paste) suffix)))
 
+(defn paste-username [paste]
+  (if-let [user (:user paste)]
+    (:username (users/get-user-by-id user))
+    "anonymous"))
+
 (defragment paste-page-fragment (resource "refheap/views/templates/paste.html")
   [lang & [old]]
   (l/child-of (l/id= "language")
@@ -107,22 +112,17 @@
 
 (defn show-paste-page [id]
   (when-let [paste (paste/view-paste id)]
-    (let [paste-user (if-let [user (:user paste)]
-                       (:username (users/get-user-by-id user))
-                       "anonymous")]
-      (layout
-       (show-paste-page-fragment paste paste-user)
-       (str paste-user "'s paste: " id)
-       show-head))))
-
-(defn show-version-page [id version]
-  (let [current-paste (paste/get-paste id)
-        paste-user (if-let [user (:user current-paste)]
-                     (:username (users/get-user-by-id user))
-                     "anonymous")]
-    (when-let [paste (paste/get-version current-paste version)]
+    (let [paste-user (paste-username paste)]
       (layout
         (show-paste-page-fragment paste paste-user)
+        (str paste-user "'s paste: " id)
+        show-head))))
+
+(defn show-version-page [id version]
+  (let [current-paste (paste/get-paste id)]
+    (when-let [paste (paste/get-version current-paste version)]
+      (layout
+        (show-paste-page-fragment paste (paste-username paste))
         (str "Version " version " of paste: " id)
         show-head))))
 
