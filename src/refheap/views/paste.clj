@@ -174,28 +174,34 @@
                                  " on "
                                  (date-string date)]))
 
+(defn list-page [title url redirect-url list-count get-fn header-fn page]
+  (if (> page (paste/count-pages list-count 20))
+    (redirect redirect-url)
+    (layout
+      (l/node :div :attrs {:class "clearfix"}
+              :content (concat (render-paste-previews (get-fn page) header-fn)
+                               (page-buttons url list-count 20 page)))
+      title
+      show-head)))
+
 (defn all-pastes-page [page]
-  (let [paste-count (paste/count-pastes false)]
-    (if (> page (paste/count-pages paste-count 20))
-      (redirect "/paste")
-      (layout
-       (l/node :div :attrs {:class "clearfix"}
-               :content (concat (render-paste-previews (paste/get-pastes page) paste-header)
-                                (page-buttons "/pastes" paste-count 20 page)))
-       "All pastes"
-       show-head))))
+  (list-page "All pastes"
+             "/pastes"
+             "/paste"
+             (paste/count-pastes false)
+             paste/get-pastes
+             paste-header
+             page))
 
 (defn forks-page [id page]
-  (let [paste (paste/get-paste id)
-        fork-count (paste/count-forks paste)]
-    (if (> page (paste/count-pages fork-count 20))
-      (redirect (paste-url paste))
-      (layout
-        (l/node :div :attrs {:class "clearfix"}
-                :content (concat (render-paste-previews (paste/get-forks paste page) paste-header)
-                                 (page-buttons (paste-url paste "/forks") fork-count 20 page)))
-        (str "Forks of paste: " id)
-        show-head))))
+  (when-let [paste (paste/get-paste id)]
+    (list-page (str "Forks of paste: " id)
+               (paste-url paste "/forks")
+               (paste-url paste)
+               (paste/count-forks paste)
+               (partial paste/get-forks paste)
+               paste-header
+               page)))
 
 (defragment version-header (resource "refheap/views/templates/allheader.html")
   [paste]
@@ -205,16 +211,14 @@
   (l/class= :right) (l/content (date-string date)))
 
 (defn history-page [id page]
-  (let [paste (paste/get-paste id)
-        history-count (paste/count-history paste)]
-    (if (> page (paste/count-pages history-count 20))
-      (redirect (paste-url paste))
-      (layout
-        (l/node :div :attrs {:class "clearfix"}
-                :content (concat (render-paste-previews (paste/get-history paste page) version-header)
-                                 (page-buttons (paste-url paste "/history") history-count 20 page)))
-        (str "History of paste: " id)
-        show-head))))
+  (when-let [paste (paste/get-paste id)]
+    (list-page (str "History of paste: " id)
+               (paste-url paste "/history")
+               (paste-url paste)
+               (paste/count-history paste)
+               (partial paste/get-history paste)
+               version-header
+               page)))
 
 (defn fail [error]
   (layout (l/node :p :attrs {:class "error"} :content error) "You broke it."))
