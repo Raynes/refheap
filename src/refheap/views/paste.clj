@@ -307,6 +307,13 @@
   (GET "/:id/history/:version" [id version]
     (show-version-page id (safe-parse-long version)))
 
+  (GET "/:id/history/:version/raw" [id version]
+    (when-let [content (->> version
+                            safe-parse-long
+                            (paste/get-version (paste/get-paste id))
+                            :raw-contents)]
+      (content-type "text/plain; charset=utf-8" content)))
+
   (POST "/:id/edit" {:keys [params]}
     (edit-paste params))
 
