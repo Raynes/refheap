@@ -55,12 +55,16 @@
 (def show-head (static "refheap/views/templates/showhead.html"))
 
 (let [head (static "refheap/views/templates/head.html")
-      html (l/parse (resource "refheap/views/templates/fullscreen.html"))]
+      html (l/parse (resource "refheap/views/templates/fullscreen.html"))
+      fullscreen #(l/document html
+                              (l/element= :head) (l/content [head show-head])
+                              (l/class= :syntax) (l/content (l/unescaped %)))]
   (defn fullscreen-paste [id]
     (when-let [contents (:contents (paste/view-paste id))]
-      (l/document html
-                  (l/element= :head) (l/content [head show-head])
-                  (l/class= :syntax) (l/content (l/unescaped contents))))))
+      (fullscreen contents)))
+  (defn fullscreen-version [id version]
+    (when-let [contents (:contents (paste/get-version (paste/get-paste id) version))]
+      (fullscreen contents))))
 
 (defragment show-paste-page-fragment (resource "refheap/views/templates/pasted.html")
   [{:keys [lines private user contents language date fork views] :as paste} paste-user]
@@ -303,6 +307,9 @@
 
   (GET "/:id/history/:version" [id version]
     (show-version-page id (safe-parse-long version)))
+
+  (GET "/:id/history/:version/fullscreen" [id version]
+    (fullscreen-version id (safe-parse-long version)))
 
   (GET "/:id/history/:version/raw" [id version]
     (when-let [content (->> version
