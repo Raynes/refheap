@@ -228,9 +228,11 @@
     (when (paste/same-user? (session/get :user) paste)
       (paste-page nil paste))))
 
-(defn fork-paste-page [id]
+(defn fork-paste-page [id & [version]]
   (let [user (:id (session/get :user))
-        paste (paste/get-paste id)]
+        paste (if version
+                (paste/get-version id version)
+                (paste/get-paste id))]
     (when (and user paste (not= (:user paste) user))
       (let [forked (paste/paste (:language paste)
                                 (:raw-contents paste)
@@ -317,6 +319,9 @@
   (GET "/:id/history/:version/raw" [id version]
     (when-let [content (:raw-contents (paste/get-version id (safe-parse-long version)))]
       (content-type "text/plain; charset=utf-8" content)))
+
+  (GET "/:id/history/:version/fork" [id version]
+    (fork-paste-page id (safe-parse-long version)))
 
   (POST "/:id/edit" {:keys [params]}
     (edit-paste params))
