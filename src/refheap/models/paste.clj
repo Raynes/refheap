@@ -205,7 +205,7 @@
 
 (defn get-version [id version]
   "Get a version of a paste."
-  (->> id get-paste :history (filter #(= (:version %) version)) first))
+  (->> id get-paste :history (filter (comp #{version} :version)) first))
 
 (defn count-pages [n per]
   (long (Math/ceil (/ n per))))
