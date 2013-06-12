@@ -9,7 +9,7 @@
             [refheap.messages :refer [error]]
             [monger.collection :as mc]
             [monger.query :refer [with-collection find sort limit paginate]]
-            [monger.operators :refer [$inc]]
+            [monger.operators :refer [$inc $set $push]]
             [refheap.highlight :refer [lookup-lexer highlight]])
   (:import java.io.StringReader
            org.apache.commons.codec.digest.DigestUtils))
@@ -149,10 +149,14 @@
                          (:date old)
                          private
                          (:fork old)
-                         (:views old))]
+                         (:views old))
+                  old-version (-> old
+                                  (dissoc :history)
+                                  (assoc :version (-> old :history count inc)))]
               (if-let [error (:error paste)]
                 error
-                (mc/update "pastes" {:id old-id} paste :upsert false :multi false))
+                (mc/update "pastes" {:id old-id} {$set paste, $push {:history old-version}}
+                           :upsert false :multi false))
               paste))))
 
 (defn delete-paste
@@ -187,6 +191,21 @@
   "Count forks of a paste."
   (mc/count "pastes" {:fork (:id paste)
                       :private false}))
+
+(defn get-history [paste page]
+  "Get history of a paste."
+  (->> (:history paste)
+       reverse
+       (drop (* (dec page) 20))
+       (take 20)))
+
+(defn count-history [paste]
+  "Count versions of a paste."
+  (count (:history paste)))
+
+(defn get-version [id version]
+  "Get a version of a paste."
+  (->> id get-paste :history (filter (comp #{version} :version)) first))
 
 (defn count-pages [n per]
   (long (Math/ceil (/ n per))))
