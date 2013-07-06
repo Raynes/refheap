@@ -74,7 +74,7 @@
    current? (not (:version paste))]
   (l/id= :language) (l/content language)
   (l/id= :lines) (l/content (pluralize lines "line"))
-  (l/id= :views) (if current? 
+  (l/id= :views) (if current?
                    (l/content (pluralize views "view"))
                    (l/remove))
   (l/id= :forks) (if (and current? (pos? forks))
