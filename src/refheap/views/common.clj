@@ -2,8 +2,8 @@
   (:require [noir.session :as session]
             [refheap.models.paste :as paste]
             [clavatar.core :refer [gravatar]]
-            [me.raynes.laser :refer [defdocument defragment] :as l]
-            [clojure.java.io :refer [resource]]))
+            [clojure.java.io :refer [resource]]
+            [me.raynes.laser :refer [defdocument defragment] :as l]))
 
 (defn avatar [email size]
   (gravatar email :size size))
@@ -19,33 +19,36 @@
                         (:username (session/get :user))))]
       (if user
         (l/fragment html
-                    (l/id= "userbutton") (comp (l/attr :href (str "/users/" user))
-                                               (l/content user)))
+                    [(l/id= "userbutton") (comp (l/attr :href (str "/users/" user))
+                                                (l/content user))])
         logged-out))))
 
-(defragment head (resource "refheap/views/templates/head.html")
+(defragment head "refheap/views/templates/head.html"
   [title heads]
+  :resource true
   (when heads
     [(l/id= :last-include) (l/insert :right heads)])
-  (l/element= :title) (l/content (or title "Refheap - The pastebin for your, you know, pastes")))
+  [(l/element= :title) (l/content (or title "Refheap - The pastebin for your, you know, pastes"))])
 
-(defragment body (resource "refheap/views/templates/commonbody.html")
+(defragment body "refheap/views/templates/commonbody.html"
   [contents]
-  (l/id= :useri) (l/content (logged-in nil))
-  (l/id= :container) (l/content contents))
+  :resource true
+  [(l/id= :useri) (l/content (logged-in nil))]
+  [(l/id= :container) (l/content contents)])
 
-(let [html (l/parse (resource "refheap/views/templates/common.html"))]
+(let [html (l/parse "refheap/views/templates/common.html" :resource true)]
   (defn layout
     ([content] (layout content nil nil))
     ([content title] (layout content title nil))
     ([content title heads]
-       (l/document
-        html
-        (l/element= :head) (l/content (head title heads))
-        (l/element= :body) (l/content (body content))))))
+     (l/document
+       html
+       [(l/element= :head) (l/content (head title heads))]
+       [(l/element= :body) (l/content (body content))]))))
 
-(defragment page-buttons (resource "refheap/views/templates/pagination.html")
+(defragment page-buttons "refheap/views/templates/pagination.html"
   [base n per page]
+  :resource true
   (if-not (= 1 page)
     [(l/id= :newer) (l/attr :href (str base "?page=" (dec page)))]
     [(l/id= :newer) (l/remove)])

@@ -21,13 +21,14 @@
 
 ;; View loading has to be done after mongo is available.
 (require '[refheap.views.common :refer [layout]]
-         '[refheap.views.about :refer [about-routes]]
-         '[refheap.views.legal :refer [legal-routes]]
+         ;'[refheap.views.about :refer [about-routes]]
+         ;'[refheap.views.legal :refer [legal-routes]]
          '[refheap.views.paste :refer [paste-routes]]
-         '[refheap.views.users :refer [user-routes]]
-         '[refheap.views.api :refer [api-routes]]
-         '[refheap.views.home :refer [home-routes]]
-         '[refheap.views.login :refer [login-routes]])
+         ;'[refheap.views.users :refer [user-routes]]
+         ;'[refheap.views.api :refer [api-routes]]
+         ;'[refheap.views.home :refer [home-routes]]
+         ;'[refheap.views.login :refer [login-routes]]
+         )
 
 (defn four-zero-four []
   (layout (l/unescaped "<p class=\"header\">Insert fancy 404 image here.</p>")))
@@ -40,13 +41,13 @@
     routes))
 
 (def handler
-  (-> (routes about-routes
-              legal-routes
+  (-> (routes ;about-routes
+              ;legal-routes
               paste-routes
-              user-routes
-              home-routes
-              login-routes
-              api-routes
+              ;user-routes
+              ;home-routes
+              ;login-routes
+              ;api-routes
               (resources "/")
               (not-found (four-zero-four)))
       (api)
