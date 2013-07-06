@@ -107,8 +107,8 @@
   [(l/id= :fullscreen) (l/attr :href (paste-url paste "/fullscreen"))]
   (if (and current? (paste/same-user? (and user-id {:id user-id}) paste))
     [(l/id= :owner) #(l/fragment (l/zip (:content %))
-                                 (l/id= "editb") (l/attr :href (paste-url paste "/edit"))
-                                 (l/id= "delete") (l/attr :href (paste-url paste "/delete")))]
+                                 [(l/id= "editb") (l/attr :href (paste-url paste "/edit"))]
+                                 [(l/id= "delete") (l/attr :href (paste-url paste "/delete"))])]
     [(l/id= :owner) (l/remove)])
   (if (and user-id (not= user user-id))
     [(l/id= :fork) (l/attr :href (paste-url paste "/fork"))]
