@@ -24,7 +24,7 @@
          '[refheap.views.about :refer [about-routes]]
          '[refheap.views.legal :refer [legal-routes]]
          '[refheap.views.paste :refer [paste-routes]]
-         ;'[refheap.views.users :refer [user-routes]]
+         '[refheap.views.users :refer [user-routes]]
          ;'[refheap.views.api :refer [api-routes]]
          ;'[refheap.views.home :refer [home-routes]]
          ;'[refheap.views.login :refer [login-routes]]
@@ -44,7 +44,7 @@
   (-> (routes about-routes
               legal-routes
               paste-routes
-              ;user-routes
+              user-routes
               ;home-routes
               ;login-routes
               ;api-routes

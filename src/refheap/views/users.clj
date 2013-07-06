@@ -8,35 +8,36 @@
             [refheap.dates :refer [date-string]]
             [noir.response :refer [redirect]]
             [refheap.models.paste :refer [count-pages proper-page get-pastes]]
-            [me.raynes.laser :refer [defragment] :as l]
-            [clojure.java.io :refer [resource]]))
+            [me.raynes.laser :refer [defragment] :as l]))
 
-(defragment paste-header (resource "refheap/views/templates/userheader.html")
+(defragment paste-header "refheap/views/templates/userheader.html"
   [paste]
-  [{:keys [paste-id date private]} paste]
-  (l/element= :a) (comp (l/attr :href (str "/" paste-id))
-                        (l/content (str "Paste " paste-id)))
+  :resource true
+  :let [{:keys [paste-id date private]} paste]
+  [(l/element= :a) (comp (l/attr :href (str "/" paste-id))
+                         (l/content (str "Paste " paste-id)))]
   (when-not private
     [(l/element= :span) (l/remove)])
-  (l/element= :div) #(update-in % [:content] conj (date-string date)))
+  [(l/element= :div) #(update-in % [:content] conj (date-string date))])
 
-(defragment user-page-fragment (resource "refheap/views/templates/users.html")
+(defragment user-page-fragment "refheap/views/templates/users.html"
   [user page user-data]
-  [you? (= user (:username (session/get :user)))
-   others (when-not you? {:private false})
-   total (users/count-user-pastes user others)]
-  (l/element= :img) (l/attr :src (avatar (:email user-data) 70))
-  (l/id= :header-data) (l/content [(if you?
+  :resource true
+  :let [you? (= user (:username (session/get :user)))
+        others (when-not you? {:private false})
+        total (users/count-user-pastes user others)]
+  [(l/element= :img) (l/attr :src (avatar (:email user-data) 70))]
+  [(l/id= :header-data) (l/content [(if you?
                                       (str "You have ")
                                       (str user " has "))
                                     (str (users/count-user-pastes user {:private false}))
                                     " public "
                                     (when you?
                                       (str "and " (users/count-user-pastes user {:private true}) " private "))
-                                    "pastes."])
-  (l/id= :pastes) (l/content
-                    (concat (paste/render-paste-previews (users/user-pastes user page others) paste-header)
-                            (page-buttons (str "/users/" user) total 10 page))))
+                                    "pastes."])]
+  [(l/id= :pastes) (l/content
+                     (concat (paste/render-paste-previews (users/user-pastes user page others) paste-header)
+                             (page-buttons (str "/users/" user) total 10 page)))])
 
 (defn user-page [user page]
   (when-let [user-data (users/get-user user)]
