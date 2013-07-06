@@ -21,8 +21,8 @@
 
 ;; View loading has to be done after mongo is available.
 (require '[refheap.views.common :refer [layout]]
-         ;'[refheap.views.about :refer [about-routes]]
-         ;'[refheap.views.legal :refer [legal-routes]]
+         '[refheap.views.about :refer [about-routes]]
+         '[refheap.views.legal :refer [legal-routes]]
          '[refheap.views.paste :refer [paste-routes]]
          ;'[refheap.views.users :refer [user-routes]]
          ;'[refheap.views.api :refer [api-routes]]
@@ -41,8 +41,8 @@
     routes))
 
 (def handler
-  (-> (routes ;about-routes
-              ;legal-routes
+  (-> (routes about-routes
+              legal-routes
               paste-routes
               ;user-routes
               ;home-routes
