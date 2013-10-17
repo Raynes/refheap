@@ -82,7 +82,11 @@
                                       :content (pluralize forks "fork")))
                    (l/remove))
   (l/id= :edits) (if (pos? history)
-                   (l/content (l/node :a :attrs {:href (paste-url paste "/history")}
+                   (l/content (l/node :a :attrs {:href (paste-url
+                                                         (if current?
+                                                           paste
+                                                           (dissoc paste :version))
+                                                         "/history")}
                                       :content (pluralize history "edit")))
                    (l/remove))
   (when-not private
@@ -123,11 +127,14 @@
         show-head))))
 
 (defn show-version-page [id version]
-  (when-let [paste (paste/get-version (paste/get-paste id) version)]
-    (layout
-      (show-paste-page-fragment paste (paste-username paste))
-      (str "Version " version " of paste: " id)
-      show-head)))
+  (let [current (paste/get-paste id)]
+    (when-let [paste (paste/get-version current version)]
+      (layout
+        (show-paste-page-fragment
+          (assoc paste :history (:history current))
+          (paste-username paste))
+        (str "Version " version " of paste: " id)
+        show-head))))
 
 (defn paste-preview [node paste header]
   (let [{:keys [lines summary date user private]} paste]
