@@ -207,7 +207,9 @@
   [paste]
   [{:keys [version date]} paste]
   (l/id= :id) (comp (l/attr :href (paste-url paste))
-                    (l/content (str "Version " version)))
+                    (l/content (if version
+                                 (str "Version " version)
+                                 "Current")))
   (l/class= :right) (l/content (date-string date)))
 
 (defn history-page [id page]

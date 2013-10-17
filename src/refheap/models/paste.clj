@@ -196,6 +196,7 @@
   "Get history of a paste."
   (->> (:history paste)
        reverse
+       (cons paste)
        (drop (* (dec page) 20))
        (take 20)))
 
