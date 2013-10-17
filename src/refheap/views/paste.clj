@@ -113,9 +113,9 @@
                                  (l/id= "editb") (l/attr :href (paste-url paste "/edit"))
                                  (l/id= "delete") (l/attr :href (paste-url paste "/delete")))]
     [(l/id= :owner) (l/remove)])
-  (if (and user-id (not= user user-id))
-    [(l/id= :fork) (l/attr :href (paste-url paste "/fork"))]
-    [(l/id= :fork) (l/remove)])
+  (if (paste/same-user? (and user-id {:id user-id}) paste)
+    [(l/id= :fork) (l/remove)]
+    [(l/id= :fork) (l/attr :href (paste-url paste "/fork"))])
   (l/id= :paste) (l/content (l/unescaped contents)))
 
 (defn show-paste-page [id]
@@ -238,15 +238,15 @@
       (paste-page nil paste))))
 
 (defn fork-paste-page [id & [version]]
-  (let [user (:id (session/get :user))
+  (let [user (session/get :user)
         paste (if version
                 (paste/get-version (paste/get-paste id) version)
                 (paste/get-paste id))]
-    (when (and user paste (not= (:user paste) user))
+    (when (and paste (not (paste/same-user? user paste)))
       (let [forked (paste/paste (:language paste)
                                 (:raw-contents paste)
                                 (:private paste)
-                                (session/get :user)
+                                user
                                 (:id paste))]
         (redirect (paste-url forked))))))
 
