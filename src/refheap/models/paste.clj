@@ -204,9 +204,9 @@
   "Count versions of a paste."
   (count (:history paste)))
 
-(defn get-version [id version]
+(defn get-version [paste version]
   "Get a version of a paste."
-  (->> id get-paste :history (filter (comp #{version} :version)) first))
+  (->> paste :history (filter (comp #{version} :version)) first))
 
 (defn count-pages [n per]
   (long (Math/ceil (/ n per))))
