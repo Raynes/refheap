@@ -63,7 +63,7 @@
     (when-let [contents (:contents (paste/view-paste id))]
       (fullscreen contents)))
   (defn fullscreen-version [id version]
-    (when-let [contents (:contents (paste/get-version id version))]
+    (when-let [contents (:contents (paste/get-version (paste/get-paste id) version))]
       (fullscreen contents))))
 
 (defragment show-paste-page-fragment (resource "refheap/views/templates/pasted.html")
@@ -82,7 +82,11 @@
                                       :content (pluralize forks "fork")))
                    (l/remove))
   (l/id= :edits) (if (pos? history)
-                   (l/content (l/node :a :attrs {:href (paste-url paste "/history")}
+                   (l/content (l/node :a :attrs {:href (paste-url
+                                                         (if current?
+                                                           paste
+                                                           (dissoc paste :version))
+                                                         "/history")}
                                       :content (pluralize history "edit")))
                    (l/remove))
   (when-not private
@@ -123,11 +127,14 @@
         show-head))))
 
 (defn show-version-page [id version]
-  (when-let [paste (paste/get-version id version)]
-    (layout
-      (show-paste-page-fragment paste (paste-username paste))
-      (str "Version " version " of paste: " id)
-      show-head)))
+  (let [current (paste/get-paste id)]
+    (when-let [paste (paste/get-version current version)]
+      (layout
+        (show-paste-page-fragment
+          (assoc paste :history (:history current))
+          (paste-username paste))
+        (str "Version " version " of paste: " id)
+        show-head))))
 
 (defn paste-preview [node paste header]
   (let [{:keys [lines summary date user private]} paste]
@@ -207,7 +214,9 @@
   [paste]
   [{:keys [version date]} paste]
   (l/id= :id) (comp (l/attr :href (paste-url paste))
-                    (l/content (str "Version " version)))
+                    (l/content (if version
+                                 (str "Version " version)
+                                 "Current")))
   (l/class= :right) (l/content (date-string date)))
 
 (defn history-page [id page]
@@ -231,7 +240,7 @@
 (defn fork-paste-page [id & [version]]
   (let [user (:id (session/get :user))
         paste (if version
-                (paste/get-version id version)
+                (paste/get-version (paste/get-paste id) version)
                 (paste/get-paste id))]
     (when (and user paste (not= (:user paste) user))
       (let [forked (paste/paste (:language paste)
@@ -317,7 +326,9 @@
     (fullscreen-version id (safe-parse-long version)))
 
   (GET "/:id/history/:version/raw" [id version]
-    (when-let [content (:raw-contents (paste/get-version id (safe-parse-long version)))]
+    (when-let [content (:raw-contents (paste/get-version
+                                        (paste/get-paste id)
+                                        (safe-parse-long version)))]
       (content-type "text/plain; charset=utf-8" content)))
 
   (GET "/:id/history/:version/fork" [id version]
