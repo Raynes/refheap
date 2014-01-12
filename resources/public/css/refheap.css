@@ -226,7 +226,11 @@ div.syntax {
 }
 
 div.markdown {
-    padding-left: 20px;
+    padding: 0 12px 0 12px;
+}
+
+.markdown li {
+    margin: 5px 0 5px 0;
 }
 
 div.syntax div.more {
