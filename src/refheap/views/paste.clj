@@ -131,7 +131,8 @@
     (when-let [paste (paste/get-version current version)]
       (layout
         (show-paste-page-fragment
-          (assoc paste :history (:history current))
+          (assoc paste :paste-id (:paste-id current)
+                       :history (:history current))
           (paste-username paste))
         (str "Version " version " of paste: " id)
         show-head))))
@@ -211,22 +212,23 @@
                page)))
 
 (defragment version-header (resource "refheap/views/templates/allheader.html")
-  [paste]
+  [current paste]
   [{:keys [version date]} paste]
-  (l/id= :id) (comp (l/attr :href (paste-url paste))
+  (l/id= :id) (comp (l/attr :href
+                      (paste-url (assoc paste :paste-id (:paste-id current))))
                     (l/content (if version
                                  (str "Version " version)
                                  "Current")))
   (l/class= :right) (l/content (date-string date)))
 
 (defn history-page [id page]
-  (when-let [paste (paste/get-paste id)]
+  (when-let [current (paste/get-paste id)]
     (list-page (str "History of paste: " id)
-               (paste-url paste "/history")
-               (paste-url paste)
-               (paste/count-history paste)
-               (partial paste/get-history paste)
-               version-header
+               (paste-url current "/history")
+               (paste-url current)
+               (paste/count-history current)
+               (partial paste/get-history current)
+               (partial version-header current)
                page)))
 
 (defn fail [error]
