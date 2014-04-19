@@ -13,4 +13,4 @@
 (defn to-html
   "Convert markdown to html."
   [s]
-  (wrap-code (md/to-html s [:fenced-code-blocks])))
+  (wrap-code (md/to-html s [:fenced-code-blocks :tables])))
