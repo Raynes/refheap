@@ -114,8 +114,8 @@
                                  (l/id= "delete") (l/attr :href (paste-url paste "/delete")))]
     [(l/id= :owner) (l/remove)])
   (if (paste/same-user? (and user-id {:id user-id}) paste)
-    [(l/id= :fork) (l/remove)]
-    [(l/id= :fork) (l/attr :href (paste-url paste "/fork"))])
+    [(l/attr= :name :forkform) (l/remove)]
+    [(l/attr= :name :forkform) (l/attr :action (paste-url paste "/fork"))])
   (l/id= :paste) (l/content (l/unescaped contents)))
 
 (defn show-paste-page [id]
@@ -297,7 +297,7 @@
   (GET "/:id/edit" [id]
     (edit-paste-page id))
 
-  (GET "/:id/fork" [id]
+  (POST "/:id/fork" [id]
     (fork-paste-page id))
 
   (GET "/:id/delete" [id]

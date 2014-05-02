@@ -351,6 +351,19 @@ div#edit {
     padding-right: 7px;
 }
 
+#edit input[type="submit"] {
+    background: none;
+    border: none;
+    color: #A2B943;
+    margin: 0;
+    padding: 0;
+    cursor: pointer;
+}
+
+#edit form {
+    display: inline;
+}
+
 .evil {
     color: #CF0000;
 }
