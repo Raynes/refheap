@@ -11,6 +11,12 @@ $ lein deps
 $ ./bootstrap.sh
 ```
 
+Get CodeMirror and mousetrap by updating git submodules (you need to have the actual refheap repo):
+
+```bash
+$ git submodule update --init`
+```
+
 Start the Mongo daemon, and in a separate terminal start the RefHeap server using lein. The server will host content from [http://localhost:3000](http://localhost:3000).
 
 ```bash
