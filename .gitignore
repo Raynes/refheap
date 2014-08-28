@@ -3,5 +3,12 @@ pom.xml
 /lib/
 /classes/
 .lein-deps-sum
-resources/pygments/
 target
+
+# Resources downloaded by bootstrap script
+resources/pygments/
+resources/public/js/codemirror/
+
+# IntelliJ IDEA project files
+.idea
+*.iml
