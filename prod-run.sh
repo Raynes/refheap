@@ -1,3 +1,5 @@
+#!/bin/sh
+
 export CANONICAL_HOST=www.refheap.com
 export HOSTS=refheap.com,www.refheap.com
 export JVM_OPTS="-Xmx60m"
