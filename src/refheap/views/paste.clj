@@ -1,5 +1,6 @@
 (ns refheap.views.paste
   (:require [refheap.models.paste :as paste]
+            [refheap.config :refer [config]]
             [refheap.models.users :as users]
             [refheap.highlight :refer [lexers]]
             [refheap.utilities :refer [to-booleany escape-string pluralize safe-parse-long]]
@@ -31,13 +32,13 @@
     (for [lang (sort #(.compareToIgnoreCase % %2)
                      (keys (dissoc lexers lang)))]
       (l/on node (l/attr :value lang) (l/content lang))))
-  (l/attr? :selected) (let [lang (or lang (:language old) (session/get :last-lang) "Clojure")]
+  (l/attr? :selected) (let [lang (or lang (:language old) (session/get :last-lang) (:default-language config) "Clojure")]
                         (comp (l/attr :value lang)
                               (l/content lang)))
   (l/element= :form) (l/attr :action (if old
                                        (paste-url old "/edit")
                                        "/create"))
-  (when (:private old)
+  (when (or (:private old) (:default-private? config) )
     [(l/attr= :name :private) (l/attr :checked "")])
   (when old
     [(l/element= :textarea) (l/content (:raw-contents old))])
