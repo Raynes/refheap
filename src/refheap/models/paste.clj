@@ -54,6 +54,7 @@
        :id id
        :random-id random-id
        :user (:id user)
+       :remote-addr (:remote-addr user)
        :language name
        :raw-contents contents
        :summary (:success (highlight short (preview contents)))

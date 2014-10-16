@@ -272,8 +272,9 @@
       (redirect (paste-url paste))
       (fail paste))))
 
-(defn create-paste [{:keys [paste language private]}]
-  (let [paste (paste/paste language paste private (session/get :user))]
+(defn create-paste [{:keys [paste language private]} remote-addr]
+  (let [user (assoc (session/get :user) :remote-addr remote-addr)
+        paste (paste/paste language paste private user)]
     (if (map? paste)
       (redirect (paste-url paste))
       (fail paste))))
@@ -339,8 +340,8 @@
   (POST "/:id/edit" {:keys [params]}
     (edit-paste params))
 
-  (POST "/create" {:keys [params]}
-    (create-paste params))
+  (POST "/create" {:keys [params remote-addr]}
+    (create-paste params remote-addr))
 
   ; Redirect legacy /paste/ prefixed URLs
 
