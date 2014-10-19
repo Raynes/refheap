@@ -340,8 +340,8 @@
   (POST "/:id/edit" {:keys [params]}
     (edit-paste params))
 
-  (POST "/create" {:keys [params remote-addr]}
-    (create-paste params remote-addr))
+  (POST "/create" {:keys [params remote-addr headers]}
+    (create-paste params (or (get headers "x-forwarded-for") remote-addr)))
 
   ; Redirect legacy /paste/ prefixed URLs
 

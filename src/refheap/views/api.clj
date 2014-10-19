@@ -25,11 +25,16 @@
     (api/new-token id)))
 
 (defn paste [{:keys [private contents language username token return]
-              :or {private "false"}}]
+              :or {private "false"}}
+             remote-addr]
   (let [user (api/validate-user username token)]
     (if (string? user)
       (api/response :unprocessable user return)
-      (let [paste (paste/paste language contents (api/string->bool private) user)]
+      (let [paste (paste/paste
+                    language
+                    contents
+                    (api/string->bool private)
+                    (assoc user :remote-addr remote-addr))]
         (if (string? paste)
           (api/response :bad paste return)
           (api/response :created (api/process-paste paste) return))))))
@@ -94,8 +99,8 @@
 (defroutes api-routes
   (GET "/api" [] (api-page))
   (GET "/token/generate" [] (generate-token))
-  (POST "/api/paste" {:keys [params]}
-    (paste params))
+  (POST "/api/paste" {:keys [params remote-addr headers]}
+    (paste params (or (get headers "x-forwarded-for") remote-addr)))
   (POST "/api/paste/:id" {:keys [params]}
     (edit-paste params))
   (DELETE "/api/paste/:id" {:keys [params]}
