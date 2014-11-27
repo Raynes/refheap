@@ -193,7 +193,7 @@
    "ActionScript" {:short "as"
                    :exts #{"as"}}
    "CoffeeScript" {:short "coffeescript"
-                   :exts #{"coffeescript"}}
+                   :exts #{"coffeescript" "coffee"}}
    "CSS" {:short "css"
           :exts #{"css"}}
    "DTD" {:short "dtd"}
