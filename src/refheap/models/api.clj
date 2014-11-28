@@ -47,7 +47,7 @@
       (assoc :contents (:raw-contents paste))
       (assoc :user (when-let [user (:user paste)]
                      (:username (users/get-user-by-id user))))
-      (assoc :url (str "https://www.refheap.com/" (:paste-id paste)))
+      (assoc :url (str (or (System/getenv "REFHEAP_URL") "https://www.refheap.com/") (:paste-id paste)))
       (dissoc :id :_id :raw-contents :summary :history)
       id->paste-id))
 
